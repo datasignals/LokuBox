@@ -1,0 +1,51 @@
+.loc-login-container{
+    height: 100vh;
+    width: 100%;
+}
+.loc-login-con{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#carouselExampleIndicators{
+    width: 300px;
+    position: relative;
+}
+.loc-login-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.carousel-indicators{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 70px;
+    position: static;
+}
+.carousel-indicators li{
+    width:10px !important;
+    height:10px !important;
+    background-color: #C0CED9 !important;
+    border-radius: 50px !important;
+    cursor: pointer;
+    border: 0 !important;
+}
+.carousel-indicators li.active{
+    background-color: #007AD3 !important;
+}
+.loc-login-form{
+    padding: 100px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.loc-login-form h2{
+    font-size: 16px;
+    text-align: center;
+    color: #626F79;
+    line-height: 24px;
+}
