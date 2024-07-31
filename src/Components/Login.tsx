@@ -4,7 +4,36 @@ import '../assets/css/loc-layout.css';
 import '../assets/css/loc-login.css';
 import '../assets/css/main.css';
 
+import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
+import { useNavigate } from 'react-router-dom';
+
+import WalletList from "../assets/data/wallets";
+import { useWallet } from '../context/WalletContext';
+
 const Login: React.FC = () => {
+
+    const { setCurrentAccount, setWalletConnected, walletData, setWalletData} = useWallet();
+    const navigate = useNavigate(); // Initialize useNavigate
+
+    const polkadot = async () =>  {  
+        const allInjected = await web3Enable('Lokubox');
+        if(allInjected.length > 0){
+          setWalletConnected(true);
+          const allAccounts = await web3Accounts();
+          setWalletData(allAccounts);
+          navigate('/profile');
+        } else {
+          alert("Wallet access is denied");
+     }
+    
+    }
+    const handleClick = (name: string)  =>  { 
+        if(name === "Polkadot.Js"){
+          polkadot();
+        } else {
+          alert(`Work under progress for ${name}.`);
+        }
+    }
     return (
         <div className="loc-login-container">
         <div className="row" style={{ height: '100%' }}>
@@ -67,22 +96,37 @@ const Login: React.FC = () => {
                     <label htmlFor="loc-login-select" className="loc-label">
                         Select your wallet
                     </label>
-                    <select
+                    {/* <select
                         className="loc-form-control"
                         id="loc-login-select"
                         style={{ width: '100%', padding: '0 10px' }}
                     >
                         <option>Coinbase</option>
                         <option>Wallet 2</option>
-                    </select>
+                    </select> */}
+
+            <div className='drop-menu wallet'>
+                <ul className="flex flex-column">
+                    {WalletList.map((item, index) => (
+                        <li className='drop-item-container' onClick={() => handleClick(item.name)}>
+                            <a className="d-item-flex" >
+                                <img src={item.img} alt="wallet-icon"/>
+                                <div className='ml-4'>
+                                    <div className='mb-1'>{item.name}</div>
+                                </div>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
                     </div>
-                    <button
+                    {/* <button
                     className="loc-btn"
                     type="button"
                     style={{ marginTop: '30px', width: '100%' }}
                     >
                     Connect
-                    </button>
+                    </button> */}
                 </form>
                 <p style={{ color: '#92A1AC', marginBottom: '2px', fontSize: '12px' }}>
                     Don't have a wallet?
