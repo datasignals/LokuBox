@@ -1,10 +1,10 @@
-import fs from "fs";
+import fs from "node:fs";
+import path from "node:path";
 import Cors from "cors";
-import Express from "express";
+import Express, {type Request, type Response} from "express";
 import bodyParser from "body-parser";
 import session from "express-session";
-import path from "node:path";
-import {mountNfs1, mountNfs2, unmountNfs} from "./Util";
+
 
 //Init server
 const app = Express()
@@ -14,7 +14,11 @@ const port = 3001; //TODO
 app.use(Cors({credentials: true}));
 app.use(bodyParser.json());
 
-fs.mkdirSync("/tmp/LokuBox/files", {recursive: true})
+interface CreateRequestBody {
+    isDirectory?: boolean;
+    content?: string;
+}
+
 
 app.use(session({
     name: "mainSession",
@@ -29,177 +33,116 @@ app.use(session({
     }
 }));
 
-fs.mkdirSync("/tmp/nfs", {recursive: true});
-const nfsDirectory = '/tmp/nfs'; // The mount point of your NFS share
+const baseDir = "/tmp/nfs";
 
-console.log('1');
-mountNfs1(nfsDirectory).catch(() => null)
+fs.mkdirSync(baseDir, {recursive: true});
 
-app.get("/mount", async (req, res) => {
-    //@ts-ignore
-    const path = req.query.path.toString();
-
-    if (path === "1" || path ===  "2") {
-        await unmountNfs(nfsDirectory);
-
-        console.log('mounting nfs...');
-
-        path === "1" ?
-            await mountNfs1(nfsDirectory):
-            await mountNfs2(nfsDirectory);
-
-        return res
-            .status(200)
-            .send("NFS dir changed");
-    }  else {
-        return res
-            .status(404)
-            .send("NFS dir does not exist");
-    }
-});
-
-app.get("/info", (req, res) => {
-    return res.status(200).send(nfsDirectory);
-})
-
-
-// API to list files in a directory
-app.get('/files', async (req, res) => {
+app.get('/api/v1/root/*', (req: Request, res: Response) => {
     try {
-        const files = fs.readdirSync(nfsDirectory);
-        res.json(files);
-    } catch (error) {
-        //@ts-ignore
-        res.status(500).json({error: error.message});
+
+        const reqPath = req.params[0] ?? '';
+        const fullPath = path.join(baseDir, reqPath);
+
+        const statResult = fs.statSync(fullPath)
+
+        if (statResult.isDirectory()) {
+            const contents = fs.readdirSync(fullPath)
+
+            return res.status(200).json({
+                isSuccessful: true,
+                message: "Directory Returned",
+                data: contents
+            });
+        }
+
+        if (statResult.isFile()) {
+            const contents: Buffer = fs.readFileSync(fullPath)
+
+            return res.status(200).json({
+                isSuccessful: true,
+                message: "File Returned",
+                data: contents
+            });
+        }
+
+        return res.status(404).json({
+            isSuccessful: false,
+            message: "Not a File or Dir",
+        });
+
+    } catch (e: unknown) {
+        return res.status(404).json({
+            isSuccessful: false,
+            message: "Not a File or Dir",
+        });
     }
 });
 
-// API to read a file
-app.get('/files/:filename', async (req, res) => {
+
+app.delete("/api/v1/root/*", (req: Request, res: Response) => {
     try {
-        const filePath = path.join(nfsDirectory, req.params.filename);
-        const fileContent = fs.readFileSync(filePath, 'utf-8');
-        res.send(fileContent);
-    } catch (error) {
-        //@ts-ignore
-        res.status(500).json({error: error.message});
+        const reqPath = req.params[0] ?? '';
+        const fullPath = path.join(baseDir, reqPath);
+
+        const statResult = fs.statSync(fullPath)
+        const isDir = statResult.isDirectory()
+
+        // if (isDir || statResult.isFile()) {
+        fs.rmSync(fullPath, {recursive: true, force: true})
+
+        return res.status(200).json({
+            isSuccessful: true,
+            message: isDir ?
+                "Directory Removed" :
+                "File Removed",
+        });
+    } catch (e: unknown) {
+        return res.status(404).json({
+            isSuccessful: false,
+            message: "Not a File or Dir",
+        });
     }
 });
 
-// API to write a file
-app.post('/files/:filename', async (req, res) => {
+//TODO it does not fail if file/dir already exists
+app.post("/api/v1/root/*", (req: Request, res: Response) => {
     try {
-        const filePath = path.join(nfsDirectory, req.params.filename);
-        fs.writeFileSync(filePath, req.body.content);
-        res.sendStatus(200);
-    } catch (error) {
-        //@ts-ignore
-        res.status(500).json({error: error.message});
+        const reqPath = req.params[0] ?? '';
+        const fullPath = path.join(baseDir, reqPath);
+        const {isDirectory, content} = req.body as CreateRequestBody;
+
+        if (isDirectory === undefined) {
+            return res.status(500).json({
+                isSuccessful: false,
+                message: "Not enough information provided",
+            });
+        }
+
+        console.log("IS dir: " + isDirectory);
+        if (isDirectory) {
+            fs.mkdirSync(fullPath, {recursive: true});
+            return res.status(201).json({
+                isSuccessful: true,
+                message: "Directory Created",
+            });
+        }
+
+        console.log("writing file instead");
+
+        fs.writeFileSync(fullPath, content ?? "");
+        return res.status(201).json({
+            isSuccessful: true,
+            message: "File Created",
+        });
+    } catch (e: unknown) {
+        return res.status(500).json({
+            isSuccessful: false,
+            message: "Failed to create file or directory",
+        });
     }
 });
 
 
-
-
-
-
-
-
-
-
-// List directory contents
-// app.get('/*', async (req: Request, res: Response) => {
-//     try {
-//         const files = await fs.readdir(nfsDirectory);
-//         return res.json({hello: "world"});
-//     } catch (err) {
-//         return res.status(500).send('Error listing directory contents');
-//     }
-// });
-//
-// // Open file (text files are returned as text, others as download)
-// app.get('/open/:filename', async (req: Request, res: Response) => {
-//     const { filename } = req.params;
-//     const filePath = path.join(folderPath, filename);
-//
-//     try {
-//         const stat = await fs.stat(filePath);
-//
-//         if (stat.isFile()) {
-//             const ext = path.extname(filename).toLowerCase();
-//             if (ext === '.txt') {
-//                 const content = await fs.readFile(filePath, 'utf-8');
-//                 res.send(content);
-//             } else {
-//                 const content: Buffer = await fs.readFile(filePath);
-//                 res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-//                 res.send(content);
-//             }
-//         } else {
-//             res.status(400).send('Not a file');
-//         }
-//     } catch (err) {
-//         res.status(500).send('Error opening file');
-//     }
-// });
-//
-// // Create a new file
-// app.post('/create-file', async (req: Request, res: Response) => {
-//     const { filename, content } = req.body;
-//
-//     if (!filename || typeof content !== 'string') {
-//         return res.status(400).send('Filename and content required');
-//     }
-//
-//     const filePath = path.join(folderPath, filename);
-//
-//     try {
-//         await fs.writeFile(filePath, content);
-//         res.send('File created');
-//     } catch (err) {
-//         res.status(500).send('Error creating file');
-//     }
-// });
-//
-// // Create a new directory
-// app.post('/create-directory', async (req: Request, res: Response) => {
-//     const { dirname } = req.body;
-//
-//     if (!dirname) {
-//         return res.status(400).send('Directory name required');
-//     }
-//
-//     const dirPath = path.join(folderPath, dirname);
-//
-//     try {
-//         await fs.mkdir(dirPath);
-//         res.send('Directory created');
-//     } catch (err) {
-//         res.status(500).send('Error creating directory');
-//     }
-// });
-//
-// // Delete a file or directory
-// app.delete('/delete/:name', async (req: Request, res: Response) => {
-//     const { name } = req.params;
-//     const itemPath = path.join(folderPath, name);
-//
-//     try {
-//         const stat = await fs.stat(itemPath);
-//
-//         if (stat.isFile()) {
-//             await fs.remove(itemPath);
-//             res.send('File deleted');
-//         } else if (stat.isDirectory()) {
-//             await fs.remove(itemPath);
-//             res.send('Directory deleted');
-//         } else {
-//             res.status(400).send('Not a file or directory');
-//         }
-//     } catch (err) {
-//         res.status(500).send('Error deleting item');
-//     }
-// });
-
-
-app.listen(port, () => console.log(`LokuBox Backend listening on port ${port}`));
+app.listen(port, () => {
+    console.log(`LokuBox Backend listening on port ${port}`);
+});
