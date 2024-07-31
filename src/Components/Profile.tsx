@@ -1,8 +1,8 @@
 import React from 'react';
-import './assets/css/loc-h-content.css';
-import './assets/css/loc-layout.css';
-import './assets/css/loc-login.css';
-import './assets/css/main.css';
+import '../assets/css/loc-h-content.css';
+import '../assets/css/loc-layout.css';
+import '../assets/css/loc-login.css';
+import '../assets/css/main.css';
 
 const Profile: React.FC = () => {
     return (
