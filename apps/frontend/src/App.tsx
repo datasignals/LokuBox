@@ -1,10 +1,10 @@
-import React from 'react';
+import {type FC} from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Home from './Components/Home';
 import Login from './Components/Login';
 import Profile from './Components/Profile';
 
-const App: React.FC = () => {
+export const App: FC = () => {
   return (
     <Router>
       <Routes>
@@ -15,5 +15,3 @@ const App: React.FC = () => {
     </Router>
   );
 };
-
-export default App;

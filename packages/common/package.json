@@ -19,9 +19,9 @@
       "types": "./src/DirectoryNode.ts",
       "default": "./dist/DirectoryNode.js"
     },
-    "./Hello": {
-      "types": "./src/Hello.ts",
-      "default": "./dist/Hello.js"
+    "./RouteNames": {
+      "types": "./src/RouteNames.ts",
+      "default": "./dist/RouteNames.js"
     }
   },
   "scripts": {

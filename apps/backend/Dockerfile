@@ -1,3 +1,7 @@
+#################################################
+########COPIED FROM ANOTHER PROJECT WIP##########
+#################################################
+
 FROM node:20-alpine AS build
 RUN apk update
 

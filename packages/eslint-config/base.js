@@ -31,7 +31,7 @@ module.exports = {
         ],
         "eslint-comments/require-description": "off",
 
-        'import/no-default-export': 'warn',
+        'import/no-default-export': 'error',
         "@typescript-eslint/no-unsafe-member-access": "warn",
         "@typescript-eslint/no-unsafe-return": "warn",
         "@typescript-eslint/naming-convention": "warn",
