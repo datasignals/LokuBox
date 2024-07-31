@@ -1,5 +1,5 @@
 {
-  "name": "LokuBox",
+  "name": "lokubox",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -8,12 +8,6 @@
     "lint:fix": "turbo lint:fix",
     "lint:strict": "turbo lint:strict",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
-  },
-  "dependencies": {
-    "@types/react-bootstrap": "^0.32.36",
-    "@types/react-toastify": "^4.1.0",
-    "react-bootstrap": "^2.10.3",
-    "typescript": "^5.5.2"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
