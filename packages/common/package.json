@@ -1,12 +1,39 @@
 {
-  "name": "common",
+  "name": "@repo/common",
   "version": "0.0.1",
-  "description": "Common data between frontend and backend",
-  "main": "index.js",
-  "author": "Milosz Jakubanis",
-  "license": "MIT",
+  "private": true,
+  "exports": {
+        "./Node": {
+      "types": "./src/Node.ts",
+      "default": "./dist/Node.js"
+    },
+    "./FileNode": {
+      "types": "./src/FileNode.ts",
+      "default": "./dist/FileNode.js"
+    },
+    "./DirectoryNode": {
+      "types": "./src/DirectoryNode.ts",
+      "default": "./dist/DirectoryNode.js"
+    },
+    "./Hello": {
+      "types": "./src/Hello.ts",
+      "default": "./dist/Hello.js"
+    }
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "lint:strict": "eslint src --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
   "dependencies": {
-    "tsc": "^2.0.4",
-    "typescript": "^5.0.2"
+    "axios": "^1.7.2"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/mongodb": "^4.0.7",
+    "@types/form-data": "^2.5.0"
   }
 }
