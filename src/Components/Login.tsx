@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../assets/css/loc-h-content.css';
 import '../assets/css/loc-layout.css';
 import '../assets/css/loc-login.css';
@@ -13,6 +13,8 @@ import { useWallet } from '../context/WalletContext';
 const Login: React.FC = () => {
 
     const { setCurrentAccount, setWalletConnected, walletData, setWalletData} = useWallet();
+    const [user, setUser] = useState(false);
+    
     const navigate = useNavigate(); // Initialize useNavigate
 
     const polkadot = async () =>  {  
@@ -40,47 +42,22 @@ const Login: React.FC = () => {
             <div className="col-12 col-md-6 col-lg-8">
             <div className="loc-login-content">
                 <div>
-                <img
-                    style={{ width: '150px', marginBottom: '70px' }}
-                    src="images/svg/logo.svg"
-                    alt="brand-logo"
-                />
+                    <img style={{ width: '150px', marginBottom: '70px' }} src="images/svg/logo.svg" alt="brand-logo"/>
                 </div>
-                <div
-                id="carouselExampleIndicators"
-                className="carousel slide"
-                data-bs-ride="carousel"
-                data-bs-interval="3000"
-                >
+                <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                    <img
-                        className="d-block w-100"
-                        src="images/png/ic_login-image.png"
-                        alt="First slide"
-                    />
+                        <img className="d-block w-100" src="images/png/ic_login-image.png" alt="First slide"/>
                     </div>
                     <div className="carousel-item">
-                    <img
-                        className="d-block w-100"
-                        src="images/png/ic_login-image.png"
-                        alt="First slide"
-                    />
+                        <img className="d-block w-100" src="images/png/ic_login-image.png" alt="First slide"/>
                     </div>
                     <div className="carousel-item">
-                    <img
-                        className="d-block w-100"
-                        src="images/png/ic_login-image.png"
-                        alt="First slide"
-                    />
+                        <img className="d-block w-100" src="images/png/ic_login-image.png" alt="First slide"/>
                     </div>
                 </div>
                 <ol className="carousel-indicators">
-                    <li
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="0"
-                    className="active"
-                    ></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active"></li>
                     <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
                     <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
                 </ol>
