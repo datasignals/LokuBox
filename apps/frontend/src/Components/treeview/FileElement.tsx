@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {getNode, isString} from "@repo/common/RouteNames";
+import {deleteNode, getNode, isString} from "@repo/common/RouteNames";
 
 interface Props {
     name: string
@@ -7,7 +7,8 @@ interface Props {
 
 export const FileElement: FC<Props> = ({name}) => {
 
-    const [confirm, setConfirm] = useState(false);
+    const [confirmDownload, setConfirmDownload] = useState(false);
+    const [confirmRemove, setConfirmRemove] = useState(false);
 
     const download = async (): Promise<void> => {
         const downloadResult = await getNode.fun2({path: name})
@@ -16,7 +17,7 @@ export const FileElement: FC<Props> = ({name}) => {
             return;
         }
 
-        if(!isString(downloadResult.data)) {
+        if (!isString(downloadResult.data)) {
             return;
         }
 
@@ -38,32 +39,53 @@ export const FileElement: FC<Props> = ({name}) => {
         window.URL.revokeObjectURL(url);
     }
 
+    const remove = async () => {
+        const deleteResult = await deleteNode.fun2({path: name});
+        //TODO handle remove
+
+    }
+
 
     return (
         <>
-            <FileButton name={name} confirm={() => { setConfirm(!confirm); }}/>
-            {confirm ?
-                <ConfirmButton name={name} download={download} confirm={() => setConfirm(!confirm)}/> : null
+            <FileButton name={name} msg="Download" confirm={() => {
+                setConfirmDownload(!confirmDownload);
+            }}/>
+            <FileButton name={name} msg="Remove" confirm={() => {
+                setConfirmRemove(!confirmRemove);
+            }}/>
+
+            {confirmDownload ?
+                <ConfirmButton name={name} msg="Download" confirmAction={download}
+                                       confirm={() => setConfirmDownload(!confirmDownload)}/> : null
+            }
+            {confirmRemove ?
+                <ConfirmButton name={name} msg="Remove" confirmAction={remove}
+                                     confirm={() => setConfirmRemove(!confirmRemove)}/> : null
             }
             <br/>
         </>
     )
 }
 
-const FileButton: FC<{ name: string, confirm: () => void }> = ({name, confirm}) =>
+const FileButton: FC<{ name: string, msg: "Download" | "Remove", confirm: () => void }> = ({name, msg,  confirm}) =>
     <button type="button" key={name} onClick={confirm}>
-        {`🧾${name}`}
+        {msg === "Download" ?
+            `🧾${name}`:
+            "❌"
+        }
     </button>
 
 const ConfirmButton: FC<{
     name: string,
+    msg: "Remove" | "Download",
     confirm: () => void,
-    download: () => Promise<void>
-}> = ({name, download, confirm}) => (
+    confirmAction: () => Promise<void>
+}> = ({name, msg, confirmAction, confirm}) => (
     <button type="button" key={name} onClick={() => {
         confirm();
-        void download()
+        void confirmAction()
     }}>
-        ✅
+        Confirm {msg}
     </button>
 )

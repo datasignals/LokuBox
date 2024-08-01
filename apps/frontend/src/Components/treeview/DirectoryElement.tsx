@@ -1,5 +1,5 @@
 import {type FC, useState} from "react";
-import {getNode, isNodeInfoObject, putNode} from "@repo/common/RouteNames";
+import {deleteNode, getNode, isNodeInfoObject, putNode} from "@repo/common/RouteNames";
 import {FileElement} from "./FileElement";
 
 interface Props {
@@ -9,6 +9,9 @@ interface Props {
 }
 
 export const DirectoryElement: FC<Props> = ({name, cachedFiles, cachedDirectories}) => {
+
+    const [confirmRemove, setConfirmRemove] =
+        useState(false);
 
     const [files, setFiles] =
         useState<string[]>(cachedFiles ?? []);
@@ -42,7 +45,7 @@ export const DirectoryElement: FC<Props> = ({name, cachedFiles, cachedDirectorie
     }
 
     const uploadFile = () => {
-        if(file === undefined) {
+        if (file === undefined) {
             return;
         }
 
@@ -50,12 +53,14 @@ export const DirectoryElement: FC<Props> = ({name, cachedFiles, cachedDirectorie
         const a = new FileReader();
 
         a.onload = (e) => {
-            if(e.target) { //TODO extra check
+            if (e.target) { //TODO extra check
                 putNode.fun2({
                     path: `${name}/${file.name}`,
                     isDirectory: false,
                     content: e.target.result as string //TODO force casting
-                }).then(() => setFile(undefined))
+                }).then(() => {
+                    setFile(undefined);
+                })
                     .catch(() => null);
             }
         }
@@ -67,8 +72,17 @@ export const DirectoryElement: FC<Props> = ({name, cachedFiles, cachedDirectorie
         putNode.fun2({
             path: `${name}/${newDirName}`,
             isDirectory: true
-        }).then(() => setIsCreateNewDirOpen(false))
+        }).then(() => {
+            setIsCreateNewDirOpen(false);
+        })
             .catch(() => null);
+    }
+
+    const removeDir = async () => {
+        console.log('remove dir');
+        const deleteResult = await deleteNode.fun2({path: name});
+        //TODO get message
+        setConfirmRemove(false)
     }
 
 
@@ -80,10 +94,24 @@ export const DirectoryElement: FC<Props> = ({name, cachedFiles, cachedDirectorie
             }</button>
 
 
-            <button onClick={() => setIsCreateNewDirOpen(!isCreateNewDirOpen)}>🗂️</button>
+            <button type="button" onClick={() => {
+                setIsCreateNewDirOpen(!isCreateNewDirOpen);
+            }}>🗂️
+            </button>
+
+            <button type="button" key={name} onClick={() => setConfirmRemove(!confirmRemove)}>
+                ❌
+            </button>
+            {confirmRemove ?
+                <button onClick={() => void removeDir()} type="button">Confirm Remove</button> : null
+            }
+
+
             {isCreateNewDirOpen ?
                 <>
-                    <input type="text" onChange={e => setNewDirName(e.target.value)}/>
+                    <input type="text" onChange={e => {
+                        setNewDirName(e.target.value);
+                    }}/>
                     <button type="button" onClick={createDir}>✅</button>
                 </> :
                 null
@@ -97,17 +125,15 @@ export const DirectoryElement: FC<Props> = ({name, cachedFiles, cachedDirectorie
                     e.target.files && setFile(e.target.files[0])
                 }
             />
-            <button onClick={uploadFile}>☁️</button>
+            <button type="button" onClick={uploadFile}>☁️</button>
 
             <br/>
-            {isOpen &&
-                files.map(file =>
-                    <FileElement key={`${name}/${file}`} name={`${name}/${file}`}/>
-                )}
-            {isOpen &&
-                directories.map(directory =>
-                    <DirectoryElement key={`${name}/${directory}`} name={`${name}/${directory}`}/>
-                )}
+            {isOpen ? files.map(file =>
+                <FileElement key={`${name}/${file}`} name={`${name}/${file}`}/>
+            ) : null}
+            {isOpen ? directories.map(directory =>
+                <DirectoryElement key={`${name}/${directory}`} name={`${name}/${directory}`}/>
+            ) : null}
         </>
     )
 }
