@@ -43,7 +43,48 @@ mod lokubox {
     #[cfg(test)]
     mod tests {
         use super::*;
+        use ink::prelude::string::String;
 
+        #[ink::test]
+        fn test_new() {
+            let contract = Lokubox::new();
+            assert_eq!(contract.is_user(AccountId::from([0x01; 32])), false);
+        }
+
+        #[ink::test]
+        fn test_sign_up() {
+            let mut contract = Lokubox::new();
+            let account = AccountId::from([0x01; 32]);
+            let username = String::from("alice");
+
+            // Sign up new user
+            assert_eq!(contract.sign_up(account, username.clone()), Ok(()));
+            assert_eq!(contract.is_user(account), true);
+
+            // Check username stored correctly
+            assert_eq!(contract.users.get(account), Some(username));
+
+            // Try signing up the same user again
+            assert_eq!(
+                contract.sign_up(account, String::from("alice")),
+                Err(String::from("User already exists"))
+            );
+        }
+
+        #[ink::test]
+        fn test_is_user() {
+            let mut contract = Lokubox::new();
+            let account = AccountId::from([0x02; 32]);
+
+            // User should not exist initially
+            assert_eq!(contract.is_user(account), false);
+
+            // Sign up user
+            contract.sign_up(account, String::from("bob")).unwrap();
+
+            // Now user should exist
+            assert_eq!(contract.is_user(account), true);
+        }
     }
 
 
