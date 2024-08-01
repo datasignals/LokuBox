@@ -97,6 +97,34 @@ mod lokubox {
     mod e2e_tests {
         /// Imports all the definitions from the outer scope so we can use them here.
         use super::*;
+        use ink_e2e::build_message;
+        use std::error::Error;
+
+        type E2EResult<T> = Result<T, Box<dyn Error>>;
+
+        #[ink_e2e::test]
+        async fn e2e_test_sign_up(mut client: Client<C, E>) -> E2EResult<()> {
+            let constructor = LokuboxRef::new();
+            let contract_account_id = client
+                .instantiate("lokubox", &ink_e2e::alice(), constructor, 0, None)
+                .await
+                .expect("instantiate failed")
+                .account_id;
+
+            let account = AccountId::from([0x01; 32]);
+            let username = "alice".to_string();
+            let sign_up = build_message::<LokuboxRef>(contract_account_id.clone())
+                .call(move |contract| contract.sign_up(account, username.clone()));  // clone username here
+            client.call(&ink_e2e::alice(), sign_up, 0, None).await.expect("sign_up failed");
+
+            let is_user = build_message::<LokuboxRef>(contract_account_id)
+                .call(|contract| contract.is_user(account));
+            let is_user_result = client.call_dry_run(&ink_e2e::alice(), &is_user, 0, None).await;
+            assert!(is_user_result.return_value());
+
+            Ok(())
+    
+        }
 
         
     }
