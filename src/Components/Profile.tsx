@@ -4,6 +4,7 @@ import '../assets/css/loc-layout.css';
 import '../assets/css/loc-login.css';
 import '../assets/css/main.css';
 
+import { useNavigate } from 'react-router-dom';
 
 import { useWallet } from '../context/WalletContext';
 import { WalletAccount } from '../comman/wallet'; 
@@ -11,11 +12,17 @@ import { WalletAccount } from '../comman/wallet';
 const Profile: React.FC = () => {
 
     const {  isWalletConnected, setCurrentAccount, setWalletConnected, walletData} = useWallet();
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const updateAccounts = (address: string) => {
         setCurrentAccount(address); 
         localStorage.setItem("currentAccount", address);
     };
+
+    const onButtonClick = ()  =>  {
+        navigate('/home');
+    }
+
     useEffect(()  =>  {
         console.log("data", walletData);
         console.log("isWalletConnected", isWalletConnected);
@@ -26,47 +33,23 @@ const Profile: React.FC = () => {
                 <div className="col-12 col-md-6 col-lg-8">
                     <div className="loc-login-content">
                         <div>
-                            <img
-                                style={{ width: '150px', marginBottom: '70px' }}
-                                src="images/svg/logo.svg"
-                                alt="brand-logo"
-                            />
+                            <img style={{ width: '150px', marginBottom: '70px' }} src="images/svg/logo.svg" alt="brand-logo"/>
                         </div>
-                        <div
-                            id="carouselExampleIndicators"
-                            className="carousel slide"
-                            data-bs-ride="carousel"
-                            data-bs-interval="3000"
-                        >
+                        <div id="carouselExampleIndicators" className="carousel slide"
+                            data-bs-ride="carousel" data-bs-interval="3000">
                             <div className="carousel-inner">
                                 <div className="carousel-item active">
-                                    <img
-                                        className="d-block w-100"
-                                        src="images/png/ic_login-image.png"
-                                        alt="First slide"
-                                    />
+                                    <img className="d-block w-100" src="images/png/ic_login-image.png" alt="First slide"/>
                                 </div>
                                 <div className="carousel-item">
-                                    <img
-                                        className="d-block w-100"
-                                        src="images/png/ic_login-image.png"
-                                        alt="Second slide"
-                                    />
+                                    <img className="d-block w-100" src="images/png/ic_login-image.png" alt="Second slide"/>
                                 </div>
                                 <div className="carousel-item">
-                                    <img
-                                        className="d-block w-100"
-                                        src="images/png/ic_login-image.png"
-                                        alt="Third slide"
-                                    />
+                                    <img className="d-block w-100" src="images/png/ic_login-image.png" alt="Third slide" />
                                 </div>
                             </div>
                             <ol className="carousel-indicators">
-                                <li
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="0"
-                                    className="active"
-                                ></li>
+                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active"></li>
                                 <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
                                 <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
                             </ol>
@@ -100,7 +83,7 @@ const Profile: React.FC = () => {
                                 {/* <label htmlFor="loc-n" className="loc-label">Name</label>
                                 <input style={{ width: '100%' }} id="loc-n" className="loc-form-control"/> */}
                                 </div>
-                                <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '100%' }}>
+                                <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '100%' }} onClick={onButtonClick}>
                                     Login
                                 </button>
                             </form>
