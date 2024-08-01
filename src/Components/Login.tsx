@@ -14,7 +14,7 @@ const Login: React.FC = () => {
 
     const { setCurrentAccount, setWalletConnected, walletData, setWalletData} = useWallet();
     const [user, setUser] = useState(false);
-    
+
     const navigate = useNavigate(); // Initialize useNavigate
 
     const polkadot = async () =>  {  
@@ -23,6 +23,7 @@ const Login: React.FC = () => {
           setWalletConnected(true);
           const allAccounts = await web3Accounts();
           setWalletData(allAccounts);
+          setCurrentAccount(allAccounts[0].address)
           navigate('/profile');
         } else {
           alert("Wallet access is denied");

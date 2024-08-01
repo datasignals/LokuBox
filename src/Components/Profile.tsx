@@ -12,7 +12,10 @@ const Profile: React.FC = () => {
 
     const {  isWalletConnected, setCurrentAccount, setWalletConnected, walletData} = useWallet();
 
-
+    const updateAccounts = (address: string) => {
+        setCurrentAccount(address); 
+        localStorage.setItem("currentAccount", address);
+    };
     useEffect(()  =>  {
         console.log("data", walletData);
         console.log("isWalletConnected", isWalletConnected);
@@ -73,22 +76,29 @@ const Profile: React.FC = () => {
                 <div className="col-12 col-md-6 col-lg-4">
                     <div style={{ backgroundColor: 'white', height: '100%' }}>
                         <div className="loc-login-form">
-                            <h2>Complete Your Lokubox Profile</h2>
+                            <h2>Share Files With Secure Provenance </h2>
                             <form style={{ width: '100%', padding: '50px 0 0 0' }}>
                                 <div style={{ width: '100%' }}>
 
                                 <label htmlFor="loc-n" className="loc-label">Select wallet address</label>
                                 {isWalletConnected && (
-                                        <select className="loc-form-control" id="loc-login-select" style={{ width: '100%', padding: '0 10px' }}>
-                                            {walletData.map((add : WalletAccount, index: number) => (
+                                    <select className="loc-form-control" id="loc-login-select" style={{ width: '100%', padding: '0 10px' }}
+                                        onChange={(e) => {
+                                            const selectedAddress = e.target.value;
+                                            const selectedAccount = walletData.find((account: { address: string; }) => account.address === selectedAddress);
+                                                if (selectedAccount) {
+                                                    updateAccounts(selectedAccount);
+                                                }
+                                            }}>
+                                            {walletData.map((add: WalletAccount, index: number) => (
                                                 <option key={index} value={add.address}>
                                                     {add.address.slice(0, 6)}...{add.address.slice(-6)}
                                                 </option>
                                             ))}
                                         </select>
                                     )}
-                                <label htmlFor="loc-n" className="loc-label">Name</label>
-                                <input style={{ width: '100%' }} id="loc-n" className="loc-form-control"/>
+                                {/* <label htmlFor="loc-n" className="loc-label">Name</label>
+                                <input style={{ width: '100%' }} id="loc-n" className="loc-form-control"/> */}
                                 </div>
                                 <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '100%' }}>
                                     Login
