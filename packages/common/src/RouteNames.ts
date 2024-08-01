@@ -1,4 +1,4 @@
-import axios, { type AxiosResponse } from "axios";
+import axios, {type AxiosResponse} from "axios";
 import {type DataResponse, type SimpleResponse} from "./SimpleResponse";
 
 type Method = "POST" | "GET" | "DELETE";
@@ -17,46 +17,42 @@ interface SimpleRouteName<T extends object> {
     fun2: (params: T) => Promise<SimpleResponse>
 }
 
-export const PP = {
-    method: "GET",
-    route: "/api/v1/root",
+type NodeInfo = {
+    files: string[],
+    directories: string[]
+} | Buffer
 
-    fun: (path: string) => encodeURI(``),
 
-    fun2: async (path: string): Promise<DataResponse<string[]>> => {
-        try {
-            const response: AxiosResponse<DataResponse<string[]>> = await axios.get<DataResponse<string[]>>(
-                `http://localhost:3001`
-            );
-            return response.data;
-        } catch (error: unknown) {
-            return {
-                isSuccessful: false,
-                message: "failed"
-            } as DataResponse<string[]>;
-        }
-    }
-}
+export const isNodeInfoObject = (nodeInfo: NodeInfo | undefined): nodeInfo is { files: string[], directories: string[] } =>
+    nodeInfo !== undefined &&
+    typeof nodeInfo === 'object' &&
+    'files' in nodeInfo &&
+    'directories' in nodeInfo;
+
+
+export const isBuffer = (nodeInfo: NodeInfo | undefined): nodeInfo is Buffer =>
+    Buffer.isBuffer(nodeInfo);
+
 
 export const getNode: DataRouteName<{
     path?: string
-}, string[]> = {
+}, NodeInfo> = {
     method: "GET",
     route: "/api/v1/root",
 
     fun: ({path}) => encodeURI(`${getNode.route}/${path ? path : ""}`),
 
-    fun2: async ({ path }): Promise<DataResponse<string[]>> => {
+    fun2: async ({path}): Promise<DataResponse<NodeInfo>> => {
         try {
-            const response: AxiosResponse<DataResponse<string[]>> = await axios.get<DataResponse<string[]>>(
-                `http://localhost:3001${getNode.fun({ path })}`
+            const response: AxiosResponse<DataResponse<NodeInfo>> = await axios.get<DataResponse<NodeInfo>>(
+                `http://localhost:3001${getNode.fun({path})}`
             );
             return response.data;
         } catch (error: unknown) {
             return {
                 isSuccessful: false,
                 message: "failed"
-            } as DataResponse<string[]>;
+            } as DataResponse<NodeInfo>;
         }
     }
 }
@@ -69,33 +65,48 @@ export const deleteNode: SimpleRouteName<{
 
     fun: ({path}) => encodeURI(`${deleteNode.route}/${path}`),
 
-    fun2: async ({path}): Promise<DataResponse<string>> => {
+    fun2: async ({path}): Promise<SimpleResponse> => {
         try {
-            const response = await axios
-                .get<DataResponse<string>>(`http://localhost:3001${deleteNode.fun({path})}`);
+            const response: AxiosResponse<SimpleResponse> = await axios.delete<SimpleResponse>(
+                `http://localhost:3001${deleteNode.fun({path})}`
+            );
             return response.data;
-        } catch (_e) {
-            return ({isSuccessful: false, message: "failed"} as DataResponse<string>);
+        } catch (error: unknown) {
+            return {
+                isSuccessful: false,
+                message: "failed"
+            } as SimpleResponse;
         }
     }
 }
 
 export const putNode: SimpleRouteName<{
     path: string,
-    contents?: Buffer | string
+    isDirectory: boolean,
+    content?: Buffer | string
 }> = {
     method: "POST",
     route: "/api/v1/root",
 
+    //TODO small problem as with this approach I have to feed it all params
     fun: ({path}) => encodeURI(`${putNode.route}/${path}`),
 
-    fun2: async ({path}): Promise<DataResponse<string>> => {
+    fun2: async ({path, isDirectory, content}): Promise<SimpleResponse> => {
+        const body = {
+            isDirectory,
+            content
+        }
         try {
-            const response = await axios
-                .get<DataResponse<string>>(`http://localhost:3001${putNode.fun({path})}`);
+            const response: AxiosResponse<SimpleResponse> = await axios.post<SimpleResponse>(
+                `http://localhost:3001${putNode.fun({path, isDirectory, content})}`,
+                body,
+            );
             return response.data;
-        } catch (_e) {
-            return ({isSuccessful: false, message: "failed"} as DataResponse<string>);
+        } catch (error: unknown) {
+            return {
+                isSuccessful: false,
+                message: "failed"
+            } as SimpleResponse;
         }
     }
 };

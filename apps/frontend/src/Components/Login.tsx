@@ -3,13 +3,13 @@ import '../css/loc-h-content.css';
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
-import {getNode} from "@repo/common/RouteNames";
+import {deleteNode, getNode, putNode} from "@repo/common/RouteNames";
 import type {DataResponse} from "@repo/common/SimpleResponse";
 import axios, {AxiosResponse} from "axios";
 
 const Login: React.FC = () => {
 
-    const result = getNode.fun2({});
+    // const result = getNode.fun2({});
 
     // result.then((e) => {
     //     console.log("THEN: " + JSON.stringify(e, null, 2))
@@ -20,12 +20,16 @@ const Login: React.FC = () => {
 
     return (
         <>
-            <button onClick={async () => {setTestValue(JSON.stringify(await getNode.fun2({})))}}>test list route 1</button>
-            {/*<button onClick={() => Routes.putNode.fun2()}>test create route 2</button>*/}
-            {/*<button onClick={() => Routes.deleteNode.fun2()}>test delete route 3</button>*/}
+            <button onClick={async () => {
+                setTestValue(JSON.stringify(await getNode.fun2({})))
+            }}>test list route 1
+            </button>
+            <button onClick={async () => console.log(JSON.stringify(await putNode.fun2({path: "dir1", isDirectory: true}), null, 2))}>test create dir</button>
+            <button onClick={async () => console.log(JSON.stringify(await putNode.fun2({path: "file1", isDirectory: false}), null, 2))}>test create file</button>
+            <button onClick={async () => console.log(JSON.stringify(await deleteNode.fun2({path: "dir1"}), null, 2))}>test delete route 3</button>
 
             {testValue.length > 0 ?
-                <h1>TEST VALUE FROM BACKEND: {testValue}</h1>:
+                <h1>TEST VALUE FROM BACKEND: {testValue}</h1> :
                 <h1>NO VALUE</h1>
             }
 

@@ -14,6 +14,7 @@ const port = 3001; //TODO
 app.use(Cors({credentials: true}));
 app.use(bodyParser.json());
 
+//TODO if this is to exists, it needs to be in common folder
 interface CreateRequestBody {
     isDirectory?: boolean;
     content?: string;
@@ -39,7 +40,6 @@ fs.mkdirSync(baseDir, {recursive: true});
 
 app.get('/api/v1/root/*', (req: Request, res: Response) => {
     try {
-
         const reqPath = req.params[0] ?? '';
         const fullPath = path.join(baseDir, reqPath);
 
@@ -48,10 +48,30 @@ app.get('/api/v1/root/*', (req: Request, res: Response) => {
         if (statResult.isDirectory()) {
             const contents = fs.readdirSync(fullPath)
 
+            const files: string[] = [];
+            const directories: string[] = [];
+
+            contents.forEach(node => {
+                const nodeFullPath = path.join(fullPath, node);
+                const stats = fs.lstatSync(nodeFullPath);
+
+                if(stats.isFile()) {
+                    files.push(node);
+                } else if(stats.isDirectory()) {
+                    directories.push(node);
+                }
+            });
+
+
+            console.log("readdirsync: " + JSON.stringify(contents, null, 2));
+
             return res.status(200).json({
                 isSuccessful: true,
                 message: "Directory Returned",
-                data: contents
+                data: {
+                    files,
+                    directories
+                }
             });
         }
 
@@ -118,7 +138,13 @@ app.post("/api/v1/root/*", (req: Request, res: Response) => {
             });
         }
 
-        console.log("IS dir: " + isDirectory);
+        if(fs.existsSync(fullPath)) {
+            return res.status(400).json({
+                isSuccessful: false,
+                message: "Directory/File already exists in this path",
+            });
+        }
+
         if (isDirectory) {
             fs.mkdirSync(fullPath, {recursive: true});
             return res.status(201).json({
@@ -126,8 +152,6 @@ app.post("/api/v1/root/*", (req: Request, res: Response) => {
                 message: "Directory Created",
             });
         }
-
-        console.log("writing file instead");
 
         fs.writeFileSync(fullPath, content ?? "");
         return res.status(201).json({
