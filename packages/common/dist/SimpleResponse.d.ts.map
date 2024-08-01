@@ -1,0 +1,1 @@
+{"version":3,"file":"SimpleResponse.d.ts","sourceRoot":"","sources":["../src/SimpleResponse.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,cAAc;IAC7B,YAAY,EAAE,OAAO,CAAC;IACtB,OAAO,EAAE,MAAM,CAAC;CACjB;AAED,MAAM,MAAM,YAAY,CAAC,CAAC,IAAI,cAAc,GAAG;IAC7C,IAAI,CAAC,EAAE,CAAC,CAAC;CACV,CAAC"}
