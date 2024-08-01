@@ -81,7 +81,7 @@ app.get('/api/v1/root/*', (req: Request, res: Response) => {
             return res.status(200).json({
                 isSuccessful: true,
                 message: "File Returned",
-                data: contents
+                data: contents.toString("base64")
             });
         }
 

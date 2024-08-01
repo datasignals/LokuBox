@@ -33,14 +33,27 @@ export const TreeView: FC<Props> = ({cachedFiles, cachedDirectories}) => {
             .catch((e: unknown) => null)
     }, []);
 
+
+    //TODO TreeView and  are almost duplicates of one another, fix that
+    const uploadFile = () => {
+
+    }
+
+    const createDir = () => {
+
+    }
+
+
+
+
     return (
         <>
             <button type="button" onClick={() => setIsOpen(!isOpen)}>{isOpen ?
                 `📂/` :
                 `📁/`
             }</button>
-            <button>⌗</button>
-            <button>⬇</button>
+            <button onClick={uploadFile}>☁️</button>
+            <button onClick={createDir}>🗂️</button>
 
             <br/>
             {isOpen &&

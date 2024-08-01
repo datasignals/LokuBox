@@ -20,7 +20,7 @@ interface SimpleRouteName<T extends object> {
 type NodeInfo = {
     files: string[],
     directories: string[]
-} | Buffer
+} | string
 
 
 export const isNodeInfoObject = (nodeInfo: NodeInfo | undefined): nodeInfo is { files: string[], directories: string[] } =>
@@ -30,8 +30,8 @@ export const isNodeInfoObject = (nodeInfo: NodeInfo | undefined): nodeInfo is { 
     'directories' in nodeInfo;
 
 
-export const isBuffer = (nodeInfo: NodeInfo | undefined): nodeInfo is Buffer =>
-    Buffer.isBuffer(nodeInfo);
+export const isString = (nodeInfo: NodeInfo | undefined): nodeInfo is string =>
+    typeof nodeInfo === "string"
 
 
 export const getNode: DataRouteName<{
