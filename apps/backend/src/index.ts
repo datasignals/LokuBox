@@ -4,6 +4,7 @@ import Cors from "cors";
 import Express, {type Request, type Response} from "express";
 import bodyParser from "body-parser";
 import session from "express-session";
+import {mountNfs1, mountNfs2, unmountNfs} from "./Util";
 
 
 //Init server
@@ -34,14 +35,40 @@ app.use(session({
     }
 }));
 
-const baseDir = "/tmp/nfs";
+const nfsDirectory = "/tmp/nfs";
 
-fs.mkdirSync(baseDir, {recursive: true});
+fs.mkdirSync(nfsDirectory, {recursive: true});
+
+app.get("/info", (_req, res) => {
+    return res.status(200).send(nfsDirectory);
+})
+
+app.get("/mount", async (req, res) => {
+    const path = req.query["path"]?.toString();
+
+    if (path === "1" || path === "2") {
+        await unmountNfs(nfsDirectory);
+
+        console.log('mounting nfs...');
+
+        path === "1" ?
+            await mountNfs1(nfsDirectory) :
+            await mountNfs2(nfsDirectory);
+
+        return res
+            .status(200)
+            .send("NFS dir changed");
+    }
+
+    return res
+        .status(404)
+        .send("NFS dir does not exist");
+});
 
 app.get('/api/v1/root/*', (req: Request, res: Response) => {
     try {
         const reqPath = req.params[0] ?? '';
-        const fullPath = path.join(baseDir, reqPath);
+        const fullPath = path.join(nfsDirectory, reqPath);
 
         const statResult = fs.statSync(fullPath)
 
@@ -55,15 +82,15 @@ app.get('/api/v1/root/*', (req: Request, res: Response) => {
                 const nodeFullPath = path.join(fullPath, node);
                 const stats = fs.lstatSync(nodeFullPath);
 
-                if(stats.isFile()) {
+                if (stats.isFile()) {
                     files.push(node);
-                } else if(stats.isDirectory()) {
+                } else if (stats.isDirectory()) {
                     directories.push(node);
                 }
             });
 
 
-            console.log("readdirsync: " + JSON.stringify(contents, null, 2));
+            console.log(`readdirsync: ${JSON.stringify(contents, null, 2)}`);
 
             return res.status(200).json({
                 isSuccessful: true,
@@ -102,7 +129,7 @@ app.get('/api/v1/root/*', (req: Request, res: Response) => {
 app.delete("/api/v1/root/*", (req: Request, res: Response) => {
     try {
         const reqPath = req.params[0] ?? '';
-        const fullPath = path.join(baseDir, reqPath);
+        const fullPath = path.join(nfsDirectory, reqPath);
 
         const statResult = fs.statSync(fullPath)
         const isDir = statResult.isDirectory()
@@ -128,7 +155,7 @@ app.delete("/api/v1/root/*", (req: Request, res: Response) => {
 app.post("/api/v1/root/*", (req: Request, res: Response) => {
     try {
         const reqPath = req.params[0] ?? '';
-        const fullPath = path.join(baseDir, reqPath);
+        const fullPath = path.join(nfsDirectory, reqPath);
         const {isDirectory, content} = req.body as CreateRequestBody;
 
         if (isDirectory === undefined) {
@@ -138,7 +165,7 @@ app.post("/api/v1/root/*", (req: Request, res: Response) => {
             });
         }
 
-        if(fs.existsSync(fullPath)) {
+        if (fs.existsSync(fullPath)) {
             return res.status(400).json({
                 isSuccessful: false,
                 message: "Directory/File already exists in this path",

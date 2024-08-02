@@ -1,4 +1,4 @@
-const WalletList = [
+export const WalletList = [
     {
         img: "/images/png/polkadot.png",
         name: "Polkadot.Js" ,
@@ -10,5 +10,3 @@ const WalletList = [
         des: "Coinbase chrome extension wallet"
     },
 ]
-
-export default WalletList;

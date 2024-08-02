@@ -139,10 +139,10 @@ li{
     font-size: 14px;
     text-align: center;
   }
-  
 
 
-/*------------------ new css ----------------*/
+
+  /*------------------ new css ----------------*/
 
 
 .drop-menu.wallet img{
@@ -161,7 +161,7 @@ li{
     border-radius: 10px;
     margin-bottom: 15px;
     position: relative;
-    
+
 }
 
 .drop-menu ul li.drop-item-container:hover{

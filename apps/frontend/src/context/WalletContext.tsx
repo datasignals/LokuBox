@@ -1,10 +1,7 @@
-import React, {createContext, useContext, useState, type FC, type ReactElement} from 'react';
+import React, { createContext, useContext, useState, type ReactNode } from 'react';
 import {InjectedAccountWithMeta} from "@polkadot/extension-inject/types";
 
-interface Props {
-  children?: ReactElement
-}
-
+// Define types for the context state
 interface WalletContextType {
   isWalletConnected: boolean;
   setWalletConnected: (_: boolean) => void;
@@ -12,44 +9,40 @@ interface WalletContextType {
   setWalletData: (_: InjectedAccountWithMeta[]) => void;
   currentAccount: string;
   setCurrentAccount: (_: string) => void;
-  currentBalance: number,
-  name: string,
-  setName: (_: string) => void
+  currentBalance: number;
+  setCurrentBalance: (_: number) => void;
+  name: string;
+  setName: (_: string) => void;
 }
 
-// Create a Context
+// Create a Context with a default value
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
+// Define types for the provider props
+interface WalletProviderProps {
+  children: ReactNode;
+}
+
 // Create a Provider component
-export const WalletProvider: FC<Props> = ({ children }) => {
-  const [isWalletConnected, setWalletConnected] = useState(false);
-  const [walletData, setWalletData] = useState<InjectedAccountWithMeta[]>([]);
-  const [currentAccount, setCurrentAccount] = useState<string>("")
-  const [currentBalance, setCurrentBalance] = useState(0);
-  const [name, setName] = useState("");
+export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
+  const [isWalletConnected, setWalletConnected] = useState<boolean>(false);
+  const [walletData, setWalletData] = useState<InjectedAccountWithMeta[]>([]); // Replace `any` with the appropriate type
+  const [currentAccount, setCurrentAccount] = useState<string>("");
+  const [currentBalance, setCurrentBalance] = useState<number>(0);
+  const [name, setName] = useState<string>("");
 
   return (
-    <WalletContext.Provider value={{
-      isWalletConnected,
-      setWalletConnected,
-      walletData,
-      setWalletData,
-      currentAccount,
-      setCurrentAccount,
-      currentBalance,
-      name,
-      setName
-    }}>
+    <WalletContext.Provider value={{ isWalletConnected, setWalletConnected, walletData, setWalletData, currentAccount, setCurrentAccount, currentBalance, setCurrentBalance, name, setName }}>
       {children}
     </WalletContext.Provider>
   );
 };
 
 // Create a custom hook to use the context
-export const useWalletContext = (): WalletContextType => {
+export const useWallet = (): WalletContextType => {
   const context = useContext(WalletContext);
-  if (!context) {
-    throw new Error('useWalletContext must be used within an AuthProvider');
+  if (context === undefined) {
+    throw new Error('useWallet must be used within a WalletProvider');
   }
   return context;
-}
+};
