@@ -15,6 +15,7 @@ const Profile: React.FC = () => {
     const navigate = useNavigate(); // Initialize useNavigate
 
     const updateAccounts = (address: string) => {
+        console.log("add", address);
         setCurrentAccount(address); 
         localStorage.setItem("currentAccount", address);
     };
@@ -70,7 +71,7 @@ const Profile: React.FC = () => {
                                             const selectedAddress = e.target.value;
                                             const selectedAccount = walletData.find((account: { address: string; }) => account.address === selectedAddress);
                                                 if (selectedAccount) {
-                                                    updateAccounts(selectedAccount);
+                                                    updateAccounts(selectedAccount.address);
                                                 }
                                             }}>
                                             {walletData.map((add: WalletAccount, index: number) => (

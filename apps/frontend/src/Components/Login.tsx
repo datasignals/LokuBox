@@ -24,6 +24,7 @@ const Login: React.FC = () => {
           const allAccounts = await web3Accounts();
           setWalletData(allAccounts);
           setCurrentAccount(allAccounts[0].address)
+          localStorage.setItem("currentAccount", allAccounts[0].address);
           navigate('/profile');
         } else {
           alert("Wallet access is denied");
