@@ -1,25 +1,25 @@
 {
-  "name": "lokubox",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
-    "lint:strict": "turbo lint:strict",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
-  },
-  "devDependencies": {
-    "prettier": "^3.2.5",
-    "turbo": "^2.0.6",
-    "typescript": "^5.5.3"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "yarn@1.22.21",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
-}
+    "name": "lokubox",
+    "private": true,
+    "scripts": {
+      "build": "turbo build",
+      "dev": "turbo dev",
+      "lint": "turbo lint",
+      "lint:fix": "turbo lint:fix",
+      "lint:strict": "turbo lint:strict",
+      "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    },
+    "devDependencies": {
+      "prettier": "^3.2.5",
+      "turbo": "^2.0.6",
+      "typescript": "^5.5.3"
+    },
+    "engines": {
+      "node": ">=18"
+    },
+    "packageManager": "yarn@1.22.21",
+    "workspaces": [
+      "apps/*",
+      "packages/*"
+    ]
+  }

@@ -1,13 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../css/loc-h-content.css"
-import '../css/loc-layout.css';
-import '../css/loc-login.css';
-import '../css/main.css';
+import "../assets/css/loc-h-content.css"
+import '../assets/css/loc-layout.css';
+import '../assets/css/loc-login.css';
+import '../assets/css/main.css';
 
+import { useWallet } from '../context/WalletContext';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
+    const {  isWalletConnected, currentAccount, setWalletConnected, walletData} = useWallet();
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
@@ -19,13 +21,14 @@ const Home: React.FC = () => {
             <div className="loc-nav" id="loc-nav">
                 <div className="loc-sidemenu-toggler" id="loc-sidemenu-toggler">
                     <div className="loc-logo">
-                        <img src={'/images/svg/logo.svg'} alt="brand-logo" />
+                        <img src={require('../assets/images/svg/logo.svg').default} alt="brand-logo" />
                     </div>
                     <div className="loc-nav-ham">Files</div>
                 </div>
                 <ul className="loc-nav-menu">
                     <li>
-                        <img src={'/images/svg/user_default.svg'} alt="user" />
+                        <span style={{ margin : "10px"}}>{currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}</span>
+                        <img src={require('../assets/images/svg/user_default.svg').default} alt="user" />
                     </li>
                 </ul>
             </div>
@@ -93,38 +96,38 @@ const Home: React.FC = () => {
                             <div className="loc-card loc-h">
                                 <div className="position-relative" style={{ width: '350px' }}>
                                     <input style={{ width: '350px' }} type="text" className="loc-form-control" placeholder="Search" />
-                                    <img style={{ position: 'absolute', top: '12px', right: '15px' }} src={'/images/svg/ic_search.svg'} alt="" />
+                                    <img style={{ position: 'absolute', top: '12px', right: '15px' }} src={require('../assets/images/svg/ic_search.svg').default} alt="" />
                                 </div>
                             </div>
                             <div className="loc-card card-active" style={{ marginTop: '20px' }}>
                                 <div className="loc-h-card-content-con">
                                     <div className="loc-h-card-content">
-                                        <img src={'/images/svg/ic_pdf.svg'} alt=""/>
+                                        <img src={require('../assets/images/svg/ic_pdf.svg').default} alt=""/>
                                         <div>
                                             <h4 style={{ marginBottom: '5px' }}>myfiles.pdf</h4>
                                             <h5>25-10-2024, 10:30 AM</h5>
                                         </div>
                                     </div>
                                     <div className="loc-h-tools">
-                                        <img src={'/images/svg/ic_team_dropdown.svg'} alt="more-options" />
-                                        <img src={'/images/svg/ic_share.svg'} alt="more-options" />
-                                        <img style={{ width: '5px' }} src={'/images/svg/ic_3_dots.svg'} alt="more-options" />
+                                        <img src={require('../assets/images/svg/ic_team_dropdown.svg').default} alt="more-options" />
+                                        <img src={require('../assets/images/svg/ic_share.svg').default} alt="more-options" />
+                                        <img style={{ width: '5px' }} src={require('../assets/images/svg/ic_3_dots.svg').default} alt="more-options" />
                                     </div>
                                 </div>
                             </div>
                             <div className="loc-card" style={{ marginTop: '20px' }}>
                                 <div className="loc-h-card-content-con">
                                     <div className="loc-h-card-content">
-                                        <img src={'/images/svg/ic_pdf.svg'} alt=""/>
+                                        <img src={require('../assets/images/svg/ic_pdf.svg').default} alt=""/>
                                         <div>
                                             <h4 style={{ marginBottom: '5px' }}>newfiles.pdf</h4>
                                             <h5>27-10-2024, 10:30 AM</h5>
                                         </div>
                                     </div>
                                     <div className="loc-h-tools">
-                                        <img src={'/images/svg/ic_team_dropdown.svg'} alt="more-options" />
-                                        <img src={'/images/svg/ic_share.svg'} alt="more-options" />
-                                        <img style={{ width: '5px' }} src={'/images/svg/ic_3_dots.svg'} alt="more-options" />
+                                        <img src={require('../assets/images/svg/ic_team_dropdown.svg').default} alt="more-options" />
+                                        <img src={require('../assets/images/svg/ic_share.svg').default} alt="more-options" />
+                                        <img style={{ width: '5px' }} src={require('../assets/images/svg/ic_3_dots.svg').default} alt="more-options" />
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +142,7 @@ const Home: React.FC = () => {
                 <div className="loc-card" style={{ marginTop: '20px' }}>
                     <div className="loc-card-content">
                         <div className="loc-h-card-content">
-                            <img src={'/images/svg/ic_pdf.svg'} alt="" />
+                            <img src={require('../assets/images/svg/ic_pdf.svg').default} alt="" />
                             <div>
                                 <h4 style={{ marginBottom: '5px' }}>myfiles.pdf</h4>
                                 <h5 style={{ marginBottom: '5px' }}>10.10mb</h5>
@@ -166,7 +169,7 @@ const Home: React.FC = () => {
                         <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '70px' }}>
                             <div className="drop-zone">
                                 <span className="drop-zone__prompt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                    <img src={'/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt="" />
+                                    <img src={require('../assets/images/svg/ic_cloud.svg').default} style={{ width: '48px', marginBottom: '20px' }} alt="" />
                                     Drop file here or click to upload
                                 </span>
                                 <input type="file" name="myFile" className="drop-zone__input" />
@@ -179,7 +182,7 @@ const Home: React.FC = () => {
                 </div>
             </div>
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn" style={{ position: 'fixed', bottom: '40px', right: '420px', zIndex: 50 }}>
-                <img src={'/images/svg/ic_upload_file.svg'} alt="" />
+                <img src={require('../assets/images/svg/ic_upload_file.svg').default} alt="" />
             </button>
         </div>
     );

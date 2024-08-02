@@ -82,6 +82,7 @@
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid #E2EAF0;
+    flex-direction: column;
 }
 
 .loc-sidemenu ul .loc-sidemenu-item.active a{
@@ -102,6 +103,7 @@
 .loc-sidemenu ul .loc-sidemenu-item a .loc-sidemenu-item-name{
     font-size: 14px;
     color: #C0CED9;
+    margin-top: 10px;
 }
 .loc-sidemenu ul .loc-sidemenu-item.active a .loc-sidemenu-item-name{
     color: #007AD3;

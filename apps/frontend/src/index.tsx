@@ -1,19 +1,21 @@
-import React, {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
-import {App} from './App';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 import './index.css';
-import {reportWebVitals} from './reportWebVitals';
+import reportWebVitals from './reportWebVitals';
 
-const root = document.getElementById("root");
+import { WalletProvider } from './context/WalletContext';
 
-if(root) {
-    createRoot(root).render(
-        <StrictMode>
-            <App/>
-        </StrictMode>,
-    );
-} else {
-    process.exit(1);
-}
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <WalletProvider>
+      <App />
+    </WalletProvider>
+  </React.StrictMode>
+);
 
 reportWebVitals();
