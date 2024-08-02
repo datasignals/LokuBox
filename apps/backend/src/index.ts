@@ -58,13 +58,13 @@ app.get("/mount", async (req, res) => {
     }
 });
 
-app.get("/info", (req, res) => {
+app.get("/info", (_req, res) => {
     return res.status(200).send(nfsDirectory);
 })
 
 
 // API to list files in a directory
-app.get('/files', async (req, res) => {
+app.get('/files', async (_req, res) => {
     try {
         const files = fs.readdirSync(nfsDirectory);
         res.json(files);
