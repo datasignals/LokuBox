@@ -60,7 +60,7 @@ const Profile: React.FC = () => {
                 <div className="col-12 col-md-6 col-lg-4">
                     <div style={{ backgroundColor: 'white', height: '100%' }}>
                         <div className="loc-login-form">
-                            <h2>Share Files With Secure Provenance </h2>
+                            <h2>Login</h2>
                             <form style={{ width: '100%', padding: '50px 0 0 0' }}>
                                 <div style={{ width: '100%' }}>
 
