@@ -140,3 +140,46 @@ li{
     text-align: center;
   }
   
+
+
+/*------------------ new css ----------------*/
+
+
+.drop-menu.wallet img{
+    border-radius: 50px;
+    width: 48px;
+    height: 48px;
+}
+.drop-menu ul li{
+    font-size: 14px;
+    padding: 10px 0;
+    width: 100%;
+}
+.drop-menu ul li.drop-item-container{
+    background-color: #f7f7f7;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    position: relative;
+    
+}
+
+.drop-menu ul li.drop-item-container:hover{
+  color:#0b0b0c;
+}
+.drop-menu ul li.drop-item-container:nth-last-child(1){
+    margin-bottom: 0;
+}
+
+.d-item-flex{
+    display: flex;
+    align-items: center;
+}
+
+.ml-4 {
+    margin-left: 1.5rem !important;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}

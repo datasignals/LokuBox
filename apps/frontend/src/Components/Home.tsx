@@ -5,11 +5,13 @@ import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
 
+import { useWalletContext } from '../context/WalletContext';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
+    const { isWalletConnected, currentAccount, setWalletConnected, walletData} = useWalletContext();
 
-    const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault();
         navigate(path);
     };
@@ -25,6 +27,7 @@ const Home: React.FC = () => {
                 </div>
                 <ul className="loc-nav-menu">
                     <li>
+                        <span style={{ margin : "10px"}}>{currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}</span>
                         <img src={'/images/svg/user_default.svg'} alt="user" />
                     </li>
                 </ul>
