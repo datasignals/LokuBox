@@ -1,26 +1,70 @@
-import React, { useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../../public/assets/css/loc-h-content.css"
+import "../../public/assets/css/loc-h-content.css";
 import '../../public/assets/css/loc-layout.css';
 import '../../public/assets/css/loc-login.css';
 import '../../public/assets/css/main.css';
-
 import { useWallet } from '../context/walletContext';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
-    const {  isWalletConnected, currentAccount, setWalletConnected, walletData} = useWallet();
+    const { isWalletConnected, currentAccount, setWalletConnected, walletData } = useWallet();
+
+    const dropZoneRef = useRef<HTMLDivElement | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [droppedFile, setDroppedFile] = useState<File | null>(null);
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
         navigate(path);
     };
 
-    useEffect(() =>  {
-        if(currentAccount || localStorage.getItem("currentAccount")){
-            navigate("")
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        if (dropZoneRef.current) {
+            dropZoneRef.current.classList.add('drop-zone--over');
         }
-    })
+    };
+
+    const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        if (dropZoneRef.current) {
+            dropZoneRef.current.classList.remove('drop-zone--over');
+        }
+    };
+
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        if (dropZoneRef.current) {
+            dropZoneRef.current.classList.remove('drop-zone--over');
+        }
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            if (fileInputRef.current) {
+                fileInputRef.current.files = files;
+            }
+            setDroppedFile(files[0]);
+        }
+    };
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            setDroppedFile(files[0]);
+        }
+    };
+
+    const handleDropZoneClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    useEffect(() => {
+        if (currentAccount || localStorage.getItem("currentAccount")) {
+            navigate("");
+        }
+    }, [currentAccount, navigate]);
 
     return (
         <div>
@@ -56,8 +100,7 @@ const Home: React.FC = () => {
                         <a href="/" className="loc-sidemenu-item-content" onClick={handleNavigation('/')}>
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 width="24.871" height="27.558" viewBox="0 0 24.871 27.558">
-                                <path
-                                    id="s_share"
+                                <path id="s_share"
                                     d="M23.726,21.479a4.021,4.021,0,0,0-2.708,1.065L11.166,16.8a4.534,4.534,0,0,0,.124-.968,4.534,4.534,0,0,0-.124-.968L20.907,9.18a4.142,4.142,0,1,0-1.326-3.03,4.534,4.534,0,0,0,.124.968L9.964,12.8a4.15,4.15,0,1,0,0,6.059L19.8,24.619a3.907,3.907,0,0,0-.111.9,4.035,4.035,0,1,0,4.035-4.04Z"
                                     transform="translate(-3 -2)"
                                     fill="#c0c5d9"
@@ -161,15 +204,15 @@ const Home: React.FC = () => {
                         <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '12px' }}
                             className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '70px' }}>
-                            <div className="drop-zone">
+                            <div className="drop-zone" ref={dropZoneRef} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={handleDropZoneClick}>
                                 <span className="drop-zone__prompt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                     <img src={'../../public/assets/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt="" />
-                                    Drop file here or click to upload
+                                    {droppedFile?.name ? <span>{droppedFile.name}</span> : <span>Drop file here or click to upload</span>}
                                 </span>
-                                <input type="file" name="myFile" className="drop-zone__input" />
+                                <input ref={fileInputRef} type="file" name="myFile" className="drop-zone__input" style={{ display: 'none' }} onChange={handleChange}/>
                             </div>
                             <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }}>
-                                Connect
+                                Upload
                             </button>
                         </div>
                     </div>
