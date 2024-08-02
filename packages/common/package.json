@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "exports": {
+    "./FileDescription": {
+      "types": "./src/FileDescription.ts",
+      "default": "./dist/FileDescription.js"
+    },
     "./SimpleResponse": {
       "types": "./src/SimpleResponse.ts",
       "default": "./dist/SimpleResponse.js"

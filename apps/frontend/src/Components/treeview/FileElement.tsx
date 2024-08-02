@@ -1,17 +1,17 @@
-import {FC, useState} from "react";
-import {deleteNode, getNode, isString} from "@repo/common/RouteNames";
+import {type FC} from "react";
+import {isString} from "@repo/common/RouteNames";
+import {type FileDescription} from "@repo/common/FileDescription";
+import {useGlobalContext} from "../../context/GlobalContext";
 
-interface Props {
-    name: string
-}
+//Simpler version of FileElement
+export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
 
-export const FileElement: FC<Props> = ({name}) => {
+    const dateObject = new Date(creationDate);
 
-    const [confirmDownload, setConfirmDownload] = useState(false);
-    const [confirmRemove, setConfirmRemove] = useState(false);
+    const {routeNames} = useGlobalContext()
 
     const download = async (): Promise<void> => {
-        const downloadResult = await getNode.fun2({path: name})
+        const downloadResult = await routeNames.getNode.fun2({path: filename})
 
         if (!downloadResult.isSuccessful) {
             return;
@@ -32,60 +32,34 @@ export const FileElement: FC<Props> = ({name}) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = name;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     }
 
-    const remove = async () => {
-        const deleteResult = await deleteNode.fun2({path: name});
-        //TODO handle remove
+    //TODO not a function
+    const timestampToFormatDate =
+        `${String(dateObject.getDate()).padStart(2, '0')}-${String(dateObject.getMonth() + 1).padStart(2, '0')}-${dateObject.getFullYear()} ${String(dateObject.getMinutes()).padStart(2, '0')}:${String(dateObject.getHours()).padStart(2, '0')}`;
 
-    }
-
-
+    //TODO move download file call to so button maybe
     return (
-        <>
-            <FileButton name={name} msg="Download" confirm={() => {
-                setConfirmDownload(!confirmDownload);
-            }}/>
-            <FileButton name={name} msg="Remove" confirm={() => {
-                setConfirmRemove(!confirmRemove);
-            }}/>
-
-            {confirmDownload ?
-                <ConfirmButton name={name} msg="Download" confirmAction={download}
-                                       confirm={() => setConfirmDownload(!confirmDownload)}/> : null
-            }
-            {confirmRemove ?
-                <ConfirmButton name={name} msg="Remove" confirmAction={remove}
-                                     confirm={() => setConfirmRemove(!confirmRemove)}/> : null
-            }
-            <br/>
-        </>
+        <div className="loc-card card-active" style={{marginTop: '20px'}} onClick={() => void download()}>
+            <div className="loc-h-card-content-con">
+                <div className="loc-h-card-content">
+                    <img src="/images/svg/ic_pdf.svg" alt=""/>
+                    <div>
+                        <h4 style={{marginBottom: '5px'}}>{filename}</h4>
+                        <h5>{timestampToFormatDate}</h5>
+                    </div>
+                </div>
+                <div className="loc-h-tools">
+                    <img src="/images/svg/ic_team_dropdown.svg" alt="more-options"/>
+                    <img src="/images/svg/ic_share.svg" alt="more-options"/>
+                    <img style={{width: '5px'}} src="/images/svg/ic_3_dots.svg" alt="more-options"/>
+                </div>
+            </div>
+        </div>
     )
 }
-
-const FileButton: FC<{ name: string, msg: "Download" | "Remove", confirm: () => void }> = ({name, msg,  confirm}) =>
-    <button type="button" key={name} onClick={confirm}>
-        {msg === "Download" ?
-            `🧾${name}`:
-            "❌"
-        }
-    </button>
-
-const ConfirmButton: FC<{
-    name: string,
-    msg: "Remove" | "Download",
-    confirm: () => void,
-    confirmAction: () => Promise<void>
-}> = ({name, msg, confirmAction, confirm}) => (
-    <button type="button" key={name} onClick={() => {
-        confirm();
-        void confirmAction()
-    }}>
-        Confirm {msg}
-    </button>
-)

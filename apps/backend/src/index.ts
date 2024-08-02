@@ -5,6 +5,8 @@ import Express, {type Request, type Response} from "express";
 import bodyParser from "body-parser";
 import session from "express-session";
 import {mountNfs1, mountNfs2, unmountNfs} from "./Util";
+import {FileDescription} from "@repo/common/FileDescription";
+
 
 
 //Init server
@@ -59,7 +61,6 @@ app.get("/mount", async (req, res) => {
             .status(200)
             .send("NFS dir changed");
     }
-
     return res
         .status(404)
         .send("NFS dir does not exist");
@@ -75,7 +76,7 @@ app.get('/api/v1/root/*', (req: Request, res: Response) => {
         if (statResult.isDirectory()) {
             const contents = fs.readdirSync(fullPath)
 
-            const files: string[] = [];
+            const files: FileDescription[] = [];
             const directories: string[] = [];
 
             contents.forEach(node => {
@@ -83,7 +84,7 @@ app.get('/api/v1/root/*', (req: Request, res: Response) => {
                 const stats = fs.lstatSync(nodeFullPath);
 
                 if (stats.isFile()) {
-                    files.push(node);
+                    files.push({filename: node, creationDate: stats.birthtime.getTime()});
                 } else if (stats.isDirectory()) {
                     directories.push(node);
                 }

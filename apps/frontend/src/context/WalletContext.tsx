@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
-import {InjectedAccountWithMeta} from "@polkadot/extension-inject/types";
+import {type InjectedAccountWithMeta} from "@polkadot/extension-inject/types";
 
 // Define types for the context state
 interface WalletContextType {

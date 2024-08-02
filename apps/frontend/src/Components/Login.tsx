@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {type FC} from 'react';
 import "../css/loc-h-content.css"
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
@@ -6,14 +6,12 @@ import '../css/main.css';
 
 import {web3Accounts, web3Enable} from '@polkadot/extension-dapp';
 import {useNavigate} from 'react-router-dom';
-
 import {WalletList} from "../Wallets"
 import {useWallet} from '../context/WalletContext';
 
-const Login: React.FC = () => {
+export const Login: FC = () => {
 
-    const {setCurrentAccount, setWalletConnected, walletData, setWalletData} = useWallet();
-    const [user, setUser] = useState(false);
+    const {setCurrentAccount, setWalletConnected, setWalletData} = useWallet();
 
     const navigate = useNavigate(); // Initialize useNavigate
 
@@ -65,9 +63,9 @@ const Login: React.FC = () => {
                             </div>
                             <ol className="carousel-indicators">
                                 <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                                    className="active"></li>
-                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
-                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+                                    className="active" />
+                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" />
+                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" />
                             </ol>
                         </div>
                     </div>
@@ -94,7 +92,7 @@ const Login: React.FC = () => {
                                         <ul className="flex flex-column">
                                             {WalletList.map((item, index) => (
                                                 <li className='drop-item-container'
-                                                    onClick={() => handleClick(item.name)}>
+                                                    onClick={() => { handleClick(item.name); }}>
                                                     <a className="d-item-flex">
                                                         <img src={item.img} alt="wallet-icon"/>
                                                         <div className='ml-4'>
@@ -127,5 +125,3 @@ const Login: React.FC = () => {
         </div>
     );
 };
-
-export default Login;

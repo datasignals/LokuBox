@@ -10,10 +10,10 @@ import {InjectedAccountWithMeta} from "@polkadot/extension-inject/types";
 
 export const Profile: React.FC = () => {
 
-    const {isWalletConnected, setCurrentAccount, setWalletConnected, walletData} = useWallet();
+    const {isWalletConnected, setCurrentAccount, walletData} = useWallet();
     const navigate = useNavigate(); // Initialize useNavigate
 
-    const updateAccounts = (address: string) => {
+    const updateAccounts = (address: string): void => {
         console.log("add", address);
         setCurrentAccount(address);
         localStorage.setItem("currentAccount", address);
