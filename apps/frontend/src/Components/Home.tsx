@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 import "../../public/assets/css/loc-h-content.css";
 import '../../public/assets/css/loc-layout.css';
 import '../../public/assets/css/loc-login.css';
@@ -13,6 +14,7 @@ const Home: React.FC = () => {
     const dropZoneRef = useRef<HTMLDivElement | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
+    const [errors, setErrors] = useState("");
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
@@ -44,6 +46,7 @@ const Home: React.FC = () => {
                 fileInputRef.current.files = files;
             }
             setDroppedFile(files[0]);
+            setErrors("");
         }
     };
 
@@ -60,6 +63,28 @@ const Home: React.FC = () => {
         }
     };
 
+
+    const uploadFile = async () =>  {
+        if (!droppedFile) {
+            setErrors('No file selected');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', droppedFile);
+        const response = await axios.post(`http://localhost:3001/upload`, 
+            formData,{ headers: {
+                'Content-Type': 'multipart/form-data' // Make sure to set the content type as multipart/form-data
+            }}).catch((e: any)  =>  {
+                console.log("e", e);
+            })
+
+        console.log("response", response);
+        if(response?.status == 200)
+        {
+            alert(response?.data);
+        }
+    }
     useEffect(() => {
         if (currentAccount || localStorage.getItem("currentAccount")) {
             navigate("");
@@ -208,10 +233,11 @@ const Home: React.FC = () => {
                                 <span className="drop-zone__prompt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                     <img src={'../../public/assets/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt="" />
                                     {droppedFile?.name ? <span>{droppedFile.name}</span> : <span>Drop file here or click to upload</span>}
+                                    {(!droppedFile?.name && errors) && <p className="text-danger">{errors}</p>}
                                 </span>
-                                <input ref={fileInputRef} type="file" name="myFile" className="drop-zone__input" style={{ display: 'none' }} onChange={handleChange}/>
+                                <input ref={fileInputRef} type="file" name="file" className="drop-zone__input" style={{ display: 'none' }} onChange={handleChange}/>
                             </div>
-                            <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }}>
+                            <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }} onClick={uploadFile}>
                                 Upload
                             </button>
                         </div>

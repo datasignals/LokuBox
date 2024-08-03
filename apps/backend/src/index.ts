@@ -4,6 +4,7 @@ import Express from "express";
 import bodyParser from "body-parser";
 import session from "express-session";
 import path from "node:path";
+import multer from 'multer';
 import {mountNfs1, mountNfs2, unmountNfs} from "./Util";
 
 //Init server
@@ -34,6 +35,18 @@ const nfsDirectory = '/tmp/nfs'; // The mount point of your NFS share
 
 console.log('1');
 mountNfs1(nfsDirectory).catch(() => null)
+
+// Middleware for file uploads
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: (_req, _file, cb) => {
+            cb(null, '/tmp/LokuBox/files'); // Directory to save uploaded files
+        },
+        filename: (_req, file, cb) => {
+            cb(null, file.originalname); // Keep original file name
+        }
+    })
+});
 
 app.get("/mount", async (req, res) => {
     //@ts-ignore
@@ -98,6 +111,44 @@ app.post('/files/:filename', async (req, res) => {
     }
 });
 
+// // API to upload a file
+// app.post('/upload', upload.single('file'), async (req,res) => {
+//     try {
+//         if (!req.file) {
+//             return res.status(400).send('No file uploaded.');
+//         }
+
+//         const tempPath = req.file.path;
+//         const targetPath = path.join(nfsDirectory, req.file.originalname);
+
+//         fs.renameSync(tempPath, targetPath);
+
+//         res.status(200).send('File uploaded and moved successfully.');
+//     } catch (error) {
+//         //@ts-ignore
+//         res.status(500).json({error: error.message});
+//     }
+// });
+
+
+// API to upload a file
+app.post('/upload', upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send('No file uploaded.');
+        }
+        console.log("here")
+        const tempPath = req.file.path;
+        const targetPath = path.join(nfsDirectory, req.file.originalname);
+
+        fs.renameSync(tempPath, targetPath);
+
+        return res.status(200).send('File uploaded and moved successfully.');
+    } catch (error) {
+        // @ts-ignore
+        return res.status(500).json({ error: error.message });
+    }
+});
 
 
 
