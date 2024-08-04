@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import "../../public/assets/css/loc-h-content.css"
+import "../../public/assets/css/loc-content.css"
 import '../../public/assets/css/loc-layout.css';
 import '../../public/assets/css/loc-login.css';
 import '../../public/assets/css/main.css';

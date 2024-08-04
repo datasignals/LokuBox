@@ -1,7 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="3.269" height="13.232" viewBox="0 0 3.269 13.232">
-  <g id="ic_3_dots" transform="translate(-12.75 -3.75)">
-    <path id="Path_1" data-name="Path 1" d="M14.384,6.769A1.384,1.384,0,1,0,13,5.384,1.36,1.36,0,0,0,14.384,6.769Z" fill="#a8abb7" stroke="#a8abb7" stroke-width="0.5"/>
-    <path id="Path_2" data-name="Path 2" d="M14.384,13a1.384,1.384,0,1,0,1.384,1.384A1.36,1.36,0,0,0,14.384,13Z" transform="translate(0 -4.018)" fill="#a8abb7" stroke="#a8abb7" stroke-width="0.5"/>
-    <path id="Path_3" data-name="Path 3" d="M14.384,22a1.384,1.384,0,1,0,1.384,1.384A1.36,1.36,0,0,0,14.384,22Z" transform="translate(0 -8.037)" fill="#a8abb7" stroke="#a8abb7" stroke-width="0.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_39" data-name="Rectangle 39" width="24" height="24" transform="translate(3938 -49)" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <g id="ic_3_dots" transform="translate(-3938 49)" clip-path="url(#clip-path)">
+    <path id="ic_dots_menu" d="M-4013.374,64.665a1.965,1.965,0,0,1,2-2,1.964,1.964,0,0,1,2,2,1.964,1.964,0,0,1-2,2A1.965,1.965,0,0,1-4013.374,64.665Zm0-8.114a1.965,1.965,0,0,1,2-2,1.964,1.964,0,0,1,2,2,1.964,1.964,0,0,1-2,2A1.965,1.965,0,0,1-4013.374,56.551Zm0-8.114a1.965,1.965,0,0,1,2-2,1.964,1.964,0,0,1,2,2,1.964,1.964,0,0,1-2,2A1.965,1.965,0,0,1-4013.374,48.436Z" transform="translate(7961.374 -93.551)" fill="#a0a4b7" stroke="#a0a4b7" stroke-width="0.5"/>
   </g>
 </svg>
