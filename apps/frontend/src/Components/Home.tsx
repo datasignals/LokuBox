@@ -1,15 +1,15 @@
-import React, {type ChangeEvent, type FC, useEffect, useRef, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import "../css/loc-h-content.css"
+import React, { useEffect, useRef, useState, type ChangeEvent, type FC } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "../css/loc-h-content.css";
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
 
-import {isDirRead} from "@repo/common/RouteNames";
-import {type FileDescription} from "@repo/common/FileDescription";
-import {useWallet} from '../context/WalletContext';
-import {useGlobalContext} from "../context/GlobalContext";
-import {FileElement} from "./treeview/FileElement";
+import { type FileDescription } from "@repo/common/FileDescription";
+import { isDirRead } from "@repo/common/RouteNames";
+import { useGlobalContext } from "../context/GlobalContext";
+import { useWallet } from '../context/WalletContext';
+import { FileElement } from "./treeview/FileElement";
 
 export const Home: FC = () => {
     const navigate = useNavigate();
@@ -29,6 +29,7 @@ export const Home: FC = () => {
 
     //TODO only fetches root
     const fetchNfsContents = (): void => {
+        console.log("fetch function")
         routeNames.getNode.fun2({path: "/"})
             .then(e => {
                 const nodeInfo = e.data
