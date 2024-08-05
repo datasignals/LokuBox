@@ -11,7 +11,7 @@ import { useGlobalContext } from "../context/GlobalContext";
 import { useWallet } from '../context/WalletContext';
 import { FileElement } from "./treeview/FileElement";
 
-export const Home: FC = () => {
+const Home: FC = () => {
     const navigate = useNavigate();
     const {currentAccount} = useWallet();
 
@@ -255,3 +255,6 @@ const FilesComponent: FC<{ files: FileDescription[] }> = ({files}) => <>
         />
     )}
 </>
+
+
+export default Home

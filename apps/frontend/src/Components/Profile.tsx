@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-
 import "../css/loc-h-content.css"
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
@@ -8,7 +7,7 @@ import {useNavigate} from 'react-router-dom';
 import {useWallet} from '../context/WalletContext';
 import {InjectedAccountWithMeta} from "@polkadot/extension-inject/types";
 
-export const Profile: React.FC = () => {
+const Profile: React.FC = () => {
 
     const {isWalletConnected, setCurrentAccount, walletData} = useWallet();
     const navigate = useNavigate(); // Initialize useNavigate
@@ -100,3 +99,6 @@ export const Profile: React.FC = () => {
         </div>
     );
 };
+
+
+export default Profile;

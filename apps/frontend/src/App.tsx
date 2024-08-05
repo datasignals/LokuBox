@@ -1,8 +1,8 @@
 import React from 'react';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
-import {Home} from './components/Home';
-import {Login} from './components/Login';
-import {Profile} from './components/Profile';
+import Home from './components/Home';
+import Login from './components/Login';
+import Profile from './components/Profile';
 
 export const App: React.FC = () => {
     return (
