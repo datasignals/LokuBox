@@ -16,9 +16,10 @@ export const Home: FC = () => {
     const {currentAccount} = useWallet();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const [files, setFiles] =
-        useState<FileDescription[]>([]);
+    const dropZoneRef = useRef<HTMLDivElement | null>(null);
+    const [files, setFiles] = useState<FileDescription[]>([]);
+    const [droppedFile, setDroppedFile] = useState<File | null>(null);
+    const [errors, setErrors] = useState("");
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault();
@@ -39,6 +40,40 @@ export const Home: FC = () => {
             .catch((e: unknown) => null)
     }
 
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        if (dropZoneRef.current) {
+            dropZoneRef.current.classList.add('drop-zone--over');
+        }
+    };
+
+    const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        if (dropZoneRef.current) {
+            dropZoneRef.current.classList.remove('drop-zone--over');
+        }
+    };
+
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        if (dropZoneRef.current) {
+            dropZoneRef.current.classList.remove('drop-zone--over');
+        }
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            if (fileInputRef.current) {
+                fileInputRef.current.files = files;
+            }
+          //  setDroppedFile(files[0]);
+            setErrors("");
+        }
+    };
+
+    const handleDropZoneClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
     useEffect(() => {
         fetchNfsContents();
 
@@ -48,13 +83,18 @@ export const Home: FC = () => {
     }, [])
 
 
-    const uploadFile = (file: File): void => {
+    const uploadFile = (): void => {
+        if (!droppedFile) {
+            setErrors('No file selected');
+            return;
+        }
+        console.log("here")
         const a = new FileReader();
 
         a.onload = (e) => {
             if (e.target) { //TODO extra check
                 routeNames.putNode.fun2({
-                    path: `/${file.name}`,
+                    path: `/${droppedFile.name}`,
                     isDirectory: false,
                     content: e.target.result as string //TODO force casting
                 }).then(() => {
@@ -63,8 +103,10 @@ export const Home: FC = () => {
                     .catch(() => null);
             }
         }
+        console.log("here 2")
 
-        a.readAsText(file, "base64")
+        a.readAsText(droppedFile, "base64")
+        alert("File is uploaded.")
     }
 
     const handleButtonClick = (): void => {
@@ -74,9 +116,11 @@ export const Home: FC = () => {
     };
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    
         const file = event.target.files?.[0];
-        if (file) {
-            uploadFile(file);
+        if (file && files.length > 0) {
+            // uploadFile(file);
+            setDroppedFile(file);
         }
     };
 
@@ -185,53 +229,38 @@ export const Home: FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
+            <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div className="modal-content" style={{borderRadius: '20px'}}>
-                        <button type="button" style={{
-                            position: 'absolute',
-                            top: '20px',
-                            right: '20px',
-                            zIndex: 999,
-                            fontSize: '12px'
-                        }}
-                                className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                        <div className="modal-body" style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '70px'
-                        }}>
-                            <div className="drop-zone">
-                                <span className="drop-zone__prompt" style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}>
-                                    <img src="/images/svg/ic_cloud.svg" style={{width: '48px', marginBottom: '20px'}}
-                                         alt=""/>
-                                    Drop file here or click to upload
+                    <div className="modal-content" style={{ borderRadius: '20px' }}>
+                        <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '12px' }}
+                            className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '70px' }}>
+                            <div className="drop-zone" ref={dropZoneRef} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={handleDropZoneClick}>
+                                <span className="drop-zone__prompt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <img src={'../../public/assets/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt="" />
+                                    {droppedFile?.name ? <span>{droppedFile.name}</span> : <span>Drop file here or click to upload</span>}
+                                    {(!droppedFile?.name && errors) && <p className="text-danger">{errors}</p>}
                                 </span>
-                                <input type="file" name="myFile" className="drop-zone__input"/>
+                                <input ref={fileInputRef} type="file" name="file" className="drop-zone__input" style={{ display: 'none' }} onChange={handleFileChange}/>
                             </div>
-                            <button className="loc-btn" type="button" style={{marginTop: '30px', width: '200px'}}>
-                                Connect
+                            <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }} onClick={uploadFile}>
+                                Upload
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn" style={{ position: 'fixed', bottom: '40px', right: '420px', zIndex: 50 }}>
+                <img src={'/images/svg/ic_upload_file.svg'} alt="" />
+            </button>
             <div>
                 {/*TODO replace the a by button later*/}
-                <a type="button" onClick={handleButtonClick}
+                {/* <a data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" onClick={handleButtonClick}
                         style={{position: 'fixed', bottom: '40px', right: '420px', zIndex: 50}}>
                     <img src="/images/svg/ic_upload_file.svg" alt="Upload"/>
-                </a>
-                <input
+                </a> */}
+                {/* <input
                     type="file"
                     name="file"
                     ref={fileInputRef}
@@ -239,7 +268,7 @@ export const Home: FC = () => {
                     style={{display: 'none'}}
                     // style={{position: 'fixed', bottom: '40px', right: '420px', zIndex: 50}}
                     onChange={handleFileChange}
-                />
+                /> */}
             </div>
         </div>
     );
