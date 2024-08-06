@@ -27,8 +27,6 @@ export const Shared: React.FC = () => {
     const handleToggleView = (viewType: string) => {
         setView(viewType);
     };
-
-
     return (
         <div>
             <Layout />

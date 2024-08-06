@@ -145,6 +145,32 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
     const shareuserfile = ()  =>  {
         alert("Wrok under progress.")
     }
+
+    const deleteFile = (filePath: string): void => {
+        // Confirm the deletion action
+        if (!window.confirm(`Are you sure you want to delete ${filePath}?`)) {
+            return;
+        }
+    
+        routeNames.deleteNode.fun2({ path: filePath })
+            .then(response => {
+                if (response.isSuccessful) {
+                    // Optionally, you can refresh the file list after deletion
+                    // fetchNfsContents();
+                    alert('File deleted successfully.');
+                } else {
+                    alert('Failed to delete the file. Please try again.');
+                }
+            })
+            .catch((error: unknown) => {
+                console.error('Error deleting file:', error);
+                alert('An error occurred while deleting the file. Please try again.');
+            });
+    }
+
+    const handleDeleteFile = (filePath: string) => {
+        deleteFile(filePath);
+    };
     useEffect(()  => {
 
     })
@@ -155,7 +181,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                     <img src="/images/svg/ic_pdf.svg" alt=""/>
                     <div>
                         <h4 style={{marginBottom: '5px'}}>{filename}</h4>
-                        <h5>{timestampToFormatDate}</h5>
+                        <h5>{getDateTime(creationDate)}</h5>
                     </div>
                 </div>
                 <div className="loc-h-tools">
@@ -180,7 +206,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                     <div className="dropdown">
                         <img className="dropdown-toggle" style={{width : "5px"}} src={'../../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li className="dropdown-item">Delete</li>
+                            <li className="dropdown-item" onClick={() => handleDeleteFile(filename)}>Delete</li>
                         </ul>
                     </div>
                 </div>

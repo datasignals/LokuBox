@@ -125,7 +125,6 @@ export const Home: FC = () => {
         }
     };
 
-
     useEffect(()  =>  {
         fetchNfsContents;
     })
