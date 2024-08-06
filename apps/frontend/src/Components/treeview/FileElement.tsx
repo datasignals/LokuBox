@@ -156,23 +156,40 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                 </div>
             </div>
 
-
             <div className="modal fade" id="shareModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div className="modal-content" style={{ borderRadius: '20px' }}>
-                        <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '12px' }}
+                    <div className="modal-content" style={{ borderRadius: '20px', padding: '30px' }}>
+                        <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '10px' }}
                             className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '70px' }}>
-                            <div className="drop-zone" ref={dropZoneRef} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={handleDropZoneClick}>
-                                <span className="drop-zone__prompt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                    <img src={'../../public/assets/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt="" />
-                                    {droppedFile?.name ? <span>{droppedFile.name}</span> : <span>Drop file here or click to upload</span>}
-                                    {(!droppedFile?.name && errors) && <p className="text-danger">{errors}</p>}
-                                </span>
-                                <input ref={fileInputRef} type="file" name="file" className="drop-zone__input" style={{ display: 'none' }} onChange={handleFileChange}/>
+                        <div className="loc-h-share-title">Share File</div>
+                        <div className="loc-h-share-content">
+                            <img src={'../../public/assets/images/svg/ic_pdf.svg'} alt=""/>
+                            <div style={{ marginLeft: '10px' }}>
+                                <h4 style={{ marginBottom: '5px' }}>newfiles.pdf</h4>
+                                <h5>27-10-2024, 10:30 AM</h5>
                             </div>
+                        </div>
+                        <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 0, marginTop: '20px' }}>
+                            <form style={{ width: '100%' }}>
+                                <div style={{ width: '100%' }}>
+                                    <label htmlFor="loc-user-select" className="loc-label">
+                                        Enter User's Wallet Id
+                                    </label>
+                                    <select className="loc-form-control" id="loc-user-select" style={{ width: '100%', padding: '0 10px' }}>
+                                        <option>Coinbase</option>
+                                        <option>Wallet 2</option>
+                                    </select>
+                                </div>
+                                <div style={{ display: 'flex', fontSize: '12px', justifyContent: 'center', width: '100%', marginTop: '20px', color: '#8B959B' }}>OR</div>
+                                <div style={{ width: '100%', marginTop: '20px', fontSize: '10px', color: '' }}>
+                                    <label htmlFor="loc-login-select" className="loc-label">
+                                        Enter User's Wallet Id
+                                    </label>
+                                    <input className="form-control" />
+                                </div>
+                            </form>
                             <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }} onClick={uploadFile}>
-                                Upload
+                                Share
                             </button>
                         </div>
                     </div>
