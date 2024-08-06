@@ -7,8 +7,6 @@ import session from "express-session";
 import {mountNfs1, mountNfs2, unmountNfs} from "./Util";
 import {FileDescription} from "@repo/common/FileDescription";
 
-
-
 //Init server
 const app = Express()
 //Port

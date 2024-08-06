@@ -34,6 +34,7 @@ export const Home: FC = () => {
             .then(e => {
                 const nodeInfo = e.data
                 if (isDirRead(nodeInfo)) {
+                    console.log("nodeInfo.files", nodeInfo.files);
                     setFiles(nodeInfo.files)
                 }
             })
@@ -274,12 +275,19 @@ export const Home: FC = () => {
     );
 };
 
-const FilesComponent: FC<{ files: FileDescription[] }> = ({files}) => <>
-    {files.map(file =>
-        <FileElement
-            key={file.filename}
-            filename={file.filename}
-            creationDate={file.creationDate}
-        />
-    )}
-</>
+const FilesComponent: FC<{ files: FileDescription[] }> = ({ files }) => {
+    // Sort files by creationDate in descending order
+    const sortedFiles = [...files].sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+
+    return (
+        <>
+            {sortedFiles.map(file => (
+                <FileElement
+                    key={file.filename}
+                    filename={file.filename}
+                    creationDate={file.creationDate}
+                />
+            ))}
+        </>
+    );
+};
