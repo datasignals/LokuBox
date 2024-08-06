@@ -148,7 +148,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                     </div>
                     <img style={{ cursor: 'pointer' }} src={'../../../public/images/svg/ic_share.svg'} alt="more-options" data-bs-toggle="modal" data-bs-target="#shareModal" />
                     <div className="dropdown">
-                        <img className="dropdown-toggle" src={'../../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
+                        <img className="dropdown-toggle" style={{width : "5px"}} src={'../../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                             <li className="dropdown-item">Delete</li>
                         </ul>
