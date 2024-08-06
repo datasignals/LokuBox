@@ -10,6 +10,7 @@ import {type FileDescription} from "@repo/common/FileDescription";
 import {useWallet} from '../context/WalletContext';
 import {useGlobalContext} from "../context/GlobalContext";
 import {FileElement} from "./treeview/FileElement";
+import { Layout } from './Layout';
 
 export const Home: FC = () => {
     const navigate = useNavigate();
@@ -127,7 +128,7 @@ export const Home: FC = () => {
 
     return (
         <div>
-            <div className="loc-nav" id="loc-nav">
+            {/* <div className="loc-nav" id="loc-nav">
                 <div className="loc-sidemenu-toggler" id="loc-sidemenu-toggler">
                     <div className="loc-logo">
                         <img src="/images/svg/logo.svg" alt="brand-logo"/>
@@ -186,7 +187,8 @@ export const Home: FC = () => {
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> */}
+            <Layout />
             <div className="loc-content-container">
                 <div className="loc-h-content-o">
                     <div className="row">

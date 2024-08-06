@@ -27,7 +27,6 @@ export const Login: FC = () => {
         } else {
             alert("Wallet access is denied");
         }
-
     }
     const handleClick = (name: string) => {
         if (name === "Polkadot.Js") {
