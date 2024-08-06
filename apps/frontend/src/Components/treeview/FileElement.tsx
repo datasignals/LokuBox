@@ -5,6 +5,11 @@ import {useGlobalContext} from "../../context/GlobalContext";
 
 
 import "../../../public/images/svg/user_default.svg"
+
+interface FileToShare {
+    filename: string;
+    creationDate: number;
+}
 //Simpler version of FileElement
 export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
 
@@ -51,6 +56,8 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
     const dropZoneRef = useRef<HTMLDivElement | null>(null);
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
     const [errors, setErrors] = useState("");
+    const [selectFile, setSelectFile] = useState<FileToShare | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -118,6 +125,29 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
             setDroppedFile(file);
         }
     };
+
+    const handleImageClick = (data: FileDescription) => {
+        console.log("data", data);
+        setSelectFile(data);
+        setModalVisible(true);  // Open the modal
+    };
+
+    const handleCloseModal = () => {
+        setModalVisible(false);  // Close the modal
+    };
+    
+    const getDateTime = (timestamp : number)  =>  {
+        const date = new Date(timestamp);
+        console.log(date.toLocaleString());
+        return date.toLocaleString();
+    }
+
+    const shareuserfile = ()  =>  {
+        alert("Wrok under progress.")
+    }
+    useEffect(()  => {
+
+    })
     return (
         <div className="loc-card card-active" style={{marginTop: '20px'}}>
             <div className="loc-h-card-content-con">
@@ -146,7 +176,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                                 </li>
                             </ul>
                     </div>
-                    <img style={{ cursor: 'pointer' }} src={'../../../public/images/svg/ic_share.svg'} alt="more-options" data-bs-toggle="modal" data-bs-target="#shareModal" />
+                    <img style={{ cursor: 'pointer' }} src={'../../../public/images/svg/ic_share.svg'} alt="more-options" data-bs-toggle="modal" data-bs-target="#shareModal" onClick={() => handleImageClick({ filename, creationDate })}/>
                     <div className="dropdown">
                         <img className="dropdown-toggle" style={{width : "5px"}} src={'../../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
@@ -156,45 +186,37 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                 </div>
             </div>
 
-            <div className="modal fade" id="shareModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div className="modal-content" style={{ borderRadius: '20px', padding: '30px' }}>
-                        <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '10px' }}
-                            className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div className="loc-h-share-title">Share File</div>
-                        <div className="loc-h-share-content">
-                            <img src={'../../public/assets/images/svg/ic_pdf.svg'} alt=""/>
-                            <div style={{ marginLeft: '10px' }}>
-                                <h4 style={{ marginBottom: '5px' }}>newfiles.pdf</h4>
-                                <h5>27-10-2024, 10:30 AM</h5>
+            {modalVisible && (
+                <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div className="modal-content" style={{ borderRadius: '20px', padding: '30px' }}>
+                            <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '10px' }}
+                                className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
+                            <div className="loc-h-share-title">Share File</div>
+                            <div className="loc-h-share-content">
+                                <img src={'../../public/assets/images/svg/ic_pdf.svg'} alt="" />
+                                <div style={{ marginLeft: '10px' }}>
+                                    <h4 style={{ marginBottom: '5px' }}>{selectFile?.filename || "Filename"}</h4>
+                                    <h5>{selectFile?.creationDate && getDateTime(selectFile?.creationDate)}</h5>
+                                </div>
                             </div>
-                        </div>
-                        <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 0, marginTop: '20px' }}>
-                            <form style={{ width: '100%' }}>
-                                <div style={{ width: '100%' }}>
-                                    <label htmlFor="loc-user-select" className="loc-label">
-                                        Enter User's Wallet Id
-                                    </label>
-                                    <select className="loc-form-control" id="loc-user-select" style={{ width: '100%', padding: '0 10px' }}>
-                                        <option>Coinbase</option>
-                                        <option>Wallet 2</option>
-                                    </select>
-                                </div>
-                                <div style={{ display: 'flex', fontSize: '12px', justifyContent: 'center', width: '100%', marginTop: '20px', color: '#8B959B' }}>OR</div>
-                                <div style={{ width: '100%', marginTop: '20px', fontSize: '10px', color: '' }}>
-                                    <label htmlFor="loc-login-select" className="loc-label">
-                                        Enter User's Wallet Id
-                                    </label>
-                                    <input className="form-control" />
-                                </div>
-                            </form>
-                            <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }} onClick={uploadFile}>
-                                Share
-                            </button>
+                            <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 0, marginTop: '20px' }}>
+                                <form style={{ width: '100%' }}>
+                                    <div style={{ width: '100%', marginTop: '20px', fontSize: '10px', color: '' }}>
+                                        <label htmlFor="loc-login-select" className="loc-label">
+                                            Enter User's Wallet address
+                                        </label>
+                                        <input className="form-control" />
+                                    </div>
+                                </form>
+                                <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }} onClick={shareuserfile}>
+                                    Share
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     )
 }

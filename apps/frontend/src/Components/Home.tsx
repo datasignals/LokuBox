@@ -125,6 +125,11 @@ export const Home: FC = () => {
         }
     };
 
+
+    useEffect(()  =>  {
+        fetchNfsContents;
+    })
+
     return (
         <div>
             {/* <div className="loc-nav" id="loc-nav">
