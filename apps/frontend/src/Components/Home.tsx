@@ -126,7 +126,7 @@ export const Home: FC = () => {
 
     useEffect(()  =>  {
         fetchNfsContents;
-    },[files])
+    })
 
     return (
         <div>

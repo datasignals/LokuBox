@@ -13,8 +13,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
 
     const dateObject = new Date(creationDate);
 
-
-    const {routeNames} = useGlobalContext()
+    const {routeNames} = useGlobalContext();
 
     // const download = async (): Promise<void> => {
     //     const downloadResult = await routeNames.getNode.fun2({path: filename})
