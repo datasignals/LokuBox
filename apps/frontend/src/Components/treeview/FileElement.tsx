@@ -3,9 +3,6 @@ import {isString} from "@repo/common/RouteNames";
 import {type FileDescription} from "@repo/common/FileDescription";
 import {useGlobalContext} from "../../context/GlobalContext";
 
-
-import "../../../public/images/svg/user_default.svg"
-
 interface FileToShare {
     filename: string;
     creationDate: number;

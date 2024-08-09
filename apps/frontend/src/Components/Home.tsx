@@ -119,9 +119,11 @@ export const Home: FC = () => {
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const file = event.target.files?.[0];
+        console.log("file ", files.length);
         if (file && files.length > 0) {
             // uploadFile(file);
             setDroppedFile(file);
+            console.log("file", droppedFile);
         }
     };
 
