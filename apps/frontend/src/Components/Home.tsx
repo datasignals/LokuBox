@@ -78,7 +78,6 @@ export const Home: FC = () => {
     };
     useEffect(() => {
         fetchNfsContents();
-
         if (localStorage.getItem("currentAccount")) {
             navigate("")
         }
@@ -291,6 +290,7 @@ const FilesComponent: FC<{ files: FileDescription[] }> = ({ files }) => {
                     key={file.filename}
                     filename={file.filename}
                     creationDate={file.creationDate}
+
                 />
             ))}
         </>

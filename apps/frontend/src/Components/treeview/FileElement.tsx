@@ -7,6 +7,7 @@ interface FileToShare {
     filename: string;
     creationDate: number;
 }
+
 //Simpler version of FileElement
 export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
 
@@ -105,6 +106,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                     isDirectory: false,
                     content: e.target.result as string //TODO force casting
                 }).then(() => {
+
                 })
                     .catch(() => null);
             }
@@ -143,30 +145,20 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
         alert("Wrok under progress.")
     }
 
-    const deleteFile = (filePath: string): void => {
-        // Confirm the deletion action
+    const handleDeleteFile = (filePath: string) => {
         if (!window.confirm(`Are you sure you want to delete ${filePath}?`)) {
             return;
         }
-    
-        routeNames.deleteNode.fun2({ path: filePath })
-            .then(response => {
-                if (response.isSuccessful) {
-                    // Optionally, you can refresh the file list after deletion
-                    // fetchNfsContents();
-                    alert('File deleted successfully.');
-                } else {
-                    alert('Failed to delete the file. Please try again.');
-                }
-            })
-            .catch((error: unknown) => {
+        routeNames.deleteNode.fun2({ path: filePath }).then(response => {
+            if (response.isSuccessful) {
+                alert('File deleted successfully.');
+            } else {
+                alert('Failed to delete the file. Please try again.');
+            }
+            }).catch((error: unknown) => {
                 console.error('Error deleting file:', error);
                 alert('An error occurred while deleting the file. Please try again.');
             });
-    }
-
-    const handleDeleteFile = (filePath: string) => {
-        deleteFile(filePath);
     };
 
     return (

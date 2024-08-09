@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import {type InjectedAccountWithMeta} from "@polkadot/extension-inject/types";
 
 // Define types for the context state
@@ -27,10 +27,17 @@ interface WalletProviderProps {
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [isWalletConnected, setWalletConnected] = useState<boolean>(false);
   const [walletData, setWalletData] = useState<InjectedAccountWithMeta[]>([]); // Replace `any` with the appropriate type
-  const [currentAccount, setCurrentAccount] = useState<string>("");
+  const [currentAccount, setCurrentAccount] = useState<string>(() => {
+    const stored = localStorage.getItem('currentAccount');
+    return stored ? JSON.parse(stored) : "";
+  });
   const [currentBalance, setCurrentBalance] = useState<number>(0);
   const [name, setName] = useState<string>("");
 
+  useEffect(() => {
+    localStorage.setItem('currentAccount', JSON.stringify(currentAccount));
+  }, [currentAccount]);
+  
   return (
     <WalletContext.Provider value={{ isWalletConnected, setWalletConnected, walletData, setWalletData, currentAccount, setCurrentAccount, currentBalance, setCurrentBalance, name, setName }}>
       {children}
