@@ -20,6 +20,7 @@ export const Home: FC = () => {
     const dropZoneRef = useRef<HTMLDivElement | null>(null);
     const [files, setFiles] = useState<FileDescription[]>([]);
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
+    const [provenanceData, setProvenanceData] = useState<any[]>([]); // Provenance
     const [errors, setErrors] = useState("");
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -125,6 +126,27 @@ export const Home: FC = () => {
         }
     };
 
+    const fetchProvenance = async () => {
+        console.log("INSIDE FETCH")
+        try {
+            const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
+            // / Log the entire response for debugging
+            console.log("RESPONSE OBJECT", response);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if(data.success == true && data.status == "Connected"){
+                console.log("DATA IN IF",data.data)
+                setProvenanceData(data.data);
+            }
+        } catch (error) {
+            
+        } finally {
+           
+        }
+    };
+
     useEffect(()  =>  {
         fetchNfsContents;
     },[files])
@@ -218,7 +240,7 @@ export const Home: FC = () => {
                         <div className="loc-h-card-content">
                             <img src="/images/svg/ic_pdf.svg" alt=""/>
                             <div>
-                                <h4 style={{marginBottom: '5px'}}>thisisfake.pdf</h4>
+                                <h4 style={{marginBottom: '5px'}} onClick={fetchProvenance}>thisisfake.pdf</h4>
                                 <h5 style={{marginBottom: '5px'}}>fakemb10.10mb</h5>
                                 <h5>25-10-2024, 10:30 AM</h5>
                             </div>
@@ -227,11 +249,27 @@ export const Home: FC = () => {
                 </div>
                 <div className="loc-h-activity-content-con">
                     <h4 style={{fontSize: '14px', marginLeft: '20px'}}>Activities</h4>
-                    <div className="loc-card" style={{height: '100%'}}>
-                        <div className="loc-h-activity-content">
-                            <div style={{fontSize: '14px'}}>Accessed On</div>
-                            <div style={{fontSize: '14px'}}>25-02-2024 10:20 AM</div>
-                        </div>
+                    <div className="loc-card-provnance" style={{height: '100%'}}>
+                        {/* <div className="loc-h-activity-content"> */}
+                            {/* <div style={{fontSize: '14px'}}>Accessed On</div>
+                            <div style={{fontSize: '14px'}}>25-02-2024 10:20 AM</div> */}
+                    {errors ? (
+                        <div style={{ fontSize: '14px', color: 'red' }}>{errors}</div>
+                    ) : (
+                        provenanceData.length > 0 ? (
+                            provenanceData.map((item, index) => (
+                                <div key={index} style={{ marginBottom: '10px' }}>
+                                    <div style={{ fontSize: '14px' }}><strong>Accessed On:</strong> {item.value.creationtime}</div>
+                                    <div style={{ fontSize: '14px' }}><strong>Accessed by:</strong> {item.value.eventkey}</div>
+                                    <div style={{ fontSize: '14px' }}><strong>Action:</strong> {item.value.eventtype}</div>
+                                    <hr style={{ margin: '10px 0', border: '1px solid #ccc' }} />
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{ fontSize: '14px' }}>No File Selected.</div>
+                        )
+                    )}
+                        {/* </div> */}
                     </div>
                 </div>
             </div>
@@ -296,3 +334,16 @@ const FilesComponent: FC<{ files: FileDescription[] }> = ({ files }) => {
         </>
     );
 };
+// .loc-card {
+//     max-height: 500px; /* Adjust this value as needed */
+//     overflow-y: auto;  /* Enable vertical scrolling */
+//     padding: 10px;     /* Optional: Add some padding */
+//     border: 1px solid #ccc; /* Optional: Add a border for visual separation */
+//     border-radius: 4px; /* Optional: Add rounded corners */
+// }
+
+// .loc-h-activity-content-con {
+//     width: 100%;
+//     height: 100%; /* Ensure the container takes full height if needed */
+//     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+// }
