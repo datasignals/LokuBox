@@ -34,9 +34,9 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [currentBalance, setCurrentBalance] = useState<number>(0);
   const [name, setName] = useState<string>("");
 
-  useEffect(() => {
-    localStorage.setItem('currentAccount', JSON.stringify(currentAccount));
-  }, [currentAccount]);
+  // useEffect(() => {
+  //   localStorage.setItem('currentAccount', JSON.stringify(currentAccount));
+  // }, [currentAccount]);
   
   return (
     <WalletContext.Provider value={{ isWalletConnected, setWalletConnected, walletData, setWalletData, currentAccount, setCurrentAccount, currentBalance, setCurrentBalance, name, setName }}>
