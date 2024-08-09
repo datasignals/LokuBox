@@ -12,6 +12,8 @@ import {useGlobalContext} from "../context/GlobalContext";
 import {FileElement} from "./treeview/FileElement";
 import { Layout } from './Layout';
 
+import {provenace} from '../config/config.json';
+
 export const Home: FC = () => {
     const navigate = useNavigate();
     const {currentAccount} = useWallet();
@@ -129,21 +131,25 @@ export const Home: FC = () => {
     const fetchProvenance = async () => {
         console.log("INSIDE FETCH")
         try {
-            const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
+            // const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
+            const accountId = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
+            const fileName = 'abc.txt';
+            const response = await fetch(`${provenace.server}/events/filerecords?accountId=${accountId}&fileName=${fileName}`);
+            // const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
             // / Log the entire response for debugging
             console.log("RESPONSE OBJECT", response);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+            console.log("DATA",data)
             if(data.success == true && data.status == "Connected"){
-                console.log("DATA IN IF",data.data)
-                setProvenanceData(data.data);
+                console.log("DATA IN IF",typeof(data.data))
+                setProvenanceData(data.data.value);
+                console.log("PRO",provenanceData);
             }
         } catch (error) {
-            
-        } finally {
-           
+            console.error("FETCH ERROR", error); 
         }
     };
 
