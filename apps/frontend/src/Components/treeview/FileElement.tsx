@@ -168,9 +168,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
     const handleDeleteFile = (filePath: string) => {
         deleteFile(filePath);
     };
-    useEffect(()  => {
 
-    })
     return (
         <div className="loc-card card-active" style={{marginTop: '20px'}}>
             <div className="loc-h-card-content-con">

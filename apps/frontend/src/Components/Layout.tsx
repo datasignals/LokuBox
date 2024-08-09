@@ -7,12 +7,15 @@ import "../../public/images/svg/user_default.svg"
 export const Layout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { currentAccount } = useWallet();
+    const { currentAccount, setCurrentAccount } = useWallet();
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
         navigate(path);
     };
+
+    useEffect(()  =>  {
+    })
     return (
         <div>
             <div className="loc-nav" id="loc-nav">
