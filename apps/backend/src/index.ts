@@ -38,7 +38,7 @@ app.use(session({
 
 // const nfsDirectory = "/tmp/nfs";
 
-const nfsDirectory = "/Users/dnyaneshwari/Redis_Cluster/Redis_database/redis-6382"
+const nfsDirectory = "/Users/dnyaneshwari/filesystem"
 
 fs.mkdirSync(nfsDirectory, {recursive: true});
 

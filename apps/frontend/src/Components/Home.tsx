@@ -89,7 +89,6 @@ export const Home: FC = () => {
             setErrors('No file selected');
             return;
         }
-        console.log("here")
         const a = new FileReader();
 
         a.onload = (e) => {
@@ -99,7 +98,12 @@ export const Home: FC = () => {
                     isDirectory: false,
                     content: e.target.result as string //TODO force casting
                 }).then(() => {
+
                     fetchNfsContents();
+
+                    setDroppedFile(null); // Clear the selected file
+                    setErrors(""); // Clear any errors
+
                 })
                     .catch(() => null);
             }
