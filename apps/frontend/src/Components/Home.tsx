@@ -21,8 +21,10 @@ export const Home: FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropZoneRef = useRef<HTMLDivElement | null>(null);
     const [files, setFiles] = useState<FileDescription[]>([]);
+    const [filesselected, setFilesselected] = useState<FileDescription | null>(null);
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
     const [provenanceData, setProvenanceData] = useState<any[]>([]); // Provenance
+    const [address, setAddress] = useState<string | null>(null); //wallet address
     const [errors, setErrors] = useState("");
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -81,11 +83,10 @@ export const Home: FC = () => {
     };
     useEffect(() => {
         fetchNfsContents();
-
-        if (localStorage.getItem("currentAccount")) {
+        if (localStorage.getItem('currentAccount')) {
             navigate("")
         }
-    }, [])
+    }, [files])
 
 
     const uploadFile = (): void => {
@@ -128,23 +129,32 @@ export const Home: FC = () => {
         }
     };
 
-    const fetchProvenance = async () => {
-        console.log("INSIDE FETCH")
+    const handleFileSelect = (file: FileDescription) => {
+        // Here you can handle the file selection, such as fetching its provenance
+        console.log("IN handleFileSelect");
+        setFilesselected(file)
+        fetchProvenance(file.filename);
+      };
+
+    const fetchProvenance = async (filename: string) => {
+        console.log("INSIDE FETCH",filename)
+        console.log("DA",filesselected)
         try {
+            console.log("RESPONSE OBJECT", currentAccount,filename);
             // const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
             const accountId = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
             const fileName = 'abc.txt';
-            const response = await fetch(`${provenace.server}/events/filerecords?accountId=${accountId}&fileName=${fileName}`);
-            // const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
+            // const response = await fetch(`${provenace.server}/events/filerecords?accountId=${currentAccount}&fileName=${fileName}`);
+            const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
             // / Log the entire response for debugging
             console.log("RESPONSE OBJECT", response);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            console.log("DATA",data)
+            console.log("DATA",data,typeof(data.data.value))
             if(data.success == true && data.status == "Connected"){
-                console.log("DATA IN IF",typeof(data.data))
+                console.log("DATA IN IF",typeof(data.data.value))
                 setProvenanceData(data.data.value);
                 console.log("PRO",provenanceData);
             }
@@ -152,6 +162,12 @@ export const Home: FC = () => {
             console.error("FETCH ERROR", error); 
         }
     };
+    // Function to format the timestamp
+    const formatDate = (timestamp: number): string => {
+        const date = new Date(timestamp);
+        return date.toLocaleDateString() + ', ' + date.toLocaleTimeString();
+    };
+
 
     useEffect(()  =>  {
         fetchNfsContents;
@@ -232,7 +248,9 @@ export const Home: FC = () => {
                                          src="/images/svg/ic_search.svg" alt=""/>
                                 </div>
                             </div>
-                            <FilesComponent files={files}/>
+                            <div>
+                                <FilesComponent files={files} onFileSelect={handleFileSelect} />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -246,9 +264,11 @@ export const Home: FC = () => {
                         <div className="loc-h-card-content">
                             <img src="/images/svg/ic_pdf.svg" alt=""/>
                             <div>
-                                <h4 style={{marginBottom: '5px'}} onClick={fetchProvenance}>thisisfake.pdf</h4>
-                                <h5 style={{marginBottom: '5px'}}>fakemb10.10mb</h5>
-                                <h5>25-10-2024, 10:30 AM</h5>
+                                <h4 style={{marginBottom: '5px'}} >
+                                {filesselected ? filesselected.filename : 'No file selected'}
+                                </h4>
+                                <h5 style={{marginBottom: '5px'}}>10mb</h5>
+                                <h5>{filesselected ? formatDate(filesselected.creationDate) : ''}</h5>
                             </div>
                         </div>
                     </div>
@@ -324,32 +344,28 @@ export const Home: FC = () => {
     );
 };
 
-const FilesComponent: FC<{ files: FileDescription[] }> = ({ files }) => {
+
+interface FilesComponentProps {
+    files: FileDescription[];
+    onFileSelect: (file: FileDescription) => void;
+}
+const FilesComponent: FC<FilesComponentProps> = ({ files, onFileSelect }) => {
     // Sort files by creationDate in descending order
     const sortedFiles = [...files].sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
 
     return (
         <>
+       
             {sortedFiles.map(file => (
+                <div key={file.filename} onClick={() => onFileSelect(file)}>
                 <FileElement
                     key={file.filename}
                     filename={file.filename}
                     creationDate={file.creationDate}
                 />
+                </div>
             ))}
+            
         </>
     );
 };
-// .loc-card {
-//     max-height: 500px; /* Adjust this value as needed */
-//     overflow-y: auto;  /* Enable vertical scrolling */
-//     padding: 10px;     /* Optional: Add some padding */
-//     border: 1px solid #ccc; /* Optional: Add a border for visual separation */
-//     border-radius: 4px; /* Optional: Add rounded corners */
-// }
-
-// .loc-h-activity-content-con {
-//     width: 100%;
-//     height: 100%; /* Ensure the container takes full height if needed */
-//     box-sizing: border-box; /* Include padding and border in the element's total width and height */
-// }
