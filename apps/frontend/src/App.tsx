@@ -1,5 +1,6 @@
 import React from 'react';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
 import {Home} from './components/Home';
 import {Login} from './components/Login';
 import {Profile} from './components/Profile';
@@ -9,6 +10,7 @@ import {Team} from "./components/Team"
 export const App: React.FC = () => {
     return (
         <Router>
+            <ToastContainer/>
             <Routes>
                 <Route path="/" element={<Login/>}/>
                 <Route path="/profile" element={<Profile/>}/>

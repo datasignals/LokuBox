@@ -5,6 +5,7 @@ import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
 import {Bounce, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {isDirRead} from "@repo/common/RouteNames";
 import {type FileDescription} from "@repo/common/FileDescription";
@@ -115,7 +116,7 @@ export const Home: FC = () => {
         console.log("here 2")
 
         a.readAsText(droppedFile, "base64")
-        toast("File is uploaded.", {
+        toast.info("File is uploaded.", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
