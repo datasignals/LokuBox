@@ -6,6 +6,7 @@ import './index.css';
 import {reportWebVitals} from './reportWebVitals';
 import {WalletProvider} from './context/WalletContext';
 import {GlobalProvider} from "./context/GlobalContext";
+import {RemoveTrailingSlashes} from "./components/RemoveTrailingSlashes";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -13,13 +14,13 @@ const root = ReactDOM.createRoot(
 
 
 root.render(
-    <React.StrictMode>
-        <GlobalProvider>
-            <WalletProvider>
-                <App/>
-            </WalletProvider>
-        </GlobalProvider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <GlobalProvider>
+        <WalletProvider>
+            <App/>
+        </WalletProvider>
+    </GlobalProvider>
+    // </React.StrictMode>
 );
 
 reportWebVitals();

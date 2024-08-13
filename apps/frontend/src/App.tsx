@@ -6,18 +6,21 @@ import {Login} from './components/Login';
 import {Profile} from './components/Profile';
 import {Shared} from "./components/Shared";
 import {Team} from "./components/Team"
+import {RemoveTrailingSlashes} from "./components/RemoveTrailingSlashes";
 
 export const App: React.FC = () => {
     return (
         <Router>
             <ToastContainer/>
-            <Routes>
-                <Route path="/" element={<Login/>}/>
-                <Route path="/profile" element={<Profile/>}/>
-                <Route path="/home" element={<Home/>}/>
-                <Route path="/shared" element={<Shared />} />
-                <Route path="/team" element={<Team />} />
-            </Routes>
+            <RemoveTrailingSlashes>
+                <Routes>
+                    <Route path="/" element={<Login/>}/>
+                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/home/*" element={<Home routePath="/home"/>}/>
+                    <Route path="/shared" element={<Shared/>}/>
+                    <Route path="/team" element={<Team/>}/>
+                </Routes>
+            </RemoveTrailingSlashes>
         </Router>
     );
 };
