@@ -3,25 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "exports": {
-    "./FileDescription": {
-      "types": "./src/FileDescription.ts",
-      "default": "./dist/FileDescription.js"
+    "./Models": {
+      "types": "./src/Models.ts",
+      "default": "./dist/Models.js"
     },
     "./SimpleResponse": {
       "types": "./src/SimpleResponse.ts",
       "default": "./dist/SimpleResponse.js"
-    },
-    "./Node": {
-      "types": "./src/Node.ts",
-      "default": "./dist/Node.js"
-    },
-    "./FileNode": {
-      "types": "./src/FileNode.ts",
-      "default": "./dist/FileNode.js"
-    },
-    "./DirectoryNode": {
-      "types": "./src/DirectoryNode.ts",
-      "default": "./dist/DirectoryNode.js"
     },
     "./RouteNames": {
       "types": "./src/RouteNames.ts",

@@ -1,6 +1,6 @@
 import axios, {type AxiosResponse} from "axios";
 import {type DataResponse, type SimpleResponse} from "./SimpleResponse";
-import {FileDescription} from "./FileDescription";
+import {FileDescription} from "./Models";
 
 type Method = "POST" | "GET" | "DELETE";
 

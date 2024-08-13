@@ -1,6 +1,6 @@
-import React, {type ChangeEvent, type FC, useEffect, useRef, useState} from 'react';
+import React, {type FC} from 'react';
 
-export const DirectoryElement: FC<{ dirName: string }> = ({dirName}) =>
+export const DirectoryElement: FC<{ dirName: string, handleEnterDirectory: () => void }> = ({dirName, handleEnterDirectory}) =>
     <div className="loc-card card-active" style={{marginTop: '20px'}}>
         <div className="loc-h-card-content-con">
             <div className="loc-h-card-content">
@@ -11,7 +11,12 @@ export const DirectoryElement: FC<{ dirName: string }> = ({dirName}) =>
                 </div>
             </div>
             <div className="loc-h-tools">
-            <div className="dropdown">
+                <div className="dropdown">
+                    <img style={{cursor: 'pointer', width: "30px"}} src={'../../../public/images/svg/enter_1_placeholder.svg'}
+                         alt="more-options"
+                         data-bs-toggle="modal" data-bs-target="#shareModal"
+                         onClick={handleEnterDirectory}/>
+
                     <img className="dropdown-toggle" src={'../../../public/images/svg/ic_team_dropdown.svg'}
                          alt="more-options" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"/>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -32,9 +37,7 @@ export const DirectoryElement: FC<{ dirName: string }> = ({dirName}) =>
                         </li>
                     </ul>
                 </div>
-                <img style={{cursor: 'pointer'}} src={'../../../public/images/svg/ic_share.svg'} alt="more-options"
-                     data-bs-toggle="modal" data-bs-target="#shareModal"
-                     onClick={() => alert("not included")}/>
+
                 <div className="dropdown">
                     <img className="dropdown-toggle" style={{width: "5px"}}
                          src={'../../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2"
