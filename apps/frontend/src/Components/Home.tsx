@@ -4,13 +4,14 @@ import "../css/loc-h-content.css"
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
+import {Bounce, toast} from "react-toastify";
 
 import {isDirRead} from "@repo/common/RouteNames";
 import {type FileDescription} from "@repo/common/FileDescription";
 import {useWallet} from '../context/WalletContext';
 import {useGlobalContext} from "../context/GlobalContext";
 import {FileElement} from "./treeview/FileElement";
-import { Layout } from './Layout';
+import {Layout} from './Layout';
 
 import {provenace} from '../config/config.json';
 
@@ -114,7 +115,17 @@ export const Home: FC = () => {
         console.log("here 2")
 
         a.readAsText(droppedFile, "base64")
-        alert("File is uploaded.")
+        toast("File is uploaded.", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+            theme: "light",
+            transition: Bounce,
+        });
     }
 
     const handleButtonClick = (): void => {
@@ -174,6 +185,9 @@ export const Home: FC = () => {
         return date.toLocaleDateString() + ', ' + date.toLocaleTimeString();
     };
 
+    const handleCloseModal = () => {
+        setModalVisible(false);  // Close the modal
+    };
 
     useEffect(()  =>  {
         fetchNfsContents;
@@ -305,7 +319,7 @@ export const Home: FC = () => {
                     </div>
                 </div>
             </div>
-            {modalVisible && (
+            {/* {modalVisible && (
             <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content" style={{ borderRadius: '20px' }}>
@@ -327,6 +341,31 @@ export const Home: FC = () => {
                     </div>
                 </div>
             </div>
+            )} */}
+
+
+            {modalVisible && (
+                <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div className="modal-content" style={{ borderRadius: '20px', padding: '30px' }}>
+                            <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '10px' }}
+                                className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
+                            <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 0, marginTop: '20px' }}>
+                            <div className="drop-zone" ref={dropZoneRef} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={handleDropZoneClick}>
+                                <span className="drop-zone__prompt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <img src={'../../public/assets/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt="" />
+                                    {droppedFile?.name ? <span>{droppedFile.name}</span> : <span>Drop file here or click to upload</span>}
+                                    {(!droppedFile?.name && errors) && <p className="text-danger">{errors}</p>}
+                                </span>
+                                <input ref={fileInputRef} type="file" name="file" className="drop-zone__input" style={{ display: 'none' }} onChange={handleFileChange}/>
+                            </div>
+                            <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }} onClick={uploadFile}>
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                </div>
             )}
 
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn" style={{ position: 'fixed', bottom: '40px', right: '420px', zIndex: 50 }}>

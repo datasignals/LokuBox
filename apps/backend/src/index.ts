@@ -83,6 +83,7 @@ app.get('/api/v1/root/*', (req: Request, res: Response) => {
                 const stats = fs.lstatSync(nodeFullPath);
 
                 if (stats.isFile()) {
+                    console.log("nodeFullPath", nodeFullPath);
                     files.push({filename: node, creationDate: stats.birthtime.getTime()});
                 } else if (stats.isDirectory()) {
                     directories.push(node);
