@@ -13,8 +13,9 @@ import {FileElement} from "./treeview/FileElement";
 import {Layout} from './Layout';
 
 import {provenace} from '../config/config.json';
+import {DirectoryElement} from "./treeview/DirectoryElement";
 
-export const Home: FC = () => {
+export const Home: FC<{routePath: string}> = ({routePath}) => {
     const navigate = useNavigate();
     const {currentAccount} = useWallet();
 
@@ -32,14 +33,11 @@ export const Home: FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const {'*': splat} = useParams<{ "*": string }>();
-    const [path, setPath] = useState(splat ? `/${splat}` : "/");
 
+    const path = splat ?
+        `/${splat}` :
+        "/";
 
-    // const [path, setPath] = useState(splat ?? "");
-
-    // const location = useLocation();
-    // location.pathname = "TOPKEK";
-    // const {splat} = useParams<{ splat?: string }>();
 
     console.log("PATH: " + path);
 
@@ -56,12 +54,6 @@ export const Home: FC = () => {
         routeNames.getNode.fun2({path})
             .then(e => {
                 const nodeInfo = e.data
-
-                if (nodeInfo === undefined) {
-                    return;
-                }
-
-                console.log(JSON.stringify(nodeInfo, null, 6));
 
                 if (isDirRead(nodeInfo)) {
                     console.log("nodeInfo.files", nodeInfo.files);
@@ -106,7 +98,6 @@ export const Home: FC = () => {
             fileInputRef.current.click();
         }
     };
-
 
 
     const uploadFile = (): void => {
@@ -171,13 +162,13 @@ export const Home: FC = () => {
     };
 
     const handleDirectorySelect = (dirName: string) => {
-        console.log("handle dirNavigation");
-        const naviagateTo = location.pathname + "/" + dirName
+        const newPath = dirName.replace(/\/+$/, '');
 
-        console.log(naviagateTo);
-        navigate(naviagateTo);
+        const pp = location.pathname.endsWith("/") ?
+            location.pathname + newPath :
+            location.pathname + "/" + newPath;
 
-        setPath(dirName);
+        navigate(pp);
     };
 
     const fetchProvenance = async (filename: string) => {
@@ -212,35 +203,17 @@ export const Home: FC = () => {
         return date.toLocaleDateString() + ', ' + date.toLocaleTimeString();
     };
 
-    const goDirUp = () => {
-        // Remove any trailing slash, except for the root "/"
-        const newPath = path.replace(/\/+$/, '');
-
-        // Find the last slash to determine the parent directory
-        const lastSlashIndex = newPath.lastIndexOf('/');
-
-        console.log("newPath");
-
-        // If there's no slash or the only slash is the first character, return "/"
-        if (lastSlashIndex <= 0) {
-
-            console.log("going home")
-
-            setPath("/");
-            navigate("/home")
-            fetchNfsContents();
+    const goDirUp = (): void => {
+        if(path === "/" || path === routePath) {
+            return;
         }
 
-        const navigateToPath = path.substring(0, lastSlashIndex);
+        const trimmedPath = path.replace(/\/$/, '');
+        const lastSlashIndex = trimmedPath.lastIndexOf('/');
+        const slicedPath = trimmedPath.substring(0, lastSlashIndex)
 
-        setPath(navigateToPath);
-        navigate(navigateToPath);
+        navigate(routePath + slicedPath)
     }
-
-
-    // useEffect(() => {
-    //     fetchNfsContents;
-    // }, [files])
 
     return (
         <div>
@@ -313,14 +286,19 @@ export const Home: FC = () => {
                                 <div className="position-relative" style={{width: '350px'}}>
                                     <input style={{width: '350px'}} type="text" className="loc-form-control"
                                            placeholder="Search"/>
-                                    <button type="button" onClick={goDirUp}>DIR UP</button>
+                                    {
+                                        path !== "/" ?
+                                            <button type="button" onClick={goDirUp}>DIR UP</button> :
+                                            null
+                                    }
                                     <img style={{position: 'absolute', top: '12px', right: '15px'}}
                                          src="/images/svg/ic_search.svg" alt=""/>
                                 </div>
                             </div>
                             <div>
                                 <FilesComponent files={files} onFileSelect={handleFileSelect}/>
-                                <DirectoryComponent directories={directories} onDirectorySelect={handleDirectorySelect}/>
+                                <DirectoryComponent directories={directories}
+                                                    onDirectorySelect={handleDirectorySelect}/>
                             </div>
                         </div>
                     </div>
@@ -479,20 +457,13 @@ interface DirectoryComponentProps {
     onDirectorySelect: (_directory: string) => void;
 }
 
-const DirectoryComponent: FC<DirectoryComponentProps> = ({directories, onDirectorySelect}) => {
-
-    return (
-        <>
-
-            {directories.map(dirName => (
-                <div key={dirName} onClick={() => onDirectorySelect(dirName)}>
-                    <FileElement
-                        key={dirName}
-                        filename={dirName}
-                        creationDate={0} //TODO might be needed
-                    />
-                </div>
-            ))}
-        </>
-    );
-};
+const DirectoryComponent: FC<DirectoryComponentProps> = ({directories, onDirectorySelect}) => <>
+    {directories.map(dirName => (
+        <div key={dirName} onClick={() => onDirectorySelect(dirName)}>
+            <DirectoryElement
+                key={dirName}
+                dirName={dirName}
+            />
+        </div>
+    ))}
+</>
