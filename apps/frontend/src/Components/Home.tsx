@@ -40,7 +40,7 @@ export const Home: FC = () => {
             .then(e => {
                 const nodeInfo = e.data
                 if (isDirRead(nodeInfo)) {
-                    console.log("nodeInfo.files", nodeInfo.files);
+                    // console.log("nodeInfo.files", nodeInfo.files);
                     setFiles(nodeInfo.files)
                 }
             })
@@ -144,8 +144,9 @@ export const Home: FC = () => {
             // const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
             const accountId = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
             const fileName = 'abc.txt';
+            const response = await fetch(`${provenace.server}/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=${filename}`);
             // const response = await fetch(`${provenace.server}/events/filerecords?accountId=${currentAccount}&fileName=${fileName}`);
-            const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
+            // const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
             // / Log the entire response for debugging
             console.log("RESPONSE OBJECT", response);
             if (!response.ok) {

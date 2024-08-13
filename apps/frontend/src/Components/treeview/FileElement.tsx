@@ -135,7 +135,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
     
     const getDateTime = (timestamp : number)  =>  {
         const date = new Date(timestamp);
-        console.log(date.toLocaleString());
+        // console.log(date.toLocaleString());
         return date.toLocaleString();
     }
 
