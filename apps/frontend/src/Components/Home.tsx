@@ -1,5 +1,5 @@
 import React, {type ChangeEvent, type FC, useEffect, useRef, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate, useParams, useResolvedPath} from 'react-router-dom';
 import "../css/loc-h-content.css"
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
@@ -10,7 +10,7 @@ import {type FileDescription} from "@repo/common/FileDescription";
 import {useWallet} from '../context/WalletContext';
 import {useGlobalContext} from "../context/GlobalContext";
 import {FileElement} from "./treeview/FileElement";
-import { Layout } from './Layout';
+import {Layout} from './Layout';
 
 import {provenace} from '../config/config.json';
 
@@ -21,12 +21,27 @@ export const Home: FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropZoneRef = useRef<HTMLDivElement | null>(null);
     const [files, setFiles] = useState<FileDescription[]>([]);
+
+    const [directories, setDirectories] = useState<string[]>([]);
+
     const [filesselected, setFilesselected] = useState<FileDescription | null>(null);
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
     const [provenanceData, setProvenanceData] = useState<any[]>([]); // Provenance
     const [address, setAddress] = useState<string | null>(null); //wallet address
     const [errors, setErrors] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+
+    const {'*': splat} = useParams<{ "*": string }>();
+    const [path, setPath] = useState(splat ? `/${splat}` : "/");
+
+
+    // const [path, setPath] = useState(splat ?? "");
+
+    // const location = useLocation();
+    // location.pathname = "TOPKEK";
+    // const {splat} = useParams<{ splat?: string }>();
+
+    console.log("PATH: " + path);
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault();
@@ -37,12 +52,21 @@ export const Home: FC = () => {
 
     //TODO only fetches root
     const fetchNfsContents = (): void => {
-        routeNames.getNode.fun2({path: "/"})
+        console.log("fetch nfs for path: " + path);
+        routeNames.getNode.fun2({path})
             .then(e => {
                 const nodeInfo = e.data
+
+                if (nodeInfo === undefined) {
+                    return;
+                }
+
+                console.log(JSON.stringify(nodeInfo, null, 6));
+
                 if (isDirRead(nodeInfo)) {
                     console.log("nodeInfo.files", nodeInfo.files);
                     setFiles(nodeInfo.files)
+                    setDirectories(nodeInfo.directories)
                 }
             })
             .catch((e: unknown) => null)
@@ -72,7 +96,7 @@ export const Home: FC = () => {
             if (fileInputRef.current) {
                 fileInputRef.current.files = files;
             }
-          //  setDroppedFile(files[0]);
+            //  setDroppedFile(files[0]);
             setErrors("");
         }
     };
@@ -82,12 +106,7 @@ export const Home: FC = () => {
             fileInputRef.current.click();
         }
     };
-    useEffect(() => {
-        fetchNfsContents();
-        if (localStorage.getItem("currentAccount")) {
-            navigate("")
-        }
-    }, [/*files*/])
+
 
 
     const uploadFile = (): void => {
@@ -117,6 +136,15 @@ export const Home: FC = () => {
         alert("File is uploaded.")
     }
 
+    useEffect(() => {
+        fetchNfsContents();
+        //TODO MILOSZ whatever this is supposted to do, it does nothing
+        // but causes additional re-render
+        // if (localStorage.getItem("currentAccount")) {
+        //     navigate("")
+        // }
+    }, [path]) //Hook to a path so that it will refresh file contents when path changes
+
     const handleButtonClick = (): void => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -140,13 +168,23 @@ export const Home: FC = () => {
         console.log("IN handleFileSelect");
         setFilesselected(file)
         fetchProvenance(file.filename);
-      };
+    };
+
+    const handleDirectorySelect = (dirName: string) => {
+        console.log("handle dirNavigation");
+        const naviagateTo = location.pathname + "/" + dirName
+
+        console.log(naviagateTo);
+        navigate(naviagateTo);
+
+        setPath(dirName);
+    };
 
     const fetchProvenance = async (filename: string) => {
-        console.log("INSIDE FETCH",filename)
-        console.log("DA",filesselected)
+        console.log("INSIDE FETCH", filename)
+        console.log("DA", filesselected)
         try {
-            console.log("RESPONSE OBJECT", currentAccount,filename);
+            console.log("RESPONSE OBJECT", currentAccount, filename);
             // const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
             const accountId = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
             const fileName = 'abc.txt';
@@ -158,11 +196,11 @@ export const Home: FC = () => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            console.log("DATA",data,typeof(data.data.value))
-            if(data.success == true && data.status == "Connected"){
-                console.log("DATA IN IF",typeof(data.data.value))
+            console.log("DATA", data, typeof (data.data.value))
+            if (data.success == true && data.status == "Connected") {
+                console.log("DATA IN IF", typeof (data.data.value))
                 setProvenanceData(data.data.value);
-                console.log("PRO",provenanceData);
+                console.log("PRO", provenanceData);
             }
         } catch (error) {
             console.error("FETCH ERROR", error);
@@ -174,10 +212,35 @@ export const Home: FC = () => {
         return date.toLocaleDateString() + ', ' + date.toLocaleTimeString();
     };
 
+    const goDirUp = () => {
+        // Remove any trailing slash, except for the root "/"
+        const newPath = path.replace(/\/+$/, '');
 
-    useEffect(()  =>  {
-        fetchNfsContents;
-    },[files])
+        // Find the last slash to determine the parent directory
+        const lastSlashIndex = newPath.lastIndexOf('/');
+
+        console.log("newPath");
+
+        // If there's no slash or the only slash is the first character, return "/"
+        if (lastSlashIndex <= 0) {
+
+            console.log("going home")
+
+            setPath("/");
+            navigate("/home")
+            fetchNfsContents();
+        }
+
+        const navigateToPath = path.substring(0, lastSlashIndex);
+
+        setPath(navigateToPath);
+        navigate(navigateToPath);
+    }
+
+
+    // useEffect(() => {
+    //     fetchNfsContents;
+    // }, [files])
 
     return (
         <div>
@@ -241,7 +304,7 @@ export const Home: FC = () => {
                     </li>
                 </ul>
             </div> */}
-            <Layout />
+            <Layout/>
             <div className="loc-content-container">
                 <div className="loc-h-content-o">
                     <div className="row">
@@ -250,17 +313,20 @@ export const Home: FC = () => {
                                 <div className="position-relative" style={{width: '350px'}}>
                                     <input style={{width: '350px'}} type="text" className="loc-form-control"
                                            placeholder="Search"/>
+                                    <button type="button" onClick={goDirUp}>DIR UP</button>
                                     <img style={{position: 'absolute', top: '12px', right: '15px'}}
                                          src="/images/svg/ic_search.svg" alt=""/>
                                 </div>
                             </div>
                             <div>
-                                <FilesComponent files={files} onFileSelect={handleFileSelect} />
+                                <FilesComponent files={files} onFileSelect={handleFileSelect}/>
+                                <DirectoryComponent directories={directories} onDirectorySelect={handleDirectorySelect}/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div className="loc-h-content-details">
                 <div className="loc-h-content-title">
                     Provenance Report
@@ -270,8 +336,8 @@ export const Home: FC = () => {
                         <div className="loc-h-card-content">
                             <img src="/images/svg/ic_pdf.svg" alt=""/>
                             <div>
-                                <h4 style={{marginBottom: '5px'}} >
-                                {filesselected ? filesselected.filename : 'No file selected'}
+                                <h4 style={{marginBottom: '5px'}}>
+                                    {filesselected ? filesselected.filename : 'No file selected'}
                                 </h4>
                                 <h5 style={{marginBottom: '5px'}}>10mb</h5>
                                 <h5>{filesselected ? formatDate(filesselected.creationDate) : ''}</h5>
@@ -283,54 +349,81 @@ export const Home: FC = () => {
                     <h4 style={{fontSize: '14px', marginLeft: '20px'}}>Activities</h4>
                     <div className="loc-card-provnance" style={{height: '100%'}}>
                         {/* <div className="loc-h-activity-content"> */}
-                            {/* <div style={{fontSize: '14px'}}>Accessed On</div>
+                        {/* <div style={{fontSize: '14px'}}>Accessed On</div>
                             <div style={{fontSize: '14px'}}>25-02-2024 10:20 AM</div> */}
-                    {errors ? (
-                        <div style={{ fontSize: '14px', color: 'red' }}>{errors}</div>
-                    ) : (
-                        provenanceData.length > 0 ? (
-                            provenanceData.map((item, index) => (
-                                <div key={index} style={{ marginBottom: '10px' }}>
-                                    <div style={{ fontSize: '14px' }}><strong>Accessed On:</strong> {item.value.creationtime}</div>
-                                    <div style={{ fontSize: '14px' }}><strong>Accessed by:</strong> {item.value.eventkey}</div>
-                                    <div style={{ fontSize: '14px' }}><strong>Action:</strong> {item.value.eventtype}</div>
-                                    <hr style={{ margin: '10px 0', border: '1px solid #ccc' }} />
-                                </div>
-                            ))
+                        {errors ? (
+                            <div style={{fontSize: '14px', color: 'red'}}>{errors}</div>
                         ) : (
-                            <div style={{ fontSize: '14px' }}>No File Selected.</div>
-                        )
-                    )}
+                            provenanceData.length > 0 ? (
+                                provenanceData.map((item, index) => (
+                                    <div key={index} style={{marginBottom: '10px'}}>
+                                        <div style={{fontSize: '14px'}}><strong>Accessed
+                                            On:</strong> {item.value.creationtime}</div>
+                                        <div style={{fontSize: '14px'}}><strong>Accessed
+                                            by:</strong> {item.value.eventkey}</div>
+                                        <div style={{fontSize: '14px'}}><strong>Action:</strong> {item.value.eventtype}
+                                        </div>
+                                        <hr style={{margin: '10px 0', border: '1px solid #ccc'}}/>
+                                    </div>
+                                ))
+                            ) : (
+                                <div style={{fontSize: '14px'}}>No File Selected.</div>
+                            )
+                        )}
                         {/* </div> */}
                     </div>
                 </div>
             </div>
             {modalVisible && (
-            <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div className="modal-content" style={{ borderRadius: '20px' }}>
-                        <button type="button" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 999, fontSize: '12px' }}
-                            className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '70px' }}>
-                            <div className="drop-zone" ref={dropZoneRef} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={handleDropZoneClick}>
-                                <span className="drop-zone__prompt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                    <img src={'../../public/assets/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt="" />
-                                    {droppedFile?.name ? <span>{droppedFile.name}</span> : <span>Drop file here or click to upload</span>}
+                <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div className="modal-content" style={{borderRadius: '20px'}}>
+                            <button type="button" style={{
+                                position: 'absolute',
+                                top: '20px',
+                                right: '20px',
+                                zIndex: 999,
+                                fontSize: '12px'
+                            }}
+                                    className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div className="modal-body" style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '70px'
+                            }}>
+                                <div className="drop-zone" ref={dropZoneRef} onDragOver={handleDragOver}
+                                     onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={handleDropZoneClick}>
+                                <span className="drop-zone__prompt" style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <img src={'../../public/assets/images/svg/ic_cloud.svg'}
+                                         style={{width: '48px', marginBottom: '20px'}} alt=""/>
+                                    {droppedFile?.name ? <span>{droppedFile.name}</span> :
+                                        <span>Drop file here or click to upload</span>}
                                     {(!droppedFile?.name && errors) && <p className="text-danger">{errors}</p>}
                                 </span>
-                                <input ref={fileInputRef} type="file" name="file" className="drop-zone__input" style={{ display: 'none' }} onChange={handleFileChange}/>
+                                    <input ref={fileInputRef} type="file" name="file" className="drop-zone__input"
+                                           style={{display: 'none'}} onChange={handleFileChange}/>
+                                </div>
+                                <button className="loc-btn" type="button" style={{marginTop: '30px', width: '200px'}}
+                                        onClick={uploadFile}>
+                                    Upload
+                                </button>
                             </div>
-                            <button className="loc-btn" type="button" style={{ marginTop: '30px', width: '200px' }} onClick={uploadFile}>
-                                Upload
-                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
             )}
 
-            <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn" style={{ position: 'fixed', bottom: '40px', right: '420px', zIndex: 50 }}>
-                <img src={'/images/svg/ic_upload_file.svg'} onClick={handleModal} alt="" />
+            <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn"
+                    style={{position: 'fixed', bottom: '40px', right: '420px', zIndex: 50}}>
+                <img src={'/images/svg/ic_upload_file.svg'} onClick={handleModal} alt=""/>
             </button>
             <div>
                 {/*TODO replace the a by button later*/}
@@ -355,22 +448,49 @@ export const Home: FC = () => {
 
 interface FilesComponentProps {
     files: FileDescription[];
-    onFileSelect: (file: FileDescription) => void;
+    onFileSelect: (_file: FileDescription) => void;
 }
-const FilesComponent: FC<FilesComponentProps> = ({ files, onFileSelect }) => {
+
+const FilesComponent: FC<FilesComponentProps> = ({files, onFileSelect}) => {
     // Sort files by creationDate in descending order
-    const sortedFiles = [...files].sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+    const sortedFiles = files
+        .sort((a, b) =>
+            new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
+        );
 
     return (
         <>
 
             {sortedFiles.map(file => (
                 <div key={file.filename} onClick={() => onFileSelect(file)}>
-                <FileElement
-                    key={file.filename}
-                    filename={file.filename}
-                    creationDate={file.creationDate}
-                />
+                    <FileElement
+                        key={file.filename}
+                        filename={file.filename}
+                        creationDate={file.creationDate}
+                    />
+                </div>
+            ))}
+        </>
+    );
+};
+
+interface DirectoryComponentProps {
+    directories: string[];
+    onDirectorySelect: (_directory: string) => void;
+}
+
+const DirectoryComponent: FC<DirectoryComponentProps> = ({directories, onDirectorySelect}) => {
+
+    return (
+        <>
+
+            {directories.map(dirName => (
+                <div key={dirName} onClick={() => onDirectorySelect(dirName)}>
+                    <FileElement
+                        key={dirName}
+                        filename={dirName}
+                        creationDate={0} //TODO might be needed
+                    />
                 </div>
             ))}
         </>

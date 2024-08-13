@@ -5,6 +5,7 @@ import {Login} from './components/Login';
 import {Profile} from './components/Profile';
 import {Shared} from "./components/Shared";
 import {Team} from "./components/Team"
+import {Test} from "./components/Test";
 
 export const App: React.FC = () => {
     return (
@@ -12,9 +13,10 @@ export const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Login/>}/>
                 <Route path="/profile" element={<Profile/>}/>
-                <Route path="/home" element={<Home/>}/>
+                <Route path="/home/*" element={<Home/>}/>
                 <Route path="/shared" element={<Shared />} />
                 <Route path="/team" element={<Team />} />
+                <Route path="/test/*" element={<Test/>} />
             </Routes>
         </Router>
     );

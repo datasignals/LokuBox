@@ -13,13 +13,13 @@ const root = ReactDOM.createRoot(
 
 
 root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <GlobalProvider>
             <WalletProvider>
                 <App/>
             </WalletProvider>
         </GlobalProvider>
-    </React.StrictMode>
+    // </React.StrictMode>
 );
 
 reportWebVitals();
