@@ -87,7 +87,7 @@ export const Home: FC = () => {
         if (localStorage.getItem("currentAccount")) {
             navigate("")
         }
-    }, [files])
+    }, [/*files*/])
 
 
     const uploadFile = (): void => {
