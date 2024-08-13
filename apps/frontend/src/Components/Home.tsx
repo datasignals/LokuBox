@@ -12,6 +12,8 @@ import {useGlobalContext} from "../context/GlobalContext";
 import {FileElement} from "./treeview/FileElement";
 import { Layout } from './Layout';
 
+import {provenace} from '../config/config.json';
+
 export const Home: FC = () => {
     const navigate = useNavigate();
     const {currentAccount} = useWallet();
@@ -19,7 +21,10 @@ export const Home: FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropZoneRef = useRef<HTMLDivElement | null>(null);
     const [files, setFiles] = useState<FileDescription[]>([]);
+    const [filesselected, setFilesselected] = useState<FileDescription | null>(null);
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
+    const [provenanceData, setProvenanceData] = useState<any[]>([]); // Provenance
+    const [address, setAddress] = useState<string | null>(null); //wallet address
     const [errors, setErrors] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -82,7 +87,7 @@ export const Home: FC = () => {
         if (localStorage.getItem("currentAccount")) {
             navigate("")
         }
-    }, [])
+    }, [files])
 
 
     const uploadFile = (): void => {
@@ -99,15 +104,11 @@ export const Home: FC = () => {
                     isDirectory: false,
                     content: e.target.result as string //TODO force casting
                 }).then(() => {
-
                     fetchNfsContents();
-
                     setDroppedFile(null); // Clear the selected file
                     setErrors(""); // Clear any error
                     setModalVisible(false);  // Close the modal
-
-                })
-                    .catch(() => null);
+                }).catch(() => null);
             }
         }
         console.log("here 2")
@@ -134,9 +135,49 @@ export const Home: FC = () => {
         setModalVisible(true);  // Close the modal
     };
 
+    const handleFileSelect = (file: FileDescription) => {
+        // Here you can handle the file selection, such as fetching its provenance
+        console.log("IN handleFileSelect");
+        setFilesselected(file)
+        fetchProvenance(file.filename);
+      };
+
+    const fetchProvenance = async (filename: string) => {
+        console.log("INSIDE FETCH",filename)
+        console.log("DA",filesselected)
+        try {
+            console.log("RESPONSE OBJECT", currentAccount,filename);
+            // const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
+            const accountId = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
+            const fileName = 'abc.txt';
+            // const response = await fetch(`${provenace.server}/events/filerecords?accountId=${currentAccount}&fileName=${fileName}`);
+            const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
+            // / Log the entire response for debugging
+            console.log("RESPONSE OBJECT", response);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log("DATA",data,typeof(data.data.value))
+            if(data.success == true && data.status == "Connected"){
+                console.log("DATA IN IF",typeof(data.data.value))
+                setProvenanceData(data.data.value);
+                console.log("PRO",provenanceData);
+            }
+        } catch (error) {
+            console.error("FETCH ERROR", error);
+        }
+    };
+    // Function to format the timestamp
+    const formatDate = (timestamp: number): string => {
+        const date = new Date(timestamp);
+        return date.toLocaleDateString() + ', ' + date.toLocaleTimeString();
+    };
+
+
     useEffect(()  =>  {
         fetchNfsContents;
-    })
+    },[files])
 
     return (
         <div>
@@ -213,7 +254,9 @@ export const Home: FC = () => {
                                          src="/images/svg/ic_search.svg" alt=""/>
                                 </div>
                             </div>
-                            <FilesComponent files={files}/>
+                            <div>
+                                <FilesComponent files={files} onFileSelect={handleFileSelect} />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -227,20 +270,38 @@ export const Home: FC = () => {
                         <div className="loc-h-card-content">
                             <img src="/images/svg/ic_pdf.svg" alt=""/>
                             <div>
-                                <h4 style={{marginBottom: '5px'}}>thisisfake.pdf</h4>
-                                <h5 style={{marginBottom: '5px'}}>fakemb10.10mb</h5>
-                                <h5>25-10-2024, 10:30 AM</h5>
+                                <h4 style={{marginBottom: '5px'}} >
+                                {filesselected ? filesselected.filename : 'No file selected'}
+                                </h4>
+                                <h5 style={{marginBottom: '5px'}}>10mb</h5>
+                                <h5>{filesselected ? formatDate(filesselected.creationDate) : ''}</h5>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="loc-h-activity-content-con">
                     <h4 style={{fontSize: '14px', marginLeft: '20px'}}>Activities</h4>
-                    <div className="loc-card" style={{height: '100%'}}>
-                        <div className="loc-h-activity-content">
-                            <div style={{fontSize: '14px'}}>Accessed On</div>
-                            <div style={{fontSize: '14px'}}>25-02-2024 10:20 AM</div>
-                        </div>
+                    <div className="loc-card-provnance" style={{height: '100%'}}>
+                        {/* <div className="loc-h-activity-content"> */}
+                            {/* <div style={{fontSize: '14px'}}>Accessed On</div>
+                            <div style={{fontSize: '14px'}}>25-02-2024 10:20 AM</div> */}
+                    {errors ? (
+                        <div style={{ fontSize: '14px', color: 'red' }}>{errors}</div>
+                    ) : (
+                        provenanceData.length > 0 ? (
+                            provenanceData.map((item, index) => (
+                                <div key={index} style={{ marginBottom: '10px' }}>
+                                    <div style={{ fontSize: '14px' }}><strong>Accessed On:</strong> {item.value.creationtime}</div>
+                                    <div style={{ fontSize: '14px' }}><strong>Accessed by:</strong> {item.value.eventkey}</div>
+                                    <div style={{ fontSize: '14px' }}><strong>Action:</strong> {item.value.eventtype}</div>
+                                    <hr style={{ margin: '10px 0', border: '1px solid #ccc' }} />
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{ fontSize: '14px' }}>No File Selected.</div>
+                        )
+                    )}
+                        {/* </div> */}
                     </div>
                 </div>
             </div>
@@ -291,19 +352,26 @@ export const Home: FC = () => {
     );
 };
 
-const FilesComponent: FC<{ files: FileDescription[] }> = ({ files }) => {
+
+interface FilesComponentProps {
+    files: FileDescription[];
+    onFileSelect: (file: FileDescription) => void;
+}
+const FilesComponent: FC<FilesComponentProps> = ({ files, onFileSelect }) => {
     // Sort files by creationDate in descending order
     const sortedFiles = [...files].sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
 
     return (
         <>
+
             {sortedFiles.map(file => (
+                <div key={file.filename} onClick={() => onFileSelect(file)}>
                 <FileElement
                     key={file.filename}
                     filename={file.filename}
                     creationDate={file.creationDate}
-
                 />
+                </div>
             ))}
         </>
     );

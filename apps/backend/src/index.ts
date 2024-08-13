@@ -13,16 +13,16 @@ const app = Express();
 const port = 3001; //TODO
 //CORS Middleware
 app.use(Cors({credentials: true}));
-// app.use(bodyParser.json());
-app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-
+app.use(bodyParser.json({ limit: '50mb' }));
 
 //TODO if this is to exists, it needs to be in common folder
 interface CreateRequestBody {
     isDirectory?: boolean;
     content?: string;
 }
+
+
 app.use(session({
     name: "mainSession",
     secret: "secretimportantchangeme",
@@ -36,9 +36,7 @@ app.use(session({
     }
 }));
 
-// const nfsDirectory = "/tmp/nfs";
-
-const nfsDirectory = "/Users/dnyaneshwari/filesystem"
+const nfsDirectory = "/tmp/nfs";
 
 fs.mkdirSync(nfsDirectory, {recursive: true});
 
