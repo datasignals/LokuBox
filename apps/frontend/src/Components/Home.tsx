@@ -21,6 +21,7 @@ export const Home: FC = () => {
     const [files, setFiles] = useState<FileDescription[]>([]);
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
     const [errors, setErrors] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault();
@@ -102,7 +103,8 @@ export const Home: FC = () => {
                     fetchNfsContents();
 
                     setDroppedFile(null); // Clear the selected file
-                    setErrors(""); // Clear any errors
+                    setErrors(""); // Clear any error
+                    setModalVisible(false);  // Close the modal
 
                 })
                     .catch(() => null);
@@ -126,6 +128,10 @@ export const Home: FC = () => {
             // uploadFile(file);
             setDroppedFile(file);
         }
+    };
+
+    const handleModal = () => {
+        setModalVisible(true);  // Close the modal
     };
 
     useEffect(()  =>  {
@@ -238,6 +244,7 @@ export const Home: FC = () => {
                     </div>
                 </div>
             </div>
+            {modalVisible && (
             <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content" style={{ borderRadius: '20px' }}>
@@ -259,9 +266,10 @@ export const Home: FC = () => {
                     </div>
                 </div>
             </div>
+            )}
 
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn" style={{ position: 'fixed', bottom: '40px', right: '420px', zIndex: 50 }}>
-                <img src={'/images/svg/ic_upload_file.svg'} alt="" />
+                <img src={'/images/svg/ic_upload_file.svg'} onClick={handleModal} alt="" />
             </button>
             <div>
                 {/*TODO replace the a by button later*/}
