@@ -12,26 +12,26 @@ export const DirectoryElement: FC<{ dirName: string, handleEnterDirectory: () =>
             </div>
             <div className="loc-h-tools">
                 <div className="dropdown">
-                    <img style={{cursor: 'pointer', width: "30px"}} src={'../../../public/images/svg/enter_1_placeholder.svg'}
+                    <img style={{cursor: 'pointer', width: "30px"}} src={'/images/svg/enter_1_placeholder.svg'}
                          alt="more-options"
                          data-bs-toggle="modal" data-bs-target="#shareModal"
                          onClick={handleEnterDirectory}/>
 
-                    <img className="dropdown-toggle" src={'../../../public/images/svg/ic_team_dropdown.svg'}
+                    <img className="dropdown-toggle" src={'/images/svg/ic_team_dropdown.svg'}
                          alt="more-options" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"/>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li className="dropdown-item">
-                            <img style={{width: "35px"}} src={'../../../public/images/svg/user_default.svg'}
+                            <img style={{width: "35px"}} src={'/images/svg/user_default.svg'}
                                  alt="user"/>
                             <div>Jason Roy</div>
                         </li>
                         <li className="dropdown-item">
-                            <img style={{width: "35px"}} src={'../../../public/images/svg/user_default.svg'}
+                            <img style={{width: "35px"}} src={'/images/svg/user_default.svg'}
                                  alt="user"/>
                             <div>Jos Butler</div>
                         </li>
                         <li className="dropdown-item">
-                            <img style={{width: "35px"}} src={'../../../public/images/svg/user_default.svg'}
+                            <img style={{width: "35px"}} src={'/images/svg/user_default.svg'}
                                  alt="user"/>
                             <div>Ian Bell</div>
                         </li>
@@ -40,7 +40,7 @@ export const DirectoryElement: FC<{ dirName: string, handleEnterDirectory: () =>
 
                 <div className="dropdown">
                     <img className="dropdown-toggle" style={{width: "5px"}}
-                         src={'../../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2"
+                         src={'/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2"
                          data-bs-toggle="dropdown" aria-expanded="false"/>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                         <li className="dropdown-item" onClick={() => alert("not included")}>Delete</li>

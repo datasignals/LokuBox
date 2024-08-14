@@ -45,7 +45,7 @@
   "scripts": {
     "copy-config": "mkdir -pv out/config ; cp src/config/config.json out/config/config.json",
     "dev": "yarn build && nodemon --ext ts --exec 'tsc && node out/index.js || exit 1'",
-    "build": "yarn clean && tsc",
+    "build": "yarn clean && yarn copy-config && tsc",
     "clean": "rm -rf out",
     "start": "node out/index.js",
     "test": "yarn build && jest --runInBand --detectOpenHandles --forceExit",

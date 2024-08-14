@@ -71,25 +71,25 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                 </div>
                 <div className="loc-h-tools">
                     <div className="dropdown">
-                        <img className="dropdown-toggle" src={'../../../public/images/svg/ic_team_dropdown.svg'} alt="more-options" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"/>
+                        <img className="dropdown-toggle" src="/images/svg/ic_team_dropdown.svg" alt="more-options" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"/>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li className="dropdown-item">
-                                    <img style={{width : "35px"}} src={'../../../public/images/svg/user_default.svg'} alt="user" />
+                                    <img style={{width : "35px"}} src={'/images/svg/user_default.svg'} alt="user" />
                                     <div>Jason Roy</div>
                                 </li>
                                 <li className="dropdown-item">
-                                    <img style={{width : "35px"}} src={'../../../public/images/svg/user_default.svg'} alt="user" />
+                                    <img style={{width : "35px"}} src={'/images/svg/user_default.svg'} alt="user" />
                                     <div>Jos Butler</div>
                                 </li>
                                 <li className="dropdown-item">
-                                    <img style={{width : "35px"}} src={'../../../public/images/svg/user_default.svg'} alt="user" />
+                                    <img style={{width : "35px"}} src={'/images/svg/user_default.svg'} alt="user" />
                                     <div>Ian Bell</div>
                                 </li>
                             </ul>
                     </div>
-                    <img style={{ cursor: 'pointer' }} src={'../../../public/images/svg/ic_share.svg'} alt="more-options" data-bs-toggle="modal" data-bs-target="#shareModal" onClick={() => setSelectFile({ filename, creationDate })}/>
+                    <img style={{ cursor: 'pointer' }} src={'/images/svg/ic_share.svg'} alt="more-options" data-bs-toggle="modal" data-bs-target="#shareModal" onClick={() => setSelectFile({ filename, creationDate })}/>
                     <div className="dropdown">
-                        <img className="dropdown-toggle" style={{width : "5px"}} src={'../../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
+                        <img className="dropdown-toggle" style={{width : "5px"}} src={'/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                             <li className="dropdown-item" onClick={() => handleDeleteFile(filename)}>Delete</li>
                         </ul>

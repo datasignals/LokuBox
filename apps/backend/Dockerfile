@@ -11,7 +11,7 @@ RUN yarn global add turbo
 COPY . .
 RUN turbo prune \
     --scope=@repo/typescript-config \
-    --scope=artifact-storage-backend \
+    --scope=lokubox-backend \
     --scope=@repo/common \
     --docker
 
@@ -30,7 +30,7 @@ COPY turbo.json turbo.json
 RUN yarn turbo run build \
     --filter=@repo/typescript-config \
     --filter=@repo/common \
-    --filter=artifact-storage-backend...
+    --filter=lokubox-backend...
 
 FROM node:20 AS runner
 WORKDIR /app

@@ -22,7 +22,7 @@ export const ShareFileModal: FC<Props> = ({selectedFile, setSelectedFile}) => {
                                 className="btn-close" onClick={() => { setSelectedFile(null); }} aria-label="Close" />
                         <div className="loc-h-share-title">Share File</div>
                         <div className="loc-h-share-content">
-                            <img src="../../public/assets/images/svg/ic_pdf.svg" alt="" />
+                            <img src="/images/svg/ic_pdf.svg" alt="" />
                             <div style={{ marginLeft: '10px' }}>
                                 <h4 style={{ marginBottom: '5px' }}>{selectedFile.filename}</h4>
                                 <h5>{getDateTime(selectedFile.creationDate)}</h5>

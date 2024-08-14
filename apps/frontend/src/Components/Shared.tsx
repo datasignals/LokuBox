@@ -37,7 +37,7 @@ export const Shared: React.FC = () => {
                             <div className="loc-card loc-h">
                                 <div className="position-relative" style={{ width: '350px' }}>
                                     <input style={{ width: '350px' }} type="text" className="loc-form-control" placeholder="Search" />
-                                    <img style={{ position: 'absolute', top: '12px', right: '15px' }} src={'../../public/images/svg/ic_search.svg'} alt="" />
+                                    <img style={{ position: 'absolute', top: '12px', right: '15px' }} src={'/images/svg/ic_search.svg'} alt="" />
                                 </div>
                                 <div className="loc-card-toggler">
                                     <ul className='loc-view-toggle-con'>
@@ -59,7 +59,7 @@ export const Shared: React.FC = () => {
                                     <div className="loc-card" style={{ marginTop: '20px' }}>
                                         <div className="loc-h-card-content-con">
                                             <div className="loc-h-card-content">
-                                                <img src={'../../public/images/svg/ic_pdf.svg'} alt=""/>
+                                                <img src={'/images/svg/ic_pdf.svg'} alt=""/>
                                                 <div>
                                                     <h4 style={{ marginBottom: '5px' }}>myfiles.pdf</h4>
                                                     <h5>25-10-2024, 10:30 AM</h5>
@@ -67,11 +67,11 @@ export const Shared: React.FC = () => {
                                             </div>
                                             <div className="loc-h-tools">
                                                 <div className="loc-s-users">
-                                                    <img src={'../../public/images/svg/user_default.svg'} alt=""/>
+                                                    <img src={'/images/svg/user_default.svg'} alt=""/>
                                                     <div style={{ fontSize: '12px', color: '#8B959B', marginTop: '5px' }}>Jos</div>
                                                 </div>
                                                 <div className="dropdown">
-                                                    <img className="dropdown-toggle" src={'../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
+                                                    <img className="dropdown-toggle" src={'/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
                                                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                                         <li className="dropdown-item">
                                                             Delete
@@ -84,7 +84,7 @@ export const Shared: React.FC = () => {
                                     <div className="loc-card" style={{ marginTop: '20px' }}>
                                         <div className="loc-h-card-content-con">
                                             <div className="loc-h-card-content">
-                                                <img src={'../../public/images/svg/ic_pdf.svg'} alt=""/>
+                                                <img src={'/images/svg/ic_pdf.svg'} alt=""/>
                                                 <div>
                                                     <h4 style={{ marginBottom: '5px' }}>newfiles.pdf</h4>
                                                     <h5>27-10-2024, 10:30 AM</h5>
@@ -92,11 +92,11 @@ export const Shared: React.FC = () => {
                                             </div>
                                             <div className="loc-h-tools">
                                                 <div className="loc-s-users">
-                                                    <img src={'../../public/images/svg/user_default.svg'} alt=""/>
+                                                    <img src={'/images/svg/user_default.svg'} alt=""/>
                                                     <div style={{ fontSize: '12px', color: '#8B959B', marginTop: '5px' }}>Jos</div>
                                                 </div>
                                                 <div className="dropdown">
-                                                    <img className="dropdown-toggle" src={'../../public/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
+                                                    <img className="dropdown-toggle" src={'/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
                                                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                                         <li className="dropdown-item">
                                                             Delete
@@ -113,11 +113,11 @@ export const Shared: React.FC = () => {
                                         <div className='col-12 col-sm-6 col-lg-4'>
                                             <div className="loc-card" style={{ marginTop: '20px', position: 'relative' }}>
                                                 <div className="loc-s-users-grid">
-                                                    <img src={'../../public/images/svg/user_default.svg'} alt=""/>
+                                                    <img src={'/images/svg/user_default.svg'} alt=""/>
                                                     <div style={{ fontSize: '12px', color: '#8B959B', marginTop: '5px' }}>Jos</div>
                                                 </div>
                                                 <div className="loc-s-card-con-grid">
-                                                    <img src={'../../public/images/svg/ic_pdf.svg'} alt=""/>
+                                                    <img src={'/images/svg/ic_pdf.svg'} alt=""/>
                                                     <div style={{ marginTop: '15px' }}>
                                                         <h4 style={{ marginBottom: '5px', textAlign: 'center' }}>newfiles.pdf</h4>
                                                         <h5>27-10-2024, 10:30 AM</h5>
@@ -128,11 +128,11 @@ export const Shared: React.FC = () => {
                                         <div className='col-12 col-sm-6 col-lg-4'>
                                             <div className="loc-card" style={{ marginTop: '20px', position: 'relative' }}>
                                                 <div className="loc-s-users-grid">
-                                                    <img src={'../../public/images/svg/user_default.svg'} alt=""/>
+                                                    <img src={'/images/svg/user_default.svg'} alt=""/>
                                                     <div style={{ fontSize: '12px', color: '#8B959B', marginTop: '5px' }}>Jos</div>
                                                 </div>
                                                 <div className="loc-s-card-con-grid">
-                                                    <img src={'../../public/images/svg/ic_pdf.svg'} alt=""/>
+                                                    <img src={'/images/svg/ic_pdf.svg'} alt=""/>
                                                     <div style={{ marginTop: '15px' }}>
                                                         <h4 style={{ marginBottom: '5px', textAlign: 'center' }}>newfiles.pdf</h4>
                                                         <h5>27-10-2024, 10:30 AM</h5>
@@ -156,8 +156,8 @@ export const Shared: React.FC = () => {
                         <div className="loc-s-activity-content">
                             <div style={{ fontSize: '12px' }}>Joe Root wants to share file</div>
                             <div>
-                                <img style={{ cursor: 'pointer' }} src={'../../public/images/svg/ic_reject.svg'} alt=""/>
-                                <img style={{ marginLeft: '10px', cursor: 'pointer' }} src={'../../public/images/svg/ic_check.svg'} alt=""/>
+                                <img style={{ cursor: 'pointer' }} src={'/images/svg/ic_reject.svg'} alt=""/>
+                                <img style={{ marginLeft: '10px', cursor: 'pointer' }} src={'/images/svg/ic_check.svg'} alt=""/>
                             </div>
                         </div>
                     </div>

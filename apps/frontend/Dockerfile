@@ -10,7 +10,7 @@ RUN yarn global add turbo
 
 #COPY package*.json ./
 COPY . .
-RUN turbo prune --scope=@repo/typescript-config --scope=artifact-storage-frontend --scope=@repo/common --docker
+RUN turbo prune --scope=@repo/typescript-config --scope=lokubox-frontend --scope=@repo/common --docker
 
 FROM node:20-alpine AS installer
 RUN apk update
@@ -23,7 +23,7 @@ RUN yarn install
 
 COPY --from=build /app/out/full/ .
 COPY turbo.json turbo.json
-RUN yarn turbo run build --filter=@repo/typescript-config --filter=@repo/common --filter=artifact-storage-frontend...
+RUN yarn turbo run build --filter=@repo/typescript-config --filter=@repo/common --filter=lokubox-frontend...
 
 
 FROM node:20 AS runner

@@ -16,7 +16,6 @@ import {Layout} from './Layout';
 
 import {DirectoryElement} from "./treeview/DirectoryElement";
 import {UploadFileModal} from "./UploadFileModal";
-import {provenace} from "../config/config.json";
 
 export const Home: FC<{ routePath: string }> = ({routePath}) => {
     const navigate = useNavigate();
@@ -35,7 +34,7 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
         `/${splat}` :
         "/";
 
-    const {routeNames} = useGlobalContext();
+    const {routeNames, provenanceAddress} = useGlobalContext();
 
     const fetchNfsContents = (): void => {
         routeNames.getNode.fun2({path})
@@ -76,7 +75,7 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
             // const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
             const accountId = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
             const fileName = 'abc.txt';
-            const response = await fetch(`${provenace.server}/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=${filename}`);
+            const response = await fetch(`${provenanceAddress}/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=${filename}`);
             // const response = await fetch(`${provenace.server}/events/filerecords?accountId=${currentAccount}&fileName=${fileName}`);
             // const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
             // / Log the entire response for debugging

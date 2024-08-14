@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/loc-layout.css';
 import '../css/main.css';
 import { useWallet } from '../context/WalletContext';
-import "../../public/images/svg/user_default.svg"
+// import "/images/svg/user_default.svg"
 export const Layout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,7 +21,7 @@ export const Layout: React.FC = () => {
             <div className="loc-nav" id="loc-nav">
                 <div className="loc-sidemenu-toggler" id="loc-sidemenu-toggler">
                     <div className="loc-logo">
-                        <img src={'../../public/images/svg/logo.svg'} alt="brand-logo" />
+                        <img src={'/images/svg/logo.svg'} alt="brand-logo" />
                     </div>
                     <div className="loc-nav-ham">Files</div>
                 </div>
@@ -30,7 +30,7 @@ export const Layout: React.FC = () => {
                         {currentAccount && ( <span style={{ margin: '10px', whiteSpace: 'nowrap' }}>
                         {currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}</span>)}
                     <div className="dropdown">
-                    <img className="dropdown-toggle" src={'../../public/images/svg/user_default.svg'}
+                    <img className="dropdown-toggle" src={'/images/svg/user_default.svg'}
                     alt="more-options" id="dropdownMenuAccount" data-bs-toggle="dropdown" aria-expanded="false" style={{ cursor: 'pointer' }}/>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuAccount">
                         <li className="dropdown-item">

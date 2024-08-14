@@ -126,7 +126,7 @@ export const UploadFileModal: FC<Props> = ({errors, setErrors, modalVisible, set
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}>
-                                    <img src={'../../public/assets/images/svg/ic_cloud.svg'}
+                                    <img src={'/images/svg/ic_cloud.svg'}
                                          style={{width: '48px', marginBottom: '20px'}} alt=""/>
                                     {droppedFile?.name ? <span>{droppedFile.name}</span> :
                                         <span>Drop file here or click to upload</span>}

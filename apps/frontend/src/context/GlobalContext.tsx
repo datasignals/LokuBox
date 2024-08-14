@@ -1,8 +1,17 @@
-import React, {createContext, type ReactNode, useContext, useState} from "react";
+import React, {createContext, type ReactNode, useContext, useEffect, useState} from "react";
 import {RouteNames} from "@repo/common/RouteNames";
+import axios, {type AxiosResponse} from "axios";
 
 interface GlobalContextType {
-    routeNames: RouteNames
+    routeNames: RouteNames;
+    provenanceAddress: string
+}
+
+interface AppConfig {
+    provenace: {
+        server: string
+    },
+    backendAddress: string
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -18,11 +27,29 @@ export const GlobalProvider: React.FC<Props> =
             routeNames,
             setRouteNames
             //TODO this will most likely be a hook
-        ] = useState<RouteNames | undefined>(new RouteNames("http://localhost:3001"))
+        ] = useState<RouteNames | undefined>(undefined);
 
-        return routeNames ? (
+        //TODO this should be one class inside of route names
+        const [provenanceAddress, setProvenanceAddress] =
+            useState<string | undefined>(undefined)
+
+
+        useEffect(() => {
+            const fetchConfig = async (): Promise<void> => {
+                const config: AxiosResponse<AppConfig> = await axios.get("/config.json");
+                setRouteNames(new RouteNames(
+                    config.data.backendAddress,
+                ));
+                setProvenanceAddress(config.data.provenace.server)
+            };
+
+            void fetchConfig();
+        }, []);
+
+
+        return (routeNames && provenanceAddress) ? (
             <GlobalContext.Provider value={
-                {routeNames}
+                {routeNames, provenanceAddress}
             }>
                 {children}
             </GlobalContext.Provider>

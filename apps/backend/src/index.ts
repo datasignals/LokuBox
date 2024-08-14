@@ -6,11 +6,16 @@ import bodyParser from "body-parser";
 import session from "express-session";
 import {mountNfs1, mountNfs2, unmountNfs} from "./Util";
 import {FileDescription} from "@repo/common/Models";
+import {ConfigService} from "./service/ConfigService";
+
+
+const configService = new ConfigService();
+const config = configService.getConfigOrDefault();
 
 //Init server
 const app = Express();
 //Port
-const port = 3001; //TODO
+const port = config.port; //TODO
 //CORS Middleware
 app.use(Cors({credentials: true}));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -24,7 +29,7 @@ interface CreateRequestBody {
 
 app.use(session({
     name: "mainSession",
-    secret: "secretimportantchangeme",
+    secret: config.sessionSecret,
     resave: true,
     saveUninitialized: true,
     rolling: true,
@@ -35,7 +40,7 @@ app.use(session({
     }
 }));
 
-const nfsDirectory = "/tmp/nfs";
+const nfsDirectory = config.nfsLocation;
 
 fs.mkdirSync(nfsDirectory, {recursive: true});
 

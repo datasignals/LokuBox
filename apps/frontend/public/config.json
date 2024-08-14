@@ -1,0 +1,6 @@
+{
+  "provenace": {
+    "server": "https://deprov.lockular.in"
+  },
+  "backendAddress": "http://localhost:3001"
+}
