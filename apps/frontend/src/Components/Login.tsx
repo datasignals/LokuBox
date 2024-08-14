@@ -90,7 +90,7 @@ export const Login: FC = () => {
                                     <div className='drop-menu wallet'>
                                         <ul className="flex flex-column">
                                             {WalletList.map((item, index) => (
-                                                <li className='drop-item-container'
+                                                <li className='drop-item-container' key={index} // Add the key prop here
                                                     onClick={() => { handleClick(item.name); }}>
                                                     <a className="d-item-flex">
                                                         <img src={item.img} alt="wallet-icon"/>
