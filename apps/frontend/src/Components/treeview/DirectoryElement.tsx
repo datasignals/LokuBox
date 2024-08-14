@@ -12,7 +12,7 @@ export const DirectoryElement: FC<{ dirName: string, handleEnterDirectory: () =>
             </div>
             <div className="loc-h-tools">
                 <div className="dropdown">
-                    <img style={{cursor: 'pointer', width: "30px"}} src={'/images/svg/enter_1_placeholder.svg'}
+                    <img style={{cursor: 'pointer', width: "30px", padding: "4px", margin: "4px"}} src={'/images/svg/enter_1_placeholder.svg'}
                          alt="more-options"
                          data-bs-toggle="modal" data-bs-target="#shareModal"
                          onClick={handleEnterDirectory}/>
