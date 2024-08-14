@@ -40,7 +40,7 @@ export const UploadFileModal: FC<Props> = ({errors, setErrors, modalVisible, set
         console.log("here 2")
 
         a.readAsText(droppedFile, "base64")
-        toast.info("File is uploaded.", {
+        toast.success("File is uploaded.", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -48,7 +48,7 @@ export const UploadFileModal: FC<Props> = ({errors, setErrors, modalVisible, set
             pauseOnHover: true,
             draggable: true,
             progress: 0,
-            theme: "light",
+            theme: "dark",
             transition: Bounce,
         });
     }

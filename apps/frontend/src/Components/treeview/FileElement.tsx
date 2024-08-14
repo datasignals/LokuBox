@@ -27,11 +27,11 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: 0,
-                    theme: "light",
+                    theme: "dark",
                     transition: Bounce,
                 });
             } else {
-                toast.info("Failed to delete the file. Please try again.", {
+                toast.warning("Failed to delete the file. Please try again.", {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -39,13 +39,13 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: 0,
-                    theme: "light",
+                    theme: "dark",
                     transition: Bounce,
                 });
             }
             }).catch((error: unknown) => {
                 console.error('Error deleting file:', error);
-                toast.info("An error occurred while deleting the file. Please try again.", {
+                toast.error("An error occurred while deleting the file. Please try again.", {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -53,7 +53,7 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: 0,
-                    theme: "light",
+                    theme: "dark",
                     transition: Bounce,
                 });
             });
