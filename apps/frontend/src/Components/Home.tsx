@@ -19,7 +19,7 @@ import {UploadFileModal} from "./UploadFileModal";
 
 export const Home: FC<{ routePath: string }> = ({routePath}) => {
     const navigate = useNavigate();
-    const {currentAccount} = useWallet();
+    const {currentAccount,setCurrentAccount, isWalletConnected} = useWallet();
 
     const [files, setFiles] = useState<FileDescription[]>([]);
     const [directories, setDirectories] = useState<string[]>([]);
@@ -112,6 +112,18 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
         navigate(routePath + slicedPath)
     }
 
+    useEffect(()  =>  {
+        console.log("isWalletConnected", isWalletConnected);
+        if(localStorage.getItem("currentAccount")) {
+            const add = localStorage.getItem("currentAccount");
+            if (add !== null) {
+              setCurrentAccount(add);
+              localStorage.setItem("currentAccount", add);
+
+            }
+            console.log("add", localStorage.getItem("currentAccount"));
+        }
+    })
     return (
         <div>
             <Layout/>

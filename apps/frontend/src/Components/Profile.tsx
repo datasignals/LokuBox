@@ -24,8 +24,9 @@ export const Profile: React.FC = () => {
     }
 
     useEffect(() => {
-        console.log("data", walletData);
-        console.log("isWalletConnected", isWalletConnected);
+        if(!isWalletConnected) {
+            navigate('/');
+        }
     })
     return (
         <div className="loc-login-container">
