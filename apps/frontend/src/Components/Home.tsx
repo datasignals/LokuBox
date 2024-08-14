@@ -15,6 +15,7 @@ import {Layout} from './Layout';
 
 import {DirectoryElement} from "./treeview/DirectoryElement";
 import {UploadFileModal} from "./UploadFileModal";
+import {provenace} from "../config/config.json";
 
 export const Home: FC<{ routePath: string }> = ({routePath}) => {
     const navigate = useNavigate();
@@ -74,8 +75,9 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
             // const response = await fetch('http://localhost:3005/events/accountId?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
             const accountId = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
             const fileName = 'abc.txt';
+            const response = await fetch(`${provenace.server}/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=${filename}`);
             // const response = await fetch(`${provenace.server}/events/filerecords?accountId=${currentAccount}&fileName=${fileName}`);
-            const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
+            // const response = await fetch('http://localhost:3005/events/filerecords?accountId=5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY&fileName=abc.txt');
             // / Log the entire response for debugging
             console.log("RESPONSE OBJECT", response);
             if (!response.ok) {
@@ -96,7 +98,25 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
     // Function to format the timestamp
     const formatDate = (timestamp: number): string => {
         const date = new Date(timestamp);
-        return `${date.toLocaleDateString()}, ${date.toLocaleTimeString()}`;
+        
+        const optionsDate: Intl.DateTimeFormatOptions = {
+            month: 'short',
+            day: 'numeric',
+        };
+    
+        const optionsTime: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        };
+    
+        const formattedDate = date.toLocaleDateString('en-US', optionsDate);
+        const formattedTime = date.toLocaleTimeString('en-US', optionsTime);
+        const formattedYear = date.getFullYear();
+    
+        // Combine all parts to form the required format
+        return `${formattedDate} ${formattedTime} ${formattedYear}`;
     };
 
     const handleGoDirUp = (): void => {
@@ -248,18 +268,26 @@ const ErrorsComponent: FC<ErrorsProps> = ({errors, provenanceData}) => {
             <div style={{fontSize: '14px', color: 'red'}}>{errors}</div>
         )
     } else if (provenanceData.length > 0) {
-        provenanceData.map((item, index) => (
-            <div key={index} style={{marginBottom: '10px'}}>
-                <div style={{fontSize: '14px'}}><strong>Accessed
-                    On:</strong> {item.value.creationtime}</div>
-                <div style={{fontSize: '14px'}}><strong>Accessed
-                    by:</strong> {item.value.eventkey}</div>
-                <div style={{fontSize: '14px'}}><strong>Action:</strong> {item.value.eventtype}
-                </div>
-                <hr style={{margin: '10px 0', border: '1px solid #ccc'}}/>
+        console.log("INSIDE ELSE IF")
+        return(
+            <div>
+                {provenanceData.map((item, index) => (
+                    <div key={index} style={{marginBottom: '10px'}}>
+                        <div style={{fontSize: '14px'}}><strong>Accessed
+                            On:</strong> {item.value.creationtime}</div>
+                        <div style={{fontSize: '14px'}}><strong>Accessed
+                            by:</strong> {item.value.eventkey}</div>
+                        <div style={{fontSize: '14px'}}><strong>Action:</strong> {item.value.eventtype}
+                        </div>
+                        <hr style={{margin: '10px 0', border: '1px solid #ccc'}}/>
+                    </div>
+                ))}
             </div>
-        ))
-    } else {
-        <div style={{fontSize: '14px'}}>No File Selected.</div>
+        )
+    } 
+       else {
+        return (
+            <div style={{ fontSize: '14px' }}>No File Selected.</div>
+        );
     }
 }
