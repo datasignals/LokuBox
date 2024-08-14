@@ -1,4 +1,6 @@
 import React, {type ChangeEvent, type FC, useEffect, useRef, useState} from 'react';
+import {Bounce, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {ShareFileModal} from "../ShareFileModal";
 import {FileToShare, type FileDescription, getDateTime} from "@repo/common/Models";
@@ -12,18 +14,48 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
     const [selectFile, setSelectFile] = useState<FileToShare | null>(null);
 
     const handleDeleteFile = (filePath: string) => {
-        if (!window.confirm(`Are you sure you want to delete ${filePath}?`)) {
-            return;
-        }
+        // if (!window.confirm(`Are you sure you want to delete ${filePath}?`)) {
+        //     return;
+        // }
         routeNames.deleteNode.fun2({ path: filePath }).then(response => {
             if (response.isSuccessful) {
-                alert('File deleted successfully.');
+                toast.info("File deleted successfully.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: 0,
+                    theme: "light",
+                    transition: Bounce,
+                });
             } else {
-                alert('Failed to delete the file. Please try again.');
+                toast.info("Failed to delete the file. Please try again.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: 0,
+                    theme: "light",
+                    transition: Bounce,
+                });
             }
             }).catch((error: unknown) => {
                 console.error('Error deleting file:', error);
-                alert('An error occurred while deleting the file. Please try again.');
+                toast.info("An error occurred while deleting the file. Please try again.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: 0,
+                    theme: "light",
+                    transition: Bounce,
+                });
             });
     };
 

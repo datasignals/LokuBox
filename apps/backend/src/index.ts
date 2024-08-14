@@ -5,7 +5,7 @@ import Express, {type Request, type Response} from "express";
 import bodyParser from "body-parser";
 import session from "express-session";
 import {mountNfs1, mountNfs2, unmountNfs} from "./Util";
-import {FileDescription} from "@repo/common/FileDescription";
+import {FileDescription} from "@repo/common/Models";
 
 //Init server
 const app = Express();
@@ -21,7 +21,6 @@ interface CreateRequestBody {
     isDirectory?: boolean;
     content?: string;
 }
-
 
 app.use(session({
     name: "mainSession",

@@ -4,6 +4,7 @@ import "../css/loc-h-content.css"
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
+import {Bounce, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import {isDirRead} from "@repo/common/RouteNames";
