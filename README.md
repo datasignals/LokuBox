@@ -1,6 +1,6 @@
 # LokuBox
 
-# steps to setup
+Steps to setup
 
 1. yarn install
 2. yarn dev
