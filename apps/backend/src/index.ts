@@ -35,7 +35,7 @@ app.use(session({
     }
 }));
 
-const nfsDirectory = "/tmp/nfs";
+const nfsDirectory = "/Users/dnyaneshwari/mount_point";
 
 fs.mkdirSync(nfsDirectory, {recursive: true});
 
