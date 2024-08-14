@@ -81,7 +81,6 @@ export const UploadFileModal: FC<Props> = ({ errors, setErrors, modalVisible, se
             setErrors("");
         }
     };
-    
 
     const handleDropZoneClick = () => {
         if (fileInputRef.current) {
