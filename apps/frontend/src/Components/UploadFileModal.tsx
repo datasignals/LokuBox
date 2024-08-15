@@ -1,15 +1,23 @@
 import React, {type ChangeEvent, type FC, useRef, useState} from "react";
 import {Bounce, toast} from "react-toastify";
 import {useGlobalContext} from "../context/GlobalContext";
+import {FileDescription} from "@repo/common/Models";
 
 interface Props {
+    currentPath: string;
     errors: string;
     setErrors: (_s: string) => void;
     modalVisible: boolean;
     setModalVisible: (_b: boolean) => void;
+
+    callbackAddFile: (_f: FileDescription) => void;
+
+
+    // droppedFile: File | null;
+    // setDroppedFile: (_f: File | null) => void;
 }
 
-export const UploadFileModal: FC<Props> = ({errors, setErrors, modalVisible, setModalVisible}) => {
+export const UploadFileModal: FC<Props> = ({currentPath, errors, setErrors, modalVisible, setModalVisible, callbackAddFile}) => {
 
     const [droppedFile, setDroppedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -27,13 +35,17 @@ export const UploadFileModal: FC<Props> = ({errors, setErrors, modalVisible, set
         a.onload = (e) => {
             if (e.target) { //TODO extra check
                 routeNames.putNode.fun2({
-                    path: `/${droppedFile.name}`,
+                    path: `${currentPath}/${droppedFile.name}`,
                     isDirectory: false,
                     content: e.target.result as string //TODO force casting
                 }).then(() => {
                     setDroppedFile(null); // Clear the selected file
                     setErrors(""); // Clear any error
                     setModalVisible(false);  // Close the modal
+                    callbackAddFile({
+                        filename: droppedFile.name,
+                        creationDate: new Date().getTime() //TODO this is sort of fake, we create a date that might be different to what acually backend has made
+                    }); //Inform parent of change
                 }).catch(() => null);
             }
         }

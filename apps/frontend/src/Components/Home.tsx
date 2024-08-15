@@ -4,7 +4,6 @@ import "../css/loc-h-content.css"
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
-import {Bounce, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import {isDirRead} from "@repo/common/RouteNames";
@@ -16,17 +15,19 @@ import {Layout} from './Layout';
 
 import {DirectoryElement} from "./treeview/DirectoryElement";
 import {UploadFileModal} from "./UploadFileModal";
+import {CreateDirectoryModal} from "./CreateDirectoryModal";
 
 export const Home: FC<{ routePath: string }> = ({routePath}) => {
     const navigate = useNavigate();
-    const {currentAccount,setCurrentAccount, isWalletConnected} = useWallet();
+    const {currentAccount, setCurrentAccount, isWalletConnected} = useWallet();
 
     const [files, setFiles] = useState<FileDescription[]>([]);
     const [directories, setDirectories] = useState<string[]>([]);
     const [filesselected, setFilesselected] = useState<FileDescription | null>(null);
     const [provenanceData, setProvenanceData] = useState<any[]>([]); // Provenance
     const [errors, setErrors] = useState("");
-    const [modalVisible, setModalVisible] = useState(false);
+    const [uploadFileModalVisible, setUploadFileModalVisible] = useState(false);
+    const [createDirectoryModalVisible, setCreateDirectoryModalVisible] = useState(false);
 
     const {'*': splat} = useParams<{ "*": string }>();
 
@@ -51,11 +52,7 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
 
     useEffect(() => {
         fetchNfsContents();
-    }, [path, modalVisible]) //Hook to a path so that it will refresh file contents when path changes
-
-    const handleModal = (): void => {
-        setModalVisible(true);  // Close the modal
-    };
+    }, [path]) //Hook to a path so that it will refresh file contents when path changes
 
     const handleFileSelect = (file: FileDescription): void => {
         // Here you can handle the file selection, such as fetching its provenance
@@ -98,25 +95,25 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
     // Function to format the timestamp
     const formatDate = (timestamp: number): string => {
         const date = new Date(timestamp);
-        
+
         const optionsDate: Intl.DateTimeFormatOptions = {
             month: 'short',
             day: 'numeric',
         };
-    
+
         const optionsTime: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
             hour12: false,
         };
-    
+
         const formattedDate = date.toLocaleDateString('en-US', optionsDate);
         const formattedTime = date.toLocaleTimeString('en-US', optionsTime);
         const formattedYear = date.getFullYear();
-    
+
         // Combine all parts to form the required format
-        return `${formattedDate} ${formattedTime} ${formattedYear}`;
+        return `${formattedDate} ${formattedTime} ${formattedYear.toString()}`;
     };
 
     const handleGoDirUp = (): void => {
@@ -131,18 +128,50 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
         navigate(routePath + slicedPath)
     }
 
-    useEffect(()  =>  {
+    useEffect(() => {
         console.log("isWalletConnected", isWalletConnected);
-        if(localStorage.getItem("currentAccount")) {
+        if (localStorage.getItem("currentAccount")) {
             const add = localStorage.getItem("currentAccount");
             if (add !== null) {
-              setCurrentAccount(add);
-              localStorage.setItem("currentAccount", add);
+                setCurrentAccount(add);
+                localStorage.setItem("currentAccount", add);
 
             }
             console.log("add", localStorage.getItem("currentAccount"));
         }
     })
+
+    const handleDeleteFile = (index: number) => () => {
+        setFiles(prevState => {
+            prevState.splice(index, 1)
+            return prevState;
+        });
+    }
+
+    const allFilesElement = files
+        .sort((a, b) =>
+            new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime())
+        .map((file, index) =>
+            <div key={file.filename} onClick={() => handleFileSelect(file)}>
+                <FileElement
+                    key={file.filename}
+                    currentPath={path}
+                    fileDescription={file}
+                    callbackDeleteFile={handleDeleteFile(index)}
+                />
+            </div>
+        )
+
+    const allDirectoriesElement = directories.map(dirName =>
+        <div key={dirName}>
+            <DirectoryElement
+                key={dirName}
+                dirName={dirName}
+                callbackEnterDirectory={() => handleDirectorySelect(dirName)}
+            />
+        </div>
+    )
+
     return (
         <div>
             <Layout/>
@@ -164,14 +193,8 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
                                 </div>
                             </div>
                             <div>
-                                <FilesComponent
-                                    files={files}
-                                    onFileSelect={handleFileSelect}
-                                />
-                                <DirectoryComponent
-                                    directories={directories}
-                                    onDirectorySelect={handleDirectorySelect}
-                                />
+                                {allFilesElement}
+                                {allDirectoriesElement}
                             </div>
                         </div>
                     </div>
@@ -206,65 +229,34 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
                 </div>
             </div>
             <UploadFileModal
+                currentPath={path}
                 errors={errors}
                 setErrors={setErrors}
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
+                modalVisible={uploadFileModalVisible}
+                setModalVisible={setUploadFileModalVisible}
+                callbackAddFile={(f: FileDescription) => setFiles((prevState) => [...prevState, f])}
+            />
+
+            <CreateDirectoryModal
+                currentPath={path}
+                errors={errors}
+                setErrors={setErrors}
+                modalVisible={createDirectoryModalVisible}
+                setModalVisible={setCreateDirectoryModalVisible}
+                callbackAddDirectory={(s: string) => setDirectories((prevState) => [...prevState, s])}
             />
 
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn"
                     style={{position: 'fixed', bottom: '40px', right: '420px', zIndex: 50}}>
-                <img src={'/images/svg/ic_upload_file.svg'} onClick={handleModal} alt=""/>
+                <img src={'/images/svg/ic_upload_file.svg'} onClick={() => setUploadFileModalVisible(true)} alt=""/>
+            </button>
+            <button type="button" onClick={() => setCreateDirectoryModalVisible(true)}
+                    style={{position: 'fixed', bottom: '40px', right: '750px', zIndex: 50}}>
+                Add Directory
             </button>
         </div>
     );
 };
-
-
-interface FilesComponentProps {
-    files: FileDescription[];
-    onFileSelect: (_file: FileDescription) => void;
-}
-
-const FilesComponent: FC<FilesComponentProps> = ({files, onFileSelect}) => {
-    // Sort files by creationDate in descending order
-    const sortedFiles = files
-        .sort((a, b) =>
-            new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
-        );
-
-    return (
-        <>
-            {sortedFiles.map(file => (
-                <div key={file.filename} onClick={() => onFileSelect(file)}>
-                    <FileElement
-                        key={file.filename}
-                        filename={file.filename}
-                        creationDate={file.creationDate}
-                    />
-                </div>
-            ))}
-        </>
-    );
-};
-
-interface DirectoryComponentProps {
-    directories: string[];
-    onDirectorySelect: (_directory: string) => void;
-}
-
-const DirectoryComponent: FC<DirectoryComponentProps> = ({directories, onDirectorySelect}) => <>
-    {directories.map(dirName => (
-        <div key={dirName}>
-            <DirectoryElement
-                key={dirName}
-                dirName={dirName}
-                handleEnterDirectory={() => onDirectorySelect(dirName)}
-            />
-        </div>
-    ))}
-</>
-
 
 interface ErrorsProps {
     errors: string;
@@ -272,16 +264,12 @@ interface ErrorsProps {
 }
 
 const ErrorsComponent: FC<ErrorsProps> = ({errors, provenanceData}) => {
-
-    console.log("provenanceData: " + JSON.stringify(provenanceData, null, 2));
-
     if (errors) {
         return (
             <div style={{fontSize: '14px', color: 'red'}}>{errors}</div>
         )
     } else if (provenanceData.length > 0) {
-        console.log("INSIDE ELSE IF")
-        return(
+        return (
             <div>
                 {provenanceData.map((item, index) => (
                     <div key={index} style={{marginBottom: '10px'}}>
@@ -296,10 +284,9 @@ const ErrorsComponent: FC<ErrorsProps> = ({errors, provenanceData}) => {
                 ))}
             </div>
         )
-    } 
-       else {
+    } else {
         return (
-            <div style={{ fontSize: '14px' }}>No File Selected.</div>
+            <div style={{fontSize: '14px'}}>No File Selected.</div>
         );
     }
 }

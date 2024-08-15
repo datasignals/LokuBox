@@ -6,19 +6,27 @@ import {ShareFileModal} from "../ShareFileModal";
 import {FileToShare, type FileDescription, getDateTime} from "@repo/common/Models";
 
 
+interface Props {
+    currentPath: string;
+    fileDescription: FileDescription,
+    callbackDeleteFile: () => void;
+}
+
 //Simpler version of FileElement
-export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
+export const FileElement: FC<Props> = ({currentPath, fileDescription, callbackDeleteFile}) => {
 
     const {routeNames} = useGlobalContext();
 
     const [selectFile, setSelectFile] = useState<FileToShare | null>(null);
 
     const handleDeleteFile = (filePath: string) => {
-        // if (!window.confirm(`Are you sure you want to delete ${filePath}?`)) {
-        //     return;
-        // }
-        routeNames.deleteNode.fun2({ path: filePath }).then(response => {
+        if (!window.confirm(`Are you sure you want to delete ${filePath}?`)) {
+            return;
+        }
+        routeNames.deleteNode.fun2({ path: `${currentPath}/${filePath}` }).then(response => {
             if (response.isSuccessful) {
+                callbackDeleteFile(); //Inform parent
+
                 toast.info("File deleted successfully.", {
                     position: "top-right",
                     autoClose: 5000,
@@ -65,8 +73,8 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                 <div className="loc-h-card-content">
                     <img src="/images/svg/ic_pdf.svg" alt=""/>
                     <div>
-                        <h4 style={{marginBottom: '5px'}}>{filename}</h4>
-                        <h5>{getDateTime(creationDate)}</h5>
+                        <h4 style={{marginBottom: '5px'}}>{fileDescription.filename}</h4>
+                        <h5>{getDateTime(fileDescription.creationDate)}</h5>
                     </div>
                 </div>
                 <div className="loc-h-tools">
@@ -87,11 +95,11 @@ export const FileElement: FC<FileDescription> = ({filename, creationDate}) => {
                                 </li>
                             </ul>
                     </div>
-                    <img style={{ cursor: 'pointer' }} src={'/images/svg/ic_share.svg'} alt="more-options" data-bs-toggle="modal" data-bs-target="#shareModal" onClick={() => setSelectFile({ filename, creationDate })}/>
+                    <img style={{ cursor: 'pointer' }} src={'/images/svg/ic_share.svg'} alt="more-options" data-bs-toggle="modal" data-bs-target="#shareModal" onClick={() => setSelectFile(fileDescription)}/>
                     <div className="dropdown">
                         <img className="dropdown-toggle" style={{width : "5px"}} src={'/images/svg/ic_3_dots.svg'} alt="more-options" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"/>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li className="dropdown-item" onClick={() => handleDeleteFile(filename)}>Delete</li>
+                            <li className="dropdown-item" onClick={() => handleDeleteFile(fileDescription.filename)}>Delete</li>
                         </ul>
                     </div>
                 </div>

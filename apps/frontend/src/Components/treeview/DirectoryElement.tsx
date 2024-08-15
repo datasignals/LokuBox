@@ -1,6 +1,11 @@
 import React, {type FC} from 'react';
 
-export const DirectoryElement: FC<{ dirName: string, handleEnterDirectory: () => void }> = ({dirName, handleEnterDirectory}) =>
+interface Props {
+    dirName: string;
+    callbackEnterDirectory: () => void
+}
+
+export const DirectoryElement: FC<Props> = ({dirName, callbackEnterDirectory}) =>
     <div className="loc-card card-active" style={{marginTop: '20px'}}>
         <div className="loc-h-card-content-con">
             <div className="loc-h-card-content">
@@ -15,7 +20,7 @@ export const DirectoryElement: FC<{ dirName: string, handleEnterDirectory: () =>
                     <img style={{cursor: 'pointer', width: "30px", padding: "4px", margin: "4px"}} src={'/images/svg/enter_1_placeholder.svg'}
                          alt="more-options"
                          data-bs-toggle="modal" data-bs-target="#shareModal"
-                         onClick={handleEnterDirectory}/>
+                         onClick={callbackEnterDirectory}/>
 
                     <img className="dropdown-toggle" src={'/images/svg/ic_team_dropdown.svg'}
                          alt="more-options" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"/>
