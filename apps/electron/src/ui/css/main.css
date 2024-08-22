@@ -1,0 +1,252 @@
+  /*------------------ Theme ----------------*/
+  :root {
+    --primary-color: #007AD3;
+    --dark-text: #122B3E;
+    --grey-text: #8B959B;
+    --light-text: #C0CED9;
+    --border-color: #E2EAF0;
+    --background-color: #F4F9FD;
+    --input-border: #D9DBE3;
+  }
+  
+    /*------------------ General ----------------*/
+  html{
+      height: 100%;
+      width: 100%;
+  }
+  body{
+      min-height: 100%;
+      width: 100%;
+      font-family: "Overpass", sans-serif;
+      letter-spacing: .5px;
+      background-color: var(--background-color);
+      color: var(--dark-text);
+  }
+  a{
+      text-decoration: none;
+  }
+  ul{
+      padding: 0;
+      margin: 0;
+  }
+  li{
+      list-style: none;
+  }
+  
+  .loc-content-container{
+      padding-top: 90px;
+      padding-left: 140px;
+      padding-right: 20px;
+      padding-bottom: 20px;
+      min-height: 100vh;
+      width: 100%;
+  }
+  .loc-card{
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      box-shadow: 0 0 8px 2px rgba(0,0,0,.02);
+      padding: 20px;
+  }
+  .loc-card h4{
+      font-size: 14px;
+      color: var(--dark-text);
+      margin: 0;
+  }
+  .loc-card h5{
+      font-size: 14px;
+      color: var(--grey-text);
+      margin: 0;
+  }
+  
+    /*------------------ Form Controller Style ----------------*/
+  .loc-form-control{
+      border: 1px solid var(--input-border);
+      color: #122B3E;
+      height: 38px;
+      border-radius: 7px;
+  }
+  .loc-form-control::placeholder{
+      padding-left: 15px;
+      color: var(--light-text);
+  }
+  .loc-label{
+      font-size: 12px;
+      margin-bottom: 5px;
+      color: #92A1AC;
+  }
+  
+    /*------------------ Button Style ----------------*/
+  .loc-transparent-img-btn{
+      background-color: transparent;
+      border: 0;
+      padding: 0;
+  }
+  .loc-btn{
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 7px;
+      border: 0;
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .loc-btn-transparent{
+      border: 0 !important;
+      background-color: transparent;
+      font-size: 14px;
+      color: var(--primary-color);
+  }
+  
+  
+  /*-------------------------------------------------
+                      File Uploader
+  ---------------------------------------------------*/
+  .loc-file-upload{
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+  }
+  .drop-zone {
+      width: 400px;
+      height: 300px;
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--light-text);
+      border: 2px dashed var(--border-color);
+      border-radius: 10px;
+    }
+    
+    .drop-zone--over {
+      border-style: solid;
+    }
+    
+    .drop-zone__input {
+      display: none;
+    }
+    
+    .drop-zone__thumb {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: var(--background-color);
+      background-size: cover;
+      position: relative;
+    }
+    
+    .drop-zone__thumb::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 5px 0;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.75);
+      font-size: 14px;
+      text-align: center;
+    }
+  
+    /*------------------ Toggler Style ----------------*/
+    .loc-view-toggle-con{
+      display: flex;
+      align-items: center;
+      background-color: #FAFBFD;
+      padding: 5px;
+      height: 38px;
+      width: auto;
+    }
+    .loc-view-toggle-con li{
+      height: 28px;
+      width: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .loc-view-toggle-con li.active{
+      background-color: white;
+      box-shadow: 0 0 8px 2px rgba(0,0,0,.03);
+    }
+    .loc-view-toggle-con li.active svg path {
+      fill: #007AD3; /* Active color */
+    }
+    .loc-view-toggle-con li svg{
+      fill: #C0CED9;
+    }
+  
+  
+  /*------------------ new css ----------------*/
+  .drop-menu.wallet img{
+      border-radius: 50px;
+      width: 48px;
+      height: 48px;
+  }
+  .drop-menu ul li{
+      font-size: 14px;
+      padding: 10px 0;
+      width: 100%;
+  }
+  .drop-menu ul li.drop-item-container{
+      background-color: #f7f7f7;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      position: relative;
+      
+  }
+  
+  .drop-menu ul li.drop-item-container:hover{
+    color:#0b0b0c;
+  }
+  .drop-menu ul li.drop-item-container:nth-last-child(1){
+      margin-bottom: 0;
+  }
+  
+  .d-item-flex{
+      display: flex;
+      align-items: center;
+  }
+  
+  .ml-4 {
+      margin-left: 1.5rem !important;
+  }
+  
+  .mb-1 {
+      margin-bottom: 0.25rem !important;
+  }
+  
+  /*------------------ new css ----------------*/
+  .dropdown-menu{
+    border: 0;
+    box-shadow: 0 0 8px 2px rgba(0,0,0,.08);
+  }
+  .dropdown-menu{
+    width: 200px;
+    padding: 0;
+  }
+  .dropdown-menu .dropdown-item{
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border-bottom: 1px solid #E2EAF0;
+  }
+  .dropdown-menu .dropdown-item:nth-last-child(1){
+    border-bottom: 0 solid #E2EAF0;
+  }
+  .dropdown-menu .dropdown-item img{
+    margin-right: 10px;
+  }
+  .dropdown img{
+    cursor: pointer;
+  }

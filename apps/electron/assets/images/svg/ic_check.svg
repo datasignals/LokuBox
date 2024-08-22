@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="ic_check" transform="translate(-11510 59)">
+    <g id="ic_reject" transform="translate(11510 -59)">
+      <rect id="Rectangle_20" data-name="Rectangle 20" width="24" height="24" rx="5" fill="#08b11c" opacity="0.1"/>
+    </g>
+    <path id="Icon_feather-check" data-name="Icon feather-check" d="M8.909,17.052a.732.732,0,0,1-.52-.215L4.715,13.163a.735.735,0,0,1,1.039-1.039l3.154,3.154,7.563-7.563a.735.735,0,1,1,1.039,1.039L9.428,16.837A.732.732,0,0,1,8.909,17.052Z" transform="translate(11511.389 -58.913)" fill="#08b11c"/>
+  </g>
+</svg>

@@ -2,11 +2,20 @@
     "name": "lokubox",
     "private": true,
     "scripts": {
-      "build": "turbo build",
-      "dev": "turbo dev",
+      "build": "yarn build:web",
+      "build:web": "turbo build --filter=lokubox-frontend --filter=lokubox-backend",
+      "build:electron": "turbo build --filter=lokubox-electron",
+      "build:all": "turbo build",
+
+      "dev": "yarn dev:web",
+      "dev:web": "turbo dev --filter=lokubox-frontend --filter=lokubox-backend",
+      "dev:electron": "turbo dev --filter=lokubox-electron",
+      "dev:all": "turbo dev --filter=lokubox-frontend --filter=lokubox-backend",
+
       "lint": "turbo lint",
       "lint:fix": "turbo lint:fix",
       "lint:strict": "turbo lint:strict",
+
       "format": "prettier --write \"**/*.{ts,tsx,md}\""
     },
     "devDependencies": {
