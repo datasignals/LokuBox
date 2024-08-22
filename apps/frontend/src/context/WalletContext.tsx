@@ -5,8 +5,8 @@ import {type InjectedAccountWithMeta} from "@polkadot/extension-inject/types";
 interface WalletContextType {
   isWalletConnected: boolean;
   setWalletConnected: (_: boolean) => void;
-  walletData: InjectedAccountWithMeta[];
-  setWalletData: (_: InjectedAccountWithMeta[]) => void;
+  walletData: any[];
+  setWalletData: (_: any[]) => void;
   currentAccount: string;
   setCurrentAccount: (_: string) => void;
   currentBalance: number;

@@ -1,76 +1,73 @@
-import React, {type FC} from 'react';
-import "../css/loc-h-content.css"
+import React, { type FC } from 'react';
+import '../css/loc-h-content.css';
 import '../css/loc-layout.css';
 import '../css/loc-login.css';
 import '../css/main.css';
 
-import {web3Accounts, web3Enable} from '@polkadot/extension-dapp';
-import {useNavigate} from 'react-router-dom';
+import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
+import { useNavigate } from 'react-router-dom';
 // import {WalletList} from "../Wallets"
 // import {useWallet} from '../context/WalletContext';
 
 const WalletList = [
   {
-    img: "assets/images/png/polkadot.png",
-    name: "Polkadot.Js" ,
-    des: "Polkadot.js chrome extension wallet"
+    img: 'assets/images/png/polkadot.png',
+    name: 'Polkadot.Js',
+    des: 'Polkadot.js chrome extension wallet',
   },
   {
-    img: "assets/images/png/coinbase.png",
-    name: "Coinbase" ,
-    des: "Coinbase chrome extension wallet"
+    img: 'assets/images/png/coinbase.png',
+    name: 'Coinbase',
+    des: 'Coinbase chrome extension wallet',
   },
-]
+];
 
 export const Login: FC = () => {
+  // const {setCurrentAccount, setWalletConnected, setWalletData} = useWallet();
 
-    // const {setCurrentAccount, setWalletConnected, setWalletData} = useWallet();
-
-
-    return (
-        <div className="loc-login-container">
-            <div className="row" style={{height: '100%'}}>
-                <div className="col-12 col-md-6 col-lg-8">
-                    <div className="loc-login-content">
-                        <div>
-                            <img style={{width: '150px', marginBottom: '70px'}} src="assets/images/svg/logo.svg"
-                                 alt="brand-logo"/>
-                        </div>
-                        <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel"
-                             data-bs-interval="3000">
-                            <div className="carousel-inner">
-                                <div className="carousel-item active">
-                                    <img className="d-block w-100" src="assets/images/png/ic_login-image.png"
-                                         alt="First slide"/>
-                                </div>
-                                <div className="carousel-item">
-                                    <img className="d-block w-100" src="assets/images/png/ic_login-image.png"
-                                         alt="First slide"/>
-                                </div>
-                                <div className="carousel-item">
-                                    <img className="d-block w-100" src="assets/images/png/ic_login-image.png"
-                                         alt="First slide"/>
-                                </div>
-                            </div>
-                            <ol className="carousel-indicators">
-                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                                    className="active" />
-                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" />
-                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" />
-                            </ol>
-                        </div>
-                    </div>
+  return (
+    <div className='loc-login-container'>
+      <div className='row' style={{ height: '100%' }}>
+        <div className='col-12 col-md-6 col-lg-8'>
+          <div className='loc-login-content'>
+            <div>
+              <img style={{ width: '150px', marginBottom: '70px' }} src='assets/images/svg/logo.svg' alt='brand-logo' />
+            </div>
+            <div
+              id='carouselExampleIndicators'
+              className='carousel slide'
+              data-bs-ride='carousel'
+              data-bs-interval='3000'
+            >
+              <div className='carousel-inner'>
+                <div className='carousel-item active'>
+                  <img className='d-block w-100' src='assets/images/png/ic_login-image.png' alt='First slide' />
                 </div>
-                <div className="col-12 col-md-6 col-lg-4">
-                    <div style={{backgroundColor: 'white', height: '100%'}}>
-                        <div className="loc-login-form">
-                            <h2>Secure & share your files with provenance tracking.</h2>
-                            <form style={{width: '100%', padding: '100px 0'}}>
-                                <div style={{width: '100%'}}>
-                                    <label htmlFor="loc-login-select" className="loc-label">
-                                        Select your wallet
-                                    </label>
-                                    {/* <select
+                <div className='carousel-item'>
+                  <img className='d-block w-100' src='assets/images/png/ic_login-image.png' alt='First slide' />
+                </div>
+                <div className='carousel-item'>
+                  <img className='d-block w-100' src='assets/images/png/ic_login-image.png' alt='First slide' />
+                </div>
+              </div>
+              <ol className='carousel-indicators'>
+                <li data-bs-target='#carouselExampleIndicators' data-bs-slide-to='0' className='active' />
+                <li data-bs-target='#carouselExampleIndicators' data-bs-slide-to='1' />
+                <li data-bs-target='#carouselExampleIndicators' data-bs-slide-to='2' />
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div className='col-12 col-md-6 col-lg-4'>
+          <div style={{ backgroundColor: 'white', height: '100%' }}>
+            <div className='loc-login-form'>
+              <h2>Secure & share your files with provenance tracking.</h2>
+              <form style={{ width: '100%', padding: '100px 0' }}>
+                <div style={{ width: '100%' }}>
+                  <label htmlFor='loc-login-select' className='loc-label'>
+                    Select your wallet
+                  </label>
+                  {/* <select
                         className="loc-form-control"
                         id="loc-login-select"
                         style={{ width: '100%', padding: '0 10px' }}
@@ -79,40 +76,43 @@ export const Login: FC = () => {
                         <option>Wallet 2</option>
                     </select> */}
 
-                                    <div className='drop-menu wallet'>
-                                        <ul className="flex flex-column">
-                                            {WalletList.map((item, index) => (
-                                                <li className='drop-item-container' key={index} // Add the key prop here
-                                                    onClick={() => { console.log() }}>
-                                                    <a className="d-item-flex">
-                                                        <img src={item.img} alt="wallet-icon"/>
-                                                        <div className='ml-4'>
-                                                            <div className='mb-1'>{item.name}</div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                                {/* <button
+                  <div className='drop-menu wallet'>
+                    <ul className='flex flex-column'>
+                      {WalletList.map((item, index) => (
+                        <li
+                          className='drop-item-container'
+                          key={index} // Add the key prop here
+                          onClick={() => {
+                            console.log();
+                          }}
+                        >
+                          <a className='d-item-flex'>
+                            <img src={item.img} alt='wallet-icon' />
+                            <div className='ml-4'>
+                              <div className='mb-1'>{item.name}</div>
+                            </div>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                {/* <button
                     className="loc-btn"
                     type="button"
                     style={{ marginTop: '30px', width: '100%' }}
                     >
                     Connect
                     </button> */}
-                            </form>
-                            <p style={{color: '#92A1AC', marginBottom: '2px', fontSize: '12px'}}>
-                                Don't have a wallet?
-                            </p>
-                            <button type="button" className="loc-btn-transparent">
-                                Learn how to setup one
-                            </button>
-                        </div>
-                    </div>
-                </div>
+              </form>
+              <p style={{ color: '#92A1AC', marginBottom: '2px', fontSize: '12px' }}>Don't have a wallet?</p>
+              <button type='button' className='loc-btn-transparent'>
+                Learn how to setup one
+              </button>
             </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };

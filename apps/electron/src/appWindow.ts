@@ -1,12 +1,12 @@
 import { app, BrowserWindow, Menu, session } from 'electron';
 import path from 'path';
 
+import { ElectronChromeExtensions } from 'electron-chrome-extensions';
 import windowStateKeeper from 'electron-window-state';
 
 import { registerMenuIpc } from 'src/ipc/menuIPC';
 import appMenu from 'src/menu/appMenu';
 import { registerWindowStateChangedEvents } from 'src/windowState';
-import {ElectronChromeExtensions} from 'electron-chrome-extensions';
 
 let appWindow: BrowserWindow;
 
@@ -77,27 +77,6 @@ export function createAppWindow(): BrowserWindow {
     appWindow = null;
     app.quit();
   });
-
-
-  // session.defaultSession.loadExtension('/Users/og_pixel/Desktop/polkadot').then(({ id }) => {
-  //   console.log("id: " + id)
-  // })
-
-
-  const extensions = new ElectronChromeExtensions({
-    modulePath: "/Users/og_pixel/Desktop/polkadot"
-  })
-  const browserWindow = new BrowserWindow()
-
-
-  // Adds the active tab of the browser
-  // extensions.addTab(browserWindow.webContents, browserWindow)
-
-  // browserWindow.loadURL('https://samuelmaddock.com')
-  // browserWindow.show()
-
-  // extensions.addTab(browserWindow.webContents, appWindow)
-
 
   return appWindow;
 }
