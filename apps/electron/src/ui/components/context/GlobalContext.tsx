@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from "axios";
+import Path from "path-browserify";
 import React, { createContext, type ReactNode, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 interface GlobalContextType {
   // routeNames: RouteNames;
   provenanceAddress: string;
+  nfsPath: string;
+  setNfsPath: (path: string) => void;
 }
 
 interface AppConfig {
@@ -44,9 +47,10 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
     void fetchConfig();
   }, []);
 
-  return (
-    <GlobalContext.Provider value={{ /*routeNames,*/ provenanceAddress }}>{children}</GlobalContext.Provider>
-  );
+  //TODO should be a config option
+  const [nfsPath, setNfsPath] = useState("/tmp/nfs");
+
+  return <GlobalContext.Provider value={{ nfsPath, setNfsPath, provenanceAddress }}>{children}</GlobalContext.Provider>;
   // return /*routeNames &&*/ provenanceAddress ? (
   //   <GlobalContext.Provider value={{ /*routeNames,*/ provenanceAddress }}>{children}</GlobalContext.Provider>
   // ) : (

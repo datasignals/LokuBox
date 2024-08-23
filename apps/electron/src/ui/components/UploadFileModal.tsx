@@ -1,3 +1,4 @@
+import Path from "path-browserify";
 import React, { type ChangeEvent, type FC, useRef, useState } from "react";
 import { Bounce, toast } from "react-toastify";
 
@@ -31,19 +32,48 @@ export const UploadFileModal: FC<Props> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement | null>(null);
 
+  const handleCleanup = () => {
+    setDroppedFile(null); // Clear the selected file
+    setErrors(""); // Clear any error
+  };
+
   const uploadFile = (): void => {
     if (!droppedFile) {
       setErrors("No file selected");
       return;
     }
     const a = new FileReader();
-    setDroppedFile(null); // Clear the selected file
-    setErrors(""); // Clear any error
-    setModalVisible(false); // Close the modal
-    callbackAddFile({
-      filename: droppedFile.name,
-      creationDate: new Date().getTime(), //TODO this is sort of fake, we create a date that might be different to what acually backend has made
-    }); //Inform parent of change
+
+    a.onload = (e) => {
+      if (e.target) {
+        console.log("result?: " + e.target.result);
+        const arrayBuffer = e.target.result as ArrayBuffer;
+        console.log("buffer?: " + arrayBuffer.byteLength);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        console.log("anything: " + uint8Array.length);
+        //TODO extra check
+        electron.ipcRenderer.fs.createFile(Path.join(currentPath, droppedFile.name), uint8Array).then((result) => {
+          if (result.isSuccessful) {
+            handleCleanup();
+            setModalVisible(false); // Close the modal
+            callbackAddFile({
+              filename: droppedFile.name,
+              creationDate: new Date().getTime(), //TODO this is sort of fake, we create a date that might be different to what acually backend has made
+            }); //Inform parent of change
+          } else {
+            setErrors(result.message);
+          }
+        });
+      }
+    };
+
+    // setDroppedFile(null); // Clear the selected file
+    // setErrors(""); // Clear any error
+    // setModalVisible(false); // Close the modal
+    // callbackAddFile({
+    //   filename: droppedFile.name,
+    //   creationDate: new Date().getTime(), //TODO this is sort of fake, we create a date that might be different to what acually backend has made
+    // }); //Inform parent of change
 
     console.log("here 2");
 

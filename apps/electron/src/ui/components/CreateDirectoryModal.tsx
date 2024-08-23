@@ -1,6 +1,5 @@
+import Path from "path-browserify";
 import React, { type ChangeEvent, type FC, useRef, useState } from "react";
-
-import { useGlobalContext } from "./context/GlobalContext";
 
 interface Props {
   currentPath: string;
@@ -27,10 +26,21 @@ export const CreateDirectoryModal: FC<Props> = ({
       return;
     }
 
+    electron.ipcRenderer.fs.createDir(Path.join(currentPath, newDirectoryName)).then((result) => {
+      if (result.isSuccessful) {
+        handleModalCleanup();
+        callbackAddDirectory(newDirectoryName); //Inform parent
+      } else {
+        console.log(result.message);
+        setErrors(result.message);
+      }
+    });
+  };
+
+  const handleModalCleanup = () => {
+    setModalVisible(false); // Close the modal
     setErrors(""); // Clear any error
     setNewDirectoryName("");
-    setModalVisible(false); // Close the modal
-    callbackAddDirectory(newDirectoryName); //Inform parent
   };
 
   return modalVisible ? (
@@ -53,7 +63,7 @@ export const CreateDirectoryModal: FC<Props> = ({
               fontSize: "10px",
             }}
             className='btn-close'
-            onClick={() => setModalVisible(false)}
+            onClick={handleModalCleanup}
             aria-label='Close'
           ></button>
           <div

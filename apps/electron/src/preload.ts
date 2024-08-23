@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 import * as fs from "node:fs";
+
 import { FileDescription } from "@repo/common/dist/Models";
+import { SimpleResponse } from "@repo/common/dist/SimpleResponse";
 
 const versions: Record<string, unknown> = {};
 
@@ -20,9 +22,6 @@ function validateIPC(channel: string) {
 export type RendererListener = (event: IpcRendererEvent, ...args: any[]) => void;
 
 export const globals = {
-  readDir: (dirPath: string): Promise<{ files: FileDescription[]; directories: string[] }> =>
-    ipcRenderer.invoke("read-dir", dirPath),
-
   /** Processes versions **/
   versions,
 
@@ -31,6 +30,14 @@ export const globals = {
    * to support communication to main process.
    */
   ipcRenderer: {
+    fs: {
+      readDir: (dirPath: string): Promise<{ files: FileDescription[]; directories: string[] }> =>
+        ipcRenderer.invoke("read-dir", dirPath),
+      createDir: (dirPath: string): Promise<SimpleResponse> => ipcRenderer.invoke("create-dir", dirPath),
+      createFile: (filePath: string, buffer: Uint8Array): Promise<SimpleResponse> =>
+        ipcRenderer.invoke("create-file", filePath, buffer),
+    },
+
     send(channel: string, ...args: any[]) {
       if (validateIPC(channel)) {
         ipcRenderer.send(channel, ...args);

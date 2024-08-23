@@ -1,3 +1,4 @@
+import Path, { dirname } from "path-browserify";
 import React, { type ChangeEvent, type FC, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams, useResolvedPath } from "react-router-dom";
 import "../css/loc-h-content.css";
@@ -13,6 +14,7 @@ interface FileDescription {
 }
 
 import { MenuChannels } from "src/channels/menuChannels";
+import { useGlobalContext } from "ui/components/context/GlobalContext";
 import { useWallet } from "ui/components/context/WalletContext";
 import { CreateDirectoryModal } from "ui/components/CreateDirectoryModal";
 // import { Layout } from 'ui/components/Layout';
@@ -22,7 +24,7 @@ import { UploadFileModal } from "ui/components/UploadFileModal";
 
 import { DirectoryElement } from "./treeview/DirectoryElement";
 
-export const Home: FC<{ routePath: string }> = ({ routePath }) => {
+export const Home: FC = () => {
   const navigate = useNavigate();
   // const { currentAccount, setCurrentAccount, isWalletConnected } = useWallet();
   const setCurrentAccount = (_s: string): any => null;
@@ -36,18 +38,20 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
   const [uploadFileModalVisible, setUploadFileModalVisible] = useState(false);
   const [createDirectoryModalVisible, setCreateDirectoryModalVisible] = useState(false);
 
-  const { "*": splat } = useParams<{ "*": string }>();
+  // const { "*": splat } = useParams<{ "*": string }>();
 
-  const path = splat ? `/${splat}` : "/";
-  const nfsPath = "/tmp/nfs" + path;
+  // const path = splat ? `/${splat}` : "/";
+  // const nfsPath = "/tmp/nfs" + path;
 
-  console.log("path: " + path);
-  console.log("nfsPath: " + path);
+  // console.log("path: " + path);
+  // console.log("nfsPath: " + path);
 
-  // const {provenanceAddress} = useGlobalContext();
+  const { nfsPath, setNfsPath } = useGlobalContext();
+
+  // const [nfsPath, setNfsPath] = useState(currentNfsPath);
 
   const fetchNfsContents = (): void => {
-    electron.readDir(nfsPath).then((contents) => {
+    electron.ipcRenderer.fs.readDir(nfsPath).then((contents) => {
       setFiles(contents.files);
       setDirectories(contents.directories);
     });
@@ -55,7 +59,7 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
 
   useEffect(() => {
     fetchNfsContents();
-  }, [path]); //Hook to a path so that it will refresh file contents when path changes
+  }, [nfsPath]); //Hook to a path so that it will refresh file contents when path changes
 
   const handleFileSelect = (file: FileDescription): void => {
     // Here you can handle the file selection, such as fetching its provenance
@@ -64,11 +68,9 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
   };
 
   const handleDirectorySelect = (dirName: string): void => {
-    console.log("path: " + path);
-    console.log("debug: " + window.location.pathname);
-    console.log("handle dir select: " + `${location.pathname}/${dirName}`);
     // navigate(`${location.pathname}/${dirName}`);
-    navigate(`/home/${dirName}`);
+    // navigate(`/home/${dirName}`);
+    setNfsPath(dirName);
   };
 
   // const fetchProvenance = async (filename: string) => {
@@ -124,15 +126,17 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
   };
 
   const handleGoDirUp = (): void => {
-    if (path === "/" || path === routePath) {
+    if (nfsPath === "/") {
       return;
     }
 
-    const trimmedPath = path.replace(/\/$/, "");
-    const lastSlashIndex = trimmedPath.lastIndexOf("/");
-    const slicedPath = trimmedPath.substring(0, lastSlashIndex);
+    setNfsPath(Path.dirname(nfsPath));
 
-    navigate(routePath + slicedPath);
+    // const trimmedPath = path.replace(/\/$/, "");
+    // const lastSlashIndex = trimmedPath.lastIndexOf("/");
+    // const slicedPath = trimmedPath.substring(0, lastSlashIndex);
+    //
+    // navigate(routePath + slicedPath);
   };
 
   useEffect(() => {
@@ -160,7 +164,7 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
       <div key={file.filename} onClick={() => handleFileSelect(file)}>
         <FileElement
           key={file.filename}
-          currentPath={path}
+          currentPath={nfsPath}
           fileDescription={file}
           callbackDeleteFile={handleDeleteFile(index)}
         />
@@ -169,7 +173,13 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
 
   const allDirectoriesElement = directories.map((dirName) => (
     <div key={dirName}>
-      <DirectoryElement key={dirName} dirName={dirName} callbackEnterDirectory={() => handleDirectorySelect(dirName)} />
+      <DirectoryElement
+        key={dirName}
+        dirName={dirName}
+        callbackEnterDirectory={() => {
+          handleDirectorySelect(Path.join(nfsPath, dirName));
+        }}
+      />
     </div>
   ));
 
@@ -182,8 +192,9 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
             <div className='col-12'>
               <div className='loc-card loc-h'>
                 <div className='position-relative' style={{ width: "350px" }}>
+                  <p>Current Path: {nfsPath}</p>
                   <input style={{ width: "350px" }} type='text' className='loc-form-control' placeholder='Search' />
-                  {path !== "/" ? (
+                  {nfsPath !== "/" ? (
                     <button type='button' onClick={handleGoDirUp}>
                       DIR UP
                     </button>
@@ -225,7 +236,7 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
         </div>
       </div>
       <UploadFileModal
-        currentPath={path}
+        currentPath={nfsPath}
         errors={errors}
         setErrors={setErrors}
         modalVisible={uploadFileModalVisible}
@@ -234,7 +245,7 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
       />
 
       <CreateDirectoryModal
-        currentPath={path}
+        currentPath={nfsPath}
         errors={errors}
         setErrors={setErrors}
         modalVisible={createDirectoryModalVisible}

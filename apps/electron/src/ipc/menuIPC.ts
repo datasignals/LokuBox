@@ -142,7 +142,7 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
   });
   ipcMain.handle(
     MenuChannels.CREATE_FILE,
-    (_event: Electron.IpcMainInvokeEvent, filePath: string, fileContent: string) => {
+    (_event: Electron.IpcMainInvokeEvent, filePath: string, fileContent: Uint8Array) => {
       try {
         if (fs.existsSync(filePath)) {
           return {
