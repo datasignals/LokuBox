@@ -1,5 +1,5 @@
-import classNames from 'classnames';
-import React from 'react';
+import classNames from "classnames";
+import React from "react";
 
 interface IControlButtonProps {
   name: string;
@@ -8,7 +8,7 @@ interface IControlButtonProps {
 }
 
 const ControlButton: React.FC<IControlButtonProps> = ({ name, onClick, path }) => {
-  const className = classNames('control', name);
+  const className = classNames("control", name);
   const title = name[0].toUpperCase() + name.substring(1);
 
   return (

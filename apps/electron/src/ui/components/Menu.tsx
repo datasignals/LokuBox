@@ -1,18 +1,18 @@
-import React, { createRef, useMemo, useRef } from 'react';
+import React, { createRef, useMemo, useRef } from "react";
 
-import appLogo from 'assets/icons/icon.png';
-import { MenuChannels } from 'src/channels/menuChannels';
-import { fixAcceleratorText } from 'src/menu/accelerators';
-import menuList from 'src/menu/appMenu';
-import { useEventListener } from 'src/ui/hooks';
+import appLogo from "assets/icons/icon.png";
+import { MenuChannels } from "src/channels/menuChannels";
+import { fixAcceleratorText } from "src/menu/accelerators";
+import menuList from "src/menu/appMenu";
+import { useEventListener } from "src/ui/hooks";
 
 export default function Menu() {
   const activeMenuIndex = useRef<number | null>(null);
   const menusRef = useMemo(() => menuList.map(() => createRef<HTMLDivElement>()), []);
 
-  useEventListener('keydown', (event) => handleKeyDown(event));
+  useEventListener("keydown", (event) => handleKeyDown(event));
 
-  useEventListener('mousedown', (event) => handleClickOutside(event));
+  useEventListener("mousedown", (event) => handleClickOutside(event));
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.repeat) return;
@@ -34,21 +34,21 @@ export default function Menu() {
     e.stopPropagation();
     e.preventDefault();
 
-    if (menusRef[index].current?.classList.contains('active')) {
+    if (menusRef[index].current?.classList.contains("active")) {
       closeActiveMenu();
     } else {
-      menusRef[index].current?.classList.add('active');
-      menusRef[index].current?.parentElement?.classList.add('active');
+      menusRef[index].current?.classList.add("active");
+      menusRef[index].current?.parentElement?.classList.add("active");
       activeMenuIndex.current = index;
     }
   };
 
   const onMenuHover = (index: number) => {
     if (activeMenuIndex.current != null) {
-      menusRef[activeMenuIndex.current].current?.classList.toggle('active');
-      menusRef[index].current?.classList.toggle('active');
-      menusRef[index].current?.parentElement?.classList.toggle('active');
-      menusRef[activeMenuIndex.current].current?.parentElement?.classList.toggle('active');
+      menusRef[activeMenuIndex.current].current?.classList.toggle("active");
+      menusRef[index].current?.classList.toggle("active");
+      menusRef[index].current?.parentElement?.classList.toggle("active");
+      menusRef[activeMenuIndex.current].current?.parentElement?.classList.toggle("active");
 
       activeMenuIndex.current = index;
     }
@@ -56,8 +56,8 @@ export default function Menu() {
 
   const closeActiveMenu = () => {
     if (activeMenuIndex.current != null) {
-      menusRef[activeMenuIndex.current].current?.classList.remove('active');
-      menusRef[activeMenuIndex.current].current?.parentElement?.classList.remove('active');
+      menusRef[activeMenuIndex.current].current?.classList.remove("active");
+      menusRef[activeMenuIndex.current].current?.parentElement?.classList.remove("active");
       activeMenuIndex.current = null;
     }
   };
@@ -75,9 +75,9 @@ export default function Menu() {
 
   const renderItemAccelerator = (menuItem: Electron.MenuItemConstructorOptions) => {
     if (menuItem.id === MenuChannels.WEB_ZOOM_IN) {
-      const firstKey = __DARWIN__ ? '⌘' : 'Ctrl';
-      const plus = __DARWIN__ ? '' : '+';
-      const thirdKey = '+';
+      const firstKey = __DARWIN__ ? "⌘" : "Ctrl";
+      const plus = __DARWIN__ ? "" : "+";
+      const thirdKey = "+";
       return `${firstKey}${plus}${thirdKey}`;
     }
 
@@ -111,7 +111,7 @@ export default function Menu() {
             <div className='menu-popup' ref={menusRef[menuIndex]}>
               {Array.isArray(submenu) &&
                 submenu.map((menuItem, menuItemIndex) => {
-                  if (menuItem.type === 'separator') {
+                  if (menuItem.type === "separator") {
                     return (
                       <div key={`menu_${menuIndex}_popup_item_${menuItemIndex}`} className='popup-item-separator' />
                     );

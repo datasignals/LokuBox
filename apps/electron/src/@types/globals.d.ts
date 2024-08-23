@@ -1,4 +1,4 @@
-import { globals } from 'src/preload';
+import { globals } from "src/preload";
 
 declare global {
   const electron: typeof globals;

@@ -1,20 +1,20 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow } from "electron";
 
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 
-import { createAppWindow } from './appWindow';
+import { createAppWindow } from "./appWindow";
 
-process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "true";
 
 /** Handle creating/removing shortcuts on Windows when installing/uninstalling. */
-if (require('electron-squirrel-startup')) {
+if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
 app.whenReady().then(() => {
   installExtension(REACT_DEVELOPER_TOOLS)
     .then((name) => console.info(`Added Extension:  ${name}`))
-    .catch((err) => console.info('An error occurred: ', err));
+    .catch((err) => console.info("An error occurred: ", err));
 });
 
 /**
@@ -22,7 +22,7 @@ app.whenReady().then(() => {
  * initialization and is ready to create browser windows.
  * Some APIs can only be used after this event occurs.
  */
-app.on('ready', createAppWindow);
+app.on("ready", createAppWindow);
 
 /**
  * Emitted when the application is activated. Various actions can
@@ -30,7 +30,7 @@ app.on('ready', createAppWindow);
  * attempting to re-launch the application when it's already running,
  * or clicking on the application's dock or taskbar icon.
  */
-app.on('activate', () => {
+app.on("activate", () => {
   /**
    * On OS X it's common to re-create a window in the app when the
    * dock icon is clicked and there are no other windows open.
@@ -43,12 +43,12 @@ app.on('activate', () => {
 /**
  * Emitted when all windows have been closed.
  */
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   /**
    * On OS X it is common for applications and their menu bar
    * to stay active until the user quits explicitly with Cmd + Q
    */
-  if (process.platform !== 'darwin') {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });

@@ -1,10 +1,10 @@
-import React, { type ChangeEvent, type FC, useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams, useResolvedPath } from 'react-router-dom';
-import '../css/loc-h-content.css';
-import '../css/loc-layout.css';
-import '../css/loc-login.css';
-import '../css/main.css';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { type ChangeEvent, type FC, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useParams, useResolvedPath } from "react-router-dom";
+import "../css/loc-h-content.css";
+import "../css/loc-layout.css";
+import "../css/loc-login.css";
+import "../css/main.css";
+import "react-toastify/dist/ReactToastify.css";
 
 // import {type FileDescription} from "@repo/common/Models";
 interface FileDescription {
@@ -12,14 +12,15 @@ interface FileDescription {
   creationDate: number;
 }
 
-import { useWallet } from 'ui/components/context/WalletContext';
-import { CreateDirectoryModal } from 'ui/components/CreateDirectoryModal';
+import { MenuChannels } from "src/channels/menuChannels";
+import { useWallet } from "ui/components/context/WalletContext";
+import { CreateDirectoryModal } from "ui/components/CreateDirectoryModal";
 // import { Layout } from 'ui/components/Layout';
-import { FileElement } from 'ui/components/treeview/FileElement';
-import { UploadFileModal } from 'ui/components/UploadFileModal';
-
-import { DirectoryElement } from './treeview/DirectoryElement';
 import { Layout } from "ui/components/Layout";
+import { FileElement } from "ui/components/treeview/FileElement";
+import { UploadFileModal } from "ui/components/UploadFileModal";
+
+import { DirectoryElement } from "./treeview/DirectoryElement";
 
 export const Home: FC<{ routePath: string }> = ({ routePath }) => {
   const navigate = useNavigate();
@@ -31,32 +32,25 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
   const [directories, setDirectories] = useState<string[]>([]);
   const [filesselected, setFilesselected] = useState<FileDescription | null>(null);
   const [provenanceData, setProvenanceData] = useState<any[]>([]); // Provenance
-  const [errors, setErrors] = useState('');
+  const [errors, setErrors] = useState("");
   const [uploadFileModalVisible, setUploadFileModalVisible] = useState(false);
   const [createDirectoryModalVisible, setCreateDirectoryModalVisible] = useState(false);
 
-  const { '*': splat } = useParams<{ '*': string }>();
+  const { "*": splat } = useParams<{ "*": string }>();
 
-  const path = splat ? `/${splat}` : '/';
+  const path = splat ? `/${splat}` : "/";
+  const nfsPath = "/tmp/nfs" + path;
+
+  console.log("path: " + path);
+  console.log("nfsPath: " + path);
 
   // const {provenanceAddress} = useGlobalContext();
 
   const fetchNfsContents = (): void => {
-    setFiles([
-      {
-        filename: 'file1',
-        creationDate: 0,
-      },
-      {
-        filename: 'file2',
-        creationDate: 0,
-      },
-      {
-        filename: 'file3',
-        creationDate: 0,
-      },
-    ]);
-    setDirectories(['Dir1', 'Dir2']);
+    electron.readDir(nfsPath).then((contents) => {
+      setFiles(contents.files);
+      setDirectories(contents.directories);
+    });
   };
 
   useEffect(() => {
@@ -70,7 +64,11 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
   };
 
   const handleDirectorySelect = (dirName: string): void => {
-    navigate(`${location.pathname}/${dirName}`);
+    console.log("path: " + path);
+    console.log("debug: " + window.location.pathname);
+    console.log("handle dir select: " + `${location.pathname}/${dirName}`);
+    // navigate(`${location.pathname}/${dirName}`);
+    navigate(`/home/${dirName}`);
   };
 
   // const fetchProvenance = async (filename: string) => {
@@ -106,19 +104,19 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
     const date = new Date(timestamp);
 
     const optionsDate: Intl.DateTimeFormatOptions = {
-      month: 'short',
-      day: 'numeric',
+      month: "short",
+      day: "numeric",
     };
 
     const optionsTime: Intl.DateTimeFormatOptions = {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
       hour12: false,
     };
 
-    const formattedDate = date.toLocaleDateString('en-US', optionsDate);
-    const formattedTime = date.toLocaleTimeString('en-US', optionsTime);
+    const formattedDate = date.toLocaleDateString("en-US", optionsDate);
+    const formattedTime = date.toLocaleTimeString("en-US", optionsTime);
     const formattedYear = date.getFullYear();
 
     // Combine all parts to form the required format
@@ -126,12 +124,12 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
   };
 
   const handleGoDirUp = (): void => {
-    if (path === '/' || path === routePath) {
+    if (path === "/" || path === routePath) {
       return;
     }
 
-    const trimmedPath = path.replace(/\/$/, '');
-    const lastSlashIndex = trimmedPath.lastIndexOf('/');
+    const trimmedPath = path.replace(/\/$/, "");
+    const lastSlashIndex = trimmedPath.lastIndexOf("/");
     const slicedPath = trimmedPath.substring(0, lastSlashIndex);
 
     navigate(routePath + slicedPath);
@@ -139,13 +137,13 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
 
   useEffect(() => {
     // console.log('isWalletConnected', isWalletConnected);
-    if (localStorage.getItem('currentAccount')) {
-      const add = localStorage.getItem('currentAccount');
+    if (localStorage.getItem("currentAccount")) {
+      const add = localStorage.getItem("currentAccount");
       if (add !== null) {
         setCurrentAccount(add);
-        localStorage.setItem('currentAccount', add);
+        localStorage.setItem("currentAccount", add);
       }
-      console.log('add', localStorage.getItem('currentAccount'));
+      console.log("add", localStorage.getItem("currentAccount"));
     }
   });
 
@@ -183,15 +181,15 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
           <div className='row'>
             <div className='col-12'>
               <div className='loc-card loc-h'>
-                <div className='position-relative' style={{ width: '350px' }}>
-                  <input style={{ width: '350px' }} type='text' className='loc-form-control' placeholder='Search' />
-                  {path !== '/' ? (
+                <div className='position-relative' style={{ width: "350px" }}>
+                  <input style={{ width: "350px" }} type='text' className='loc-form-control' placeholder='Search' />
+                  {path !== "/" ? (
                     <button type='button' onClick={handleGoDirUp}>
                       DIR UP
                     </button>
                   ) : null}
                   <img
-                    style={{ position: 'absolute', top: '12px', right: '15px' }}
+                    style={{ position: "absolute", top: "12px", right: "15px" }}
                     src='assets/images/svg/ic_search.svg'
                     alt=''
                   />
@@ -207,21 +205,21 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
       </div>
       <div className='loc-h-content-details'>
         <div className='loc-h-content-title'>Provenance Report</div>
-        <div className='loc-card' style={{ marginTop: '20px' }}>
+        <div className='loc-card' style={{ marginTop: "20px" }}>
           <div className='loc-card-content'>
             <div className='loc-h-card-content'>
               <img src='assets/images/svg/ic_pdf.svg' alt='' />
               <div>
-                <h4 style={{ marginBottom: '5px' }}>{filesselected ? filesselected.filename : 'No file selected'}</h4>
-                <h5 style={{ marginBottom: '5px' }}>10mb</h5>
-                <h5>{filesselected ? formatDate(filesselected.creationDate) : ''}</h5>
+                <h4 style={{ marginBottom: "5px" }}>{filesselected ? filesselected.filename : "No file selected"}</h4>
+                <h5 style={{ marginBottom: "5px" }}>10mb</h5>
+                <h5>{filesselected ? formatDate(filesselected.creationDate) : ""}</h5>
               </div>
             </div>
           </div>
         </div>
         <div className='loc-h-activity-content-con'>
-          <h4 style={{ fontSize: '14px', marginLeft: '20px' }}>Activities</h4>
-          <div className='loc-card-provnance' style={{ height: '100%' }}>
+          <h4 style={{ fontSize: "14px", marginLeft: "20px" }}>Activities</h4>
+          <div className='loc-card-provnance' style={{ height: "100%" }}>
             <ErrorsComponent errors={errors} provenanceData={provenanceData} />
           </div>
         </div>
@@ -248,17 +246,17 @@ export const Home: FC<{ routePath: string }> = ({ routePath }) => {
         data-bs-toggle='modal'
         data-bs-target='#exampleModal'
         className='loc-transparent-img-btn'
-        style={{ position: 'fixed', bottom: '40px', right: '420px', zIndex: 50 }}
+        style={{ position: "fixed", bottom: "40px", right: "420px", zIndex: 50 }}
       >
-        <img src={'assets/images/svg/ic_upload_file.svg'} onClick={() => setUploadFileModalVisible(true)} alt='' />
+        <img src={"assets/images/svg/ic_upload_file.svg"} onClick={() => setUploadFileModalVisible(true)} alt='' />
       </button>
       <button
         type='button'
         onClick={() => {
           setCreateDirectoryModalVisible(true);
-          console.log('setting some modal to true');
+          console.log("setting some modal to true");
         }}
-        style={{ position: 'fixed', bottom: '40px', right: '750px', zIndex: 50 }}
+        style={{ position: "fixed", bottom: "40px", right: "750px", zIndex: 50 }}
       >
         Add Directory
       </button>
@@ -273,27 +271,27 @@ interface ErrorsProps {
 
 const ErrorsComponent: FC<ErrorsProps> = ({ errors, provenanceData }) => {
   if (errors) {
-    return <div style={{ fontSize: '14px', color: 'red' }}>{errors}</div>;
+    return <div style={{ fontSize: "14px", color: "red" }}>{errors}</div>;
   } else if (provenanceData.length > 0) {
     return (
       <div>
         {provenanceData.map((item, index) => (
-          <div key={index} style={{ marginBottom: '10px' }}>
-            <div style={{ fontSize: '14px' }}>
+          <div key={index} style={{ marginBottom: "10px" }}>
+            <div style={{ fontSize: "14px" }}>
               <strong>Accessed On:</strong> {item.value.creationtime}
             </div>
-            <div style={{ fontSize: '14px' }}>
+            <div style={{ fontSize: "14px" }}>
               <strong>Accessed by:</strong> {item.value.eventkey}
             </div>
-            <div style={{ fontSize: '14px' }}>
+            <div style={{ fontSize: "14px" }}>
               <strong>Action:</strong> {item.value.eventtype}
             </div>
-            <hr style={{ margin: '10px 0', border: '1px solid #ccc' }} />
+            <hr style={{ margin: "10px 0", border: "1px solid #ccc" }} />
           </div>
         ))}
       </div>
     );
   } else {
-    return <div style={{ fontSize: '14px' }}>No File Selected.</div>;
+    return <div style={{ fontSize: "14px" }}>No File Selected.</div>;
   }
 };

@@ -1,6 +1,6 @@
-import React, { type ChangeEvent, type FC, useRef, useState } from 'react';
+import React, { type ChangeEvent, type FC, useRef, useState } from "react";
 
-import { useGlobalContext } from './context/GlobalContext';
+import { useGlobalContext } from "./context/GlobalContext";
 
 interface Props {
   currentPath: string;
@@ -19,16 +19,16 @@ export const CreateDirectoryModal: FC<Props> = ({
   setModalVisible,
   callbackAddDirectory,
 }) => {
-  const [newDirectoryName, setNewDirectoryName] = useState('');
+  const [newDirectoryName, setNewDirectoryName] = useState("");
 
   const createDirectory = (): void => {
     if (newDirectoryName.length === 0) {
-      setErrors('Directory name cannot be empty!');
+      setErrors("Directory name cannot be empty!");
       return;
     }
 
-    setErrors(''); // Clear any error
-    setNewDirectoryName('');
+    setErrors(""); // Clear any error
+    setNewDirectoryName("");
     setModalVisible(false); // Close the modal
     callbackAddDirectory(newDirectoryName); //Inform parent
   };
@@ -36,21 +36,21 @@ export const CreateDirectoryModal: FC<Props> = ({
   return modalVisible ? (
     <div
       className='modal fade show'
-      style={{ display: 'block' }}
+      style={{ display: "block" }}
       tabIndex={-1}
       aria-labelledby='exampleModalLabel'
       aria-hidden='true'
     >
       <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
-        <div className='modal-content' style={{ borderRadius: '20px', padding: '30px' }}>
+        <div className='modal-content' style={{ borderRadius: "20px", padding: "30px" }}>
           <button
             type='button'
             style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
+              position: "absolute",
+              top: "20px",
+              right: "20px",
               zIndex: 999,
-              fontSize: '10px',
+              fontSize: "10px",
             }}
             className='btn-close'
             onClick={() => setModalVisible(false)}
@@ -59,12 +59,12 @@ export const CreateDirectoryModal: FC<Props> = ({
           <div
             className='modal-body'
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
               padding: 0,
-              marginTop: '20px',
+              marginTop: "20px",
             }}
           >
             {errors ? <p className='text-danger'>{errors}</p> : null}
@@ -72,7 +72,7 @@ export const CreateDirectoryModal: FC<Props> = ({
             <button
               className='loc-btn'
               type='button'
-              style={{ marginTop: '30px', width: '200px' }}
+              style={{ marginTop: "30px", width: "200px" }}
               onClick={createDirectory}
             >
               Create

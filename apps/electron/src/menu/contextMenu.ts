@@ -1,6 +1,6 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from "electron";
 
-import { ClickHandler } from 'src/webContents';
+import { ClickHandler } from "src/webContents";
 
 export interface IMenuItem {
   readonly id?: string;
@@ -12,7 +12,7 @@ export interface IMenuItem {
   readonly action?: () => void;
 
   /** The type of item. */
-  readonly type?: 'separator';
+  readonly type?: "separator";
 
   /** Is the menu item enabled? Defaults to true. */
   readonly enabled?: boolean;
@@ -21,7 +21,7 @@ export interface IMenuItem {
    * The predefined behavior of the menu item.
    * When specified, the click property will be ignored.
    */
-  readonly role?: Electron.MenuItemConstructorOptions['role'];
+  readonly role?: Electron.MenuItemConstructorOptions["role"];
 
   /**
    * Submenu that will appear when hovering this menu item.
@@ -39,7 +39,7 @@ export interface ISerializableMenuItem extends IMenuItem {
 }
 
 export async function showContextualMenu(items: ReadonlyArray<IMenuItem>) {
-  const indices = await ipcRenderer.invoke('show-contextual-menu', serializeMenuItems(items));
+  const indices = await ipcRenderer.invoke("show-contextual-menu", serializeMenuItems(items));
 
   if (indices !== null) {
     const menuItem = findSubmenuItem(items, indices);

@@ -1,9 +1,11 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
+import * as fs from "node:fs";
+import { FileDescription } from "@repo/common/dist/Models";
 
 const versions: Record<string, unknown> = {};
 
 // Process versions
-for (const type of ['chrome', 'node', 'electron']) {
+for (const type of ["chrome", "node", "electron"]) {
   versions[type] = process.versions[type];
 }
 
@@ -18,6 +20,9 @@ function validateIPC(channel: string) {
 export type RendererListener = (event: IpcRendererEvent, ...args: any[]) => void;
 
 export const globals = {
+  readDir: (dirPath: string): Promise<{ files: FileDescription[]; directories: string[] }> =>
+    ipcRenderer.invoke("read-dir", dirPath),
+
   /** Processes versions **/
   versions,
 
@@ -67,4 +72,4 @@ export const globals = {
 /** Create a safe, bidirectional, synchronous bridge across isolated contexts
  *  When contextIsolation is enabled in your webPreferences, your preload scripts run in an "Isolated World".
  */
-contextBridge.exposeInMainWorld('electron', globals);
+contextBridge.exposeInMainWorld("electron", globals);

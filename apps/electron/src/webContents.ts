@@ -1,6 +1,6 @@
-import { WebContents } from 'electron';
+import { WebContents } from "electron";
 
-import { MenuChannels } from 'src/channels/menuChannels';
+import { MenuChannels } from "src/channels/menuChannels";
 
 export type ClickHandler = (
   menuItem: Electron.MenuItem,

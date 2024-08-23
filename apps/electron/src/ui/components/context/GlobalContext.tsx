@@ -1,5 +1,7 @@
-import axios, { type AxiosResponse } from 'axios';
-import React, { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
+import axios, { type AxiosResponse } from "axios";
+import React, { createContext, type ReactNode, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 // import {RouteNames} from "@repo/common/RouteNames";
 
 interface GlobalContextType {
@@ -32,17 +34,19 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const fetchConfig = async (): Promise<void> => {
-      const config: AxiosResponse<AppConfig> = await axios.get('/config.json');
+      const config: AxiosResponse<AppConfig> = await axios.get("/config.json");
       // setRouteNames(new RouteNames(
       //     config.data.backendAddress,
       // ));
-      setProvenanceAddress(config.data.provenace.server);
+      // setProvenanceAddress(config.data.provenace.server);
     };
 
     void fetchConfig();
   }, []);
 
-  return <GlobalContext.Provider value={{ /*routeNames,*/ provenanceAddress }}>{children}</GlobalContext.Provider>;
+  return (
+    <GlobalContext.Provider value={{ /*routeNames,*/ provenanceAddress }}>{children}</GlobalContext.Provider>
+  );
   // return /*routeNames &&*/ provenanceAddress ? (
   //   <GlobalContext.Provider value={{ /*routeNames,*/ provenanceAddress }}>{children}</GlobalContext.Provider>
   // ) : (
@@ -53,7 +57,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
 export const useGlobalContext = (): GlobalContextType => {
   const context = useContext(GlobalContext);
   if (!context) {
-    throw new Error('useGlobalContext must be used within an AuthProvider');
+    throw new Error("useGlobalContext must be used within an AuthProvider");
   }
   return context;
 };

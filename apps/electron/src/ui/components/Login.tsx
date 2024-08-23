@@ -1,37 +1,24 @@
-import React, { type FC } from 'react';
-import '../css/loc-h-content.css';
-import '../css/loc-layout.css';
-import '../css/loc-login.css';
-import '../css/main.css';
+import React, { type FC } from "react";
+import "../css/loc-h-content.css";
+import "../css/loc-layout.css";
+import "../css/loc-login.css";
+import "../css/main.css";
 
-import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
-import { useNavigate } from 'react-router-dom';
-// import {WalletList} from "../Wallets"
+import { WalletList } from "../Wallets";
+import { useNavigate } from "react-router-dom";
 // import {useWallet} from '../context/WalletContext';
-
-const WalletList = [
-  {
-    img: 'assets/images/png/polkadot.png',
-    name: 'Polkadot.Js',
-    des: 'Polkadot.js chrome extension wallet',
-  },
-  {
-    img: 'assets/images/png/coinbase.png',
-    name: 'Coinbase',
-    des: 'Coinbase chrome extension wallet',
-  },
-];
 
 export const Login: FC = () => {
   // const {setCurrentAccount, setWalletConnected, setWalletData} = useWallet();
+  const navigate = useNavigate();
 
   return (
     <div className='loc-login-container'>
-      <div className='row' style={{ height: '100%' }}>
+      <div className='row' style={{ height: "100%" }}>
         <div className='col-12 col-md-6 col-lg-8'>
           <div className='loc-login-content'>
             <div>
-              <img style={{ width: '150px', marginBottom: '70px' }} src='assets/images/svg/logo.svg' alt='brand-logo' />
+              <img style={{ width: "150px", marginBottom: "70px" }} src='assets/images/svg/logo.svg' alt='brand-logo' />
             </div>
             <div
               id='carouselExampleIndicators'
@@ -59,11 +46,11 @@ export const Login: FC = () => {
           </div>
         </div>
         <div className='col-12 col-md-6 col-lg-4'>
-          <div style={{ backgroundColor: 'white', height: '100%' }}>
+          <div style={{ backgroundColor: "white", height: "100%" }}>
             <div className='loc-login-form'>
               <h2>Secure & share your files with provenance tracking.</h2>
-              <form style={{ width: '100%', padding: '100px 0' }}>
-                <div style={{ width: '100%' }}>
+              <form style={{ width: "100%", padding: "100px 0" }}>
+                <div style={{ width: "100%" }}>
                   <label htmlFor='loc-login-select' className='loc-label'>
                     Select your wallet
                   </label>
@@ -83,7 +70,7 @@ export const Login: FC = () => {
                           className='drop-item-container'
                           key={index} // Add the key prop here
                           onClick={() => {
-                            console.log();
+                            navigate("/home");
                           }}
                         >
                           <a className='d-item-flex'>
@@ -105,7 +92,7 @@ export const Login: FC = () => {
                     Connect
                     </button> */}
               </form>
-              <p style={{ color: '#92A1AC', marginBottom: '2px', fontSize: '12px' }}>Don't have a wallet?</p>
+              <p style={{ color: "#92A1AC", marginBottom: "2px", fontSize: "12px" }}>Don't have a wallet?</p>
               <button type='button' className='loc-btn-transparent'>
                 Learn how to setup one
               </button>

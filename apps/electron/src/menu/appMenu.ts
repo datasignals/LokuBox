@@ -1,70 +1,70 @@
-import { MenuChannels } from 'src/channels/menuChannels';
-import { emitEvent } from 'src/webContents';
+import { MenuChannels } from "src/channels/menuChannels";
+import { emitEvent } from "src/webContents";
 
 const MenuItems: Electron.MenuItemConstructorOptions[] = [
   {
-    label: 'EFRV Boilerplate',
+    label: "EFRV Boilerplate",
     submenu: [
       {
-        label: 'About EFRV Boilerplate',
+        label: "About EFRV Boilerplate",
       },
       {
-        type: 'separator',
+        type: "separator",
       },
       {
         id: MenuChannels.WINDOW_CLOSE,
-        label: 'Exit',
-        role: 'quit',
-        accelerator: 'CmdOrCtrl+Q',
+        label: "Exit",
+        role: "quit",
+        accelerator: "CmdOrCtrl+Q",
       },
     ],
   },
   {
-    label: 'View',
+    label: "View",
     submenu: [
       {
         id: MenuChannels.WEB_ACTUAL_SIZE,
-        label: 'Reset Zoom',
-        role: 'resetZoom',
-        accelerator: 'CmdOrCtrl+0',
+        label: "Reset Zoom",
+        role: "resetZoom",
+        accelerator: "CmdOrCtrl+0",
       },
       {
         id: MenuChannels.WEB_ZOOM_IN,
-        label: 'Zoom In',
-        role: 'zoomIn',
+        label: "Zoom In",
+        role: "zoomIn",
       },
       {
         id: MenuChannels.WEB_ZOOM_OUT,
-        label: 'Zoom Out',
-        role: 'zoomOut',
-        accelerator: 'CmdOrCtrl+-',
+        label: "Zoom Out",
+        role: "zoomOut",
+        accelerator: "CmdOrCtrl+-",
       },
       {
-        type: 'separator',
+        type: "separator",
       },
       {
         id: MenuChannels.WEB_TOGGLE_FULLSCREEN,
-        label: 'Toggle Full Screen',
-        role: 'togglefullscreen',
+        label: "Toggle Full Screen",
+        role: "togglefullscreen",
       },
       {
-        type: 'separator',
+        type: "separator",
       },
       {
         id: MenuChannels.WEB_TOGGLE_DEVTOOLS,
-        label: 'Toogle Developer Tools',
-        role: 'toggleDevTools',
-        accelerator: 'CmdOrCtrl+Shift+I',
+        label: "Toogle Developer Tools",
+        role: "toggleDevTools",
+        accelerator: "CmdOrCtrl+Shift+I",
       },
     ],
   },
   {
-    label: 'Authors',
+    label: "Authors",
     submenu: [
       {
         id: MenuChannels.OPEN_GITHUB_PROFILE,
-        label: 'flaviodelgrosso',
-        click: emitEvent(MenuChannels.OPEN_GITHUB_PROFILE, 'flaviodelgrosso'),
+        label: "Lockular",
+        click: emitEvent(MenuChannels.OPEN_GITHUB_PROFILE, "flaviodelgrosso"),
       },
     ],
   },

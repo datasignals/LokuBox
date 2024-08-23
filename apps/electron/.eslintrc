@@ -21,7 +21,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "rules": {
-    "no-console": ["warn", { "allow": ["warn", "error", "info", "table"] }],
+    "no-console": "off",//["warn", { "allow": ["warn", "error", "info", "table"] }],
     "react/prop-types": "off",
     "import/order": [
       "error",

@@ -1,5 +1,5 @@
-import React, { type ChangeEvent, type FC, useRef, useState } from 'react';
-import { Bounce, toast } from 'react-toastify';
+import React, { type ChangeEvent, type FC, useRef, useState } from "react";
+import { Bounce, toast } from "react-toastify";
 
 interface FileDescription {
   filename: string;
@@ -33,30 +33,30 @@ export const UploadFileModal: FC<Props> = ({
 
   const uploadFile = (): void => {
     if (!droppedFile) {
-      setErrors('No file selected');
+      setErrors("No file selected");
       return;
     }
     const a = new FileReader();
     setDroppedFile(null); // Clear the selected file
-    setErrors(''); // Clear any error
+    setErrors(""); // Clear any error
     setModalVisible(false); // Close the modal
     callbackAddFile({
       filename: droppedFile.name,
       creationDate: new Date().getTime(), //TODO this is sort of fake, we create a date that might be different to what acually backend has made
     }); //Inform parent of change
 
-    console.log('here 2');
+    console.log("here 2");
 
-    a.readAsText(droppedFile, 'base64');
-    toast.success('File is uploaded.', {
-      position: 'top-right',
+    a.readAsText(droppedFile, "base64");
+    toast.success("File is uploaded.", {
+      position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: 0,
-      theme: 'dark',
+      theme: "dark",
       transition: Bounce,
     });
   };
@@ -64,28 +64,28 @@ export const UploadFileModal: FC<Props> = ({
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (dropZoneRef.current) {
-      dropZoneRef.current.classList.add('drop-zone--over');
+      dropZoneRef.current.classList.add("drop-zone--over");
     }
   };
 
   const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (dropZoneRef.current) {
-      dropZoneRef.current.classList.remove('drop-zone--over');
+      dropZoneRef.current.classList.remove("drop-zone--over");
     }
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (dropZoneRef.current) {
-      dropZoneRef.current.classList.remove('drop-zone--over');
+      dropZoneRef.current.classList.remove("drop-zone--over");
     }
     const files = event.dataTransfer.files;
     if (files.length > 0) {
       if (fileInputRef.current) {
         fileInputRef.current.files = files;
       }
-      setErrors('');
+      setErrors("");
     }
   };
 
@@ -105,21 +105,21 @@ export const UploadFileModal: FC<Props> = ({
   return modalVisible ? (
     <div
       className='modal fade show'
-      style={{ display: 'block' }}
+      style={{ display: "block" }}
       tabIndex={-1}
       aria-labelledby='exampleModalLabel'
       aria-hidden='true'
     >
       <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
-        <div className='modal-content' style={{ borderRadius: '20px', padding: '30px' }}>
+        <div className='modal-content' style={{ borderRadius: "20px", padding: "30px" }}>
           <button
             type='button'
             style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
+              position: "absolute",
+              top: "20px",
+              right: "20px",
               zIndex: 999,
-              fontSize: '10px',
+              fontSize: "10px",
             }}
             className='btn-close'
             onClick={() => setModalVisible(false)}
@@ -128,12 +128,12 @@ export const UploadFileModal: FC<Props> = ({
           <div
             className='modal-body'
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
               padding: 0,
-              marginTop: '20px',
+              marginTop: "20px",
             }}
           >
             <div
@@ -147,13 +147,13 @@ export const UploadFileModal: FC<Props> = ({
               <span
                 className='drop-zone__prompt'
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                <img src={'assets/images/svg/ic_cloud.svg'} style={{ width: '48px', marginBottom: '20px' }} alt='' />
+                <img src={"assets/images/svg/ic_cloud.svg"} style={{ width: "48px", marginBottom: "20px" }} alt='' />
                 {droppedFile?.name ? <span>{droppedFile.name}</span> : <span>Drop file here or click to upload</span>}
                 {!droppedFile?.name && errors && <p className='text-danger'>{errors}</p>}
               </span>
@@ -162,14 +162,14 @@ export const UploadFileModal: FC<Props> = ({
                 type='file'
                 name='file'
                 className='drop-zone__input'
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 onChange={handleFileChange}
               />
             </div>
             <button
               className='loc-btn'
               type='button'
-              style={{ marginTop: '30px', width: '200px' }}
+              style={{ marginTop: "30px", width: "200px" }}
               onClick={uploadFile}
             >
               Upload

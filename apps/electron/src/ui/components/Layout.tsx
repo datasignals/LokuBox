@@ -1,15 +1,15 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import '../css/loc-layout.css';
-import '../css/main.css';
+import "../css/loc-layout.css";
+import "../css/main.css";
 // import { useWallet } from './context/WalletContext';
 // import "/images/svg/user_default.svg"
 export const Layout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   // const { currentAccount, setCurrentAccount } = useWallet();
-  const currentAccount = 'test';
+  const currentAccount = "DEBUG LOGOUT";
 
   const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
@@ -17,31 +17,34 @@ export const Layout: React.FC = () => {
   };
 
   useEffect(() => {});
+
   return (
     <div>
       <div className='loc-nav' id='loc-nav'>
         <div className='loc-sidemenu-toggler' id='loc-sidemenu-toggler'>
           <div className='loc-logo'>
-            <img src={'assets/images/svg/logo.svg'} alt='brand-logo' />
+            <img src={"assets/images/svg/logo.svg"} alt='brand-logo' />
           </div>
           <div className='loc-nav-ham'>Files</div>
         </div>
-        <ul className='loc-nav-menu' style={{ display: 'flex', alignItems: 'center', padding: '0' }}>
-          <li style={{ display: 'flex', alignItems: 'center' }}>
+        <ul className='loc-nav-menu' style={{ display: "flex", alignItems: "center", padding: "0" }}>
+          <li style={{ display: "flex", alignItems: "center" }}>
             {currentAccount && (
-              <span style={{ margin: '10px', whiteSpace: 'nowrap' }}>
-                {currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}
-              </span>
+              <button type="button" onClick={() => navigate("/")}>
+                <span style={{ margin: "10px", whiteSpace: "nowrap" }}>
+                  {currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}
+                </span>
+              </button>
             )}
             <div className='dropdown'>
               <img
                 className='dropdown-toggle'
-                src={'assets/images/svg/user_default.svg'}
+                src={"assets/images/svg/user_default.svg"}
                 alt='more-options'
                 id='dropdownMenuAccount'
                 data-bs-toggle='dropdown'
                 aria-expanded='false'
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
               />
               <ul className='dropdown-menu' aria-labelledby='dropdownMenuAccount'>
                 <li className='dropdown-item'>
@@ -57,8 +60,8 @@ export const Layout: React.FC = () => {
       </div>
       <div className='loc-sidemenu'>
         <ul>
-          <li className={`loc-sidemenu-item ${location.pathname === '/home' ? 'active' : ''}`}>
-            <a className='loc-sidemenu-item-content' onClick={handleNavigation('/home')}>
+          <li className={`loc-sidemenu-item ${location.pathname === "/home" ? "active" : ""}`}>
+            <a className='loc-sidemenu-item-content' onClick={handleNavigation("/home")}>
               <svg xmlns='http://www.w3.org/2000/svg' width='36.047' height='40.553' viewBox='0 0 36.047 40.553'>
                 <path
                   id='s_files'
@@ -68,8 +71,8 @@ export const Layout: React.FC = () => {
               <div className='loc-sidemenu-item-name'>My Files</div>
             </a>
           </li>
-          <li className={`loc-sidemenu-item ${location.pathname === '/shared' ? 'active' : ''}`}>
-            <a className='loc-sidemenu-item-content' onClick={handleNavigation('/shared')}>
+          <li className={`loc-sidemenu-item ${location.pathname === "/shared" ? "active" : ""}`}>
+            <a className='loc-sidemenu-item-content' onClick={handleNavigation("/shared")}>
               <svg xmlns='http://www.w3.org/2000/svg' width='24.871' height='27.558' viewBox='0 0 24.871 27.558'>
                 <path
                   id='s_share'
@@ -81,8 +84,8 @@ export const Layout: React.FC = () => {
               <div className='loc-sidemenu-item-name'>Shared</div>
             </a>
           </li>
-          <li className={`loc-sidemenu-item ${location.pathname === '/team' ? 'active' : ''}`}>
-            <a className='loc-sidemenu-item-content' onClick={handleNavigation('/team')}>
+          <li className={`loc-sidemenu-item ${location.pathname === "/team" ? "active" : ""}`}>
+            <a className='loc-sidemenu-item-content' onClick={handleNavigation("/team")}>
               <svg xmlns='http://www.w3.org/2000/svg' width='39.022' height='36.077' viewBox='0 0 39.022 36.077'>
                 <path
                   id='s_team'

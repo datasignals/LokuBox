@@ -1,9 +1,9 @@
-import classNames from 'classnames';
-import React, { useState } from 'react';
+import classNames from "classnames";
+import React, { useState } from "react";
 
-import { MenuChannels } from 'src/channels/menuChannels';
-import { useRendererListener } from 'src/ui/hooks';
-import { WindowState } from 'src/windowState';
+import { MenuChannels } from "src/channels/menuChannels";
+import { useRendererListener } from "src/ui/hooks";
+import { WindowState } from "src/windowState";
 
 interface ITitleBarProps {
   children: (props: WindowState) => React.ReactNode;
@@ -14,12 +14,12 @@ const handleDoubleClick = () => {
 };
 
 export default function Titlebar({ children }: ITitleBarProps) {
-  const [windowState, setWindowState] = useState<WindowState>('normal');
+  const [windowState, setWindowState] = useState<WindowState>("normal");
 
-  useRendererListener('window-state-changed', (_, windowState: WindowState) => setWindowState(windowState));
+  useRendererListener("window-state-changed", (_, windowState: WindowState) => setWindowState(windowState));
 
   return (
-    <div onDoubleClick={handleDoubleClick} className={classNames('window-titlebar')}>
+    <div onDoubleClick={handleDoubleClick} className={classNames("window-titlebar")}>
       {children(windowState)}
     </div>
   );

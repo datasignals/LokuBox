@@ -1,7 +1,7 @@
-import React, { type FC, useState } from 'react';
+import React, { type FC, useState } from "react";
 
-import 'react-toastify/dist/ReactToastify.css';
-import { ShareFileModal } from 'ui/components/ShareFileModal';
+import "react-toastify/dist/ReactToastify.css";
+import { ShareFileModal } from "ui/components/ShareFileModal";
 
 interface FileDescription {
   filename: string;
@@ -36,12 +36,12 @@ export const FileElement: FC<Props> = ({ currentPath, fileDescription, callbackD
   };
 
   return (
-    <div className='loc-card card-active' style={{ marginTop: '20px' }}>
+    <div className='loc-card card-active' style={{ marginTop: "20px" }}>
       <div className='loc-h-card-content-con'>
         <div className='loc-h-card-content'>
           <img src='assets/images/svg/ic_pdf.svg' alt='' />
           <div>
-            <h4 style={{ marginBottom: '5px' }}>{fileDescription.filename}</h4>
+            <h4 style={{ marginBottom: "5px" }}>{fileDescription.filename}</h4>
             <h5>{getDateTime(fileDescription.creationDate)}</h5>
           </div>
         </div>
@@ -57,22 +57,22 @@ export const FileElement: FC<Props> = ({ currentPath, fileDescription, callbackD
             />
             <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
               <li className='dropdown-item'>
-                <img style={{ width: '35px' }} src={'assets/images/svg/user_default.svg'} alt='user' />
+                <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />
                 <div>Jason Roy</div>
               </li>
               <li className='dropdown-item'>
-                <img style={{ width: '35px' }} src={'assets/images/svg/user_default.svg'} alt='user' />
+                <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />
                 <div>Jos Butler</div>
               </li>
               <li className='dropdown-item'>
-                <img style={{ width: '35px' }} src={'assets/images/svg/user_default.svg'} alt='user' />
+                <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />
                 <div>Ian Bell</div>
               </li>
             </ul>
           </div>
           <img
-            style={{ cursor: 'pointer' }}
-            src={'assets/images/svg/ic_share.svg'}
+            style={{ cursor: "pointer" }}
+            src={"assets/images/svg/ic_share.svg"}
             alt='more-options'
             data-bs-toggle='modal'
             data-bs-target='#shareModal'
@@ -81,8 +81,8 @@ export const FileElement: FC<Props> = ({ currentPath, fileDescription, callbackD
           <div className='dropdown'>
             <img
               className='dropdown-toggle'
-              style={{ width: '5px' }}
-              src={'assets/images/svg/ic_3_dots.svg'}
+              style={{ width: "5px" }}
+              src={"assets/images/svg/ic_3_dots.svg"}
               alt='more-options'
               id='dropdownMenuButton2'
               data-bs-toggle='dropdown'
