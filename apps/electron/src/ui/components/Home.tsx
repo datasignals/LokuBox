@@ -59,7 +59,7 @@ export const Home: FC = () => {
 
   useEffect(() => {
     fetchNfsContents();
-  }, [nfsPath]); //Hook to a path so that it will refresh file contents when path changes
+  }, [nfsPath, files, directories]); //Hook to a path so that it will refresh file contents when path changes
 
   const handleFileSelect = (file: FileDescription): void => {
     // Here you can handle the file selection, such as fetching its provenance
@@ -68,8 +68,6 @@ export const Home: FC = () => {
   };
 
   const handleDirectorySelect = (dirName: string): void => {
-    // navigate(`${location.pathname}/${dirName}`);
-    // navigate(`/home/${dirName}`);
     setNfsPath(dirName);
   };
 
@@ -158,20 +156,22 @@ export const Home: FC = () => {
     });
   };
 
+  const handleDeleteDirectory = (index: number) => {
+    setDirectories((prevState) => {
+      prevState.splice(index, 1);
+      return prevState;
+    });
+  };
+
   const allFilesElement = files
     .sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime())
     .map((file, index) => (
       <div key={file.filename} onClick={() => handleFileSelect(file)}>
-        <FileElement
-          key={file.filename}
-          currentPath={nfsPath}
-          fileDescription={file}
-          callbackDeleteFile={handleDeleteFile(index)}
-        />
+        <FileElement key={file.filename} fileDescription={file} callbackDeleteFile={handleDeleteFile(index)} />
       </div>
     ));
 
-  const allDirectoriesElement = directories.map((dirName) => (
+  const allDirectoriesElement = directories.map((dirName, index) => (
     <div key={dirName}>
       <DirectoryElement
         key={dirName}
@@ -179,6 +179,7 @@ export const Home: FC = () => {
         callbackEnterDirectory={() => {
           handleDirectorySelect(Path.join(nfsPath, dirName));
         }}
+        callbackDeleteDirectory={() => handleDeleteDirectory(index)}
       />
     </div>
   ));

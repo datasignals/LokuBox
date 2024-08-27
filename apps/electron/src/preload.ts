@@ -33,9 +33,11 @@ export const globals = {
     fs: {
       readDir: (dirPath: string): Promise<{ files: FileDescription[]; directories: string[] }> =>
         ipcRenderer.invoke("read-dir", dirPath),
+      readFile: (filePath: string): Promise<SimpleResponse> => ipcRenderer.invoke("read-file", filePath),
       createDir: (dirPath: string): Promise<SimpleResponse> => ipcRenderer.invoke("create-dir", dirPath),
-      createFile: (filePath: string, buffer: Uint8Array): Promise<SimpleResponse> =>
+      createFile: (filePath: string, buffer: ArrayBuffer): Promise<SimpleResponse> =>
         ipcRenderer.invoke("create-file", filePath, buffer),
+      deleteDirOrFile: (path: string): Promise<SimpleResponse> => ipcRenderer.invoke("remove-dir-file", path),
     },
 
     send(channel: string, ...args: any[]) {

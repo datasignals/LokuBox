@@ -1,6 +1,10 @@
+import Path from "path-browserify";
 import React, { type FC, useState } from "react";
 
 import "react-toastify/dist/ReactToastify.css";
+import { Bounce, toast } from "react-toastify";
+
+import { useGlobalContext } from "ui/components/context/GlobalContext";
 import { ShareFileModal } from "ui/components/ShareFileModal";
 
 interface FileDescription {
@@ -19,20 +23,46 @@ const getDateTime = (timestamp: number): string => {
 };
 
 interface Props {
-  currentPath: string;
   fileDescription: FileDescription;
   callbackDeleteFile: () => void;
 }
 
 //Simpler version of FileElement
-export const FileElement: FC<Props> = ({ currentPath, fileDescription, callbackDeleteFile }) => {
+export const FileElement: FC<Props> = ({ fileDescription, callbackDeleteFile }) => {
   const [selectFile, setSelectFile] = useState<FileToShare | null>(null);
+  const { nfsPath } = useGlobalContext();
+  const fullPath = Path.join(nfsPath, fileDescription.filename);
 
-  const handleDeleteFile = (filePath: string) => {
-    if (!window.confirm(`Are you sure you want to delete ${filePath}?`)) {
+  const handleDeleteFile = () => {
+    if (!window.confirm(`Are you sure you want to delete ${fullPath}?`)) {
       return;
     }
-    callbackDeleteFile(); //Inform parent
+
+    electron.ipcRenderer.fs.deleteDirOrFile(fullPath).then((result) => {
+      if (result.isSuccessful) {
+        callbackDeleteFile(); //Inform parent
+      }
+    });
+  };
+
+  const handleDownloadFile = () => {
+    electron.ipcRenderer.fs.readFile(fullPath).then((result) => {
+      console.log("hello: " + JSON.stringify(result, null, 2));
+      if (result.isSuccessful) {
+        console.log("success");
+        toast.success("File has been downloaded.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+          theme: "dark",
+          transition: Bounce,
+        });
+      }
+    });
   };
 
   return (
@@ -89,8 +119,11 @@ export const FileElement: FC<Props> = ({ currentPath, fileDescription, callbackD
               aria-expanded='false'
             />
             <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton2'>
-              <li className='dropdown-item' onClick={() => handleDeleteFile(fileDescription.filename)}>
+              <li className='dropdown-item' onClick={handleDeleteFile}>
                 Delete
+              </li>
+              <li className='dropdown-item' onClick={handleDownloadFile}>
+                Download
               </li>
             </ul>
           </div>

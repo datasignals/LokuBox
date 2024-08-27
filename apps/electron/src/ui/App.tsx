@@ -1,3 +1,4 @@
+import { Toast } from "bootstrap";
 import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -28,6 +29,7 @@ export default function App() {
   return (
     <WalletProvider>
       <GlobalProvider>
+        <ToastContainer />
         <Router>
           <Titlebar>
             {(windowState) => (

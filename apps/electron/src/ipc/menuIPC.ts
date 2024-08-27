@@ -1,11 +1,15 @@
-import { BrowserWindow, ipcMain, Menu, shell } from "electron";
+import { BrowserWindow, ipcMain, Menu, shell, dialog } from "electron";
 import * as fs from "node:fs";
 import path from "node:path";
 
 import { filterEventsSome } from "@polkadot/types/metadata/decorate";
 import { FileDescription } from "@repo/common/dist/Models";
+import { SimpleResponse } from "@repo/common/dist/SimpleResponse";
+import { toast } from "react-toastify";
 
 import { MenuChannels } from "src/channels/menuChannels";
+
+import success = toast.success;
 
 export const registerMenuIpc = (mainWindow: BrowserWindow) => {
   ipcMain.on(MenuChannels.EXECUTE_MENU_ITEM_BY_ID, (event, id) => {
@@ -108,18 +112,36 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
   );
   ipcMain.handle(
     MenuChannels.READ_FILE,
-    (_event: Electron.IpcMainInvokeEvent, filePath: string): string | undefined => {
+    async (_event: Electron.IpcMainInvokeEvent, filePath: string): Promise<SimpleResponse> => {
       const statResult = fs.statSync(filePath);
       if (statResult.isFile()) {
-        const contents: Buffer = fs.readFileSync(filePath);
-        return contents.toString("base64");
+        const { canceled, filePath: savePath } = await dialog.showSaveDialog(mainWindow, {
+          defaultPath: filePath,
+        });
+
+        if (canceled || !savePath) {
+          return {
+            isSuccessful: false,
+            message: "Save location choice cancelled",
+          };
+        }
+
+        // Copy the file to the selected path
+        fs.copyFileSync(filePath, savePath);
+        return {
+          isSuccessful: true,
+          message: "File downloaded successfully to: " + savePath,
+        };
       }
 
-      return undefined;
+      return {
+        isSuccessful: false,
+        message: "Not a file to download",
+      };
     },
   );
 
-  ipcMain.handle(MenuChannels.CREATE_DIR, (_event: Electron.IpcMainInvokeEvent, dirPath: string) => {
+  ipcMain.handle(MenuChannels.CREATE_DIR, (_event: Electron.IpcMainInvokeEvent, dirPath: string): SimpleResponse => {
     try {
       if (fs.existsSync(dirPath)) {
         return {
@@ -142,7 +164,7 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
   });
   ipcMain.handle(
     MenuChannels.CREATE_FILE,
-    (_event: Electron.IpcMainInvokeEvent, filePath: string, fileContent: Uint8Array) => {
+    (_event: Electron.IpcMainInvokeEvent, filePath: string, fileContent: ArrayBuffer): SimpleResponse => {
       try {
         if (fs.existsSync(filePath)) {
           return {
@@ -151,7 +173,7 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
           };
         }
 
-        fs.writeFileSync(filePath, fileContent);
+        fs.writeFileSync(filePath, Buffer.from(fileContent));
         return {
           isSuccessful: true,
           message: "File Created",
@@ -165,7 +187,7 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
     },
   );
 
-  ipcMain.handle(MenuChannels.REMOVE_DIR_FILE, (_event: Electron.IpcMainInvokeEvent, path: string) => {
+  ipcMain.handle(MenuChannels.REMOVE_DIR_FILE, (_event: Electron.IpcMainInvokeEvent, path: string): SimpleResponse => {
     try {
       const statResult = fs.statSync(path);
       const isDir = statResult.isDirectory();

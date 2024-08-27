@@ -46,13 +46,9 @@ export const UploadFileModal: FC<Props> = ({
 
     a.onload = (e) => {
       if (e.target) {
-        console.log("result?: " + e.target.result);
         const arrayBuffer = e.target.result as ArrayBuffer;
-        console.log("buffer?: " + arrayBuffer.byteLength);
-        const uint8Array = new Uint8Array(arrayBuffer);
-        console.log("anything: " + uint8Array.length);
         //TODO extra check
-        electron.ipcRenderer.fs.createFile(Path.join(currentPath, droppedFile.name), uint8Array).then((result) => {
+        electron.ipcRenderer.fs.createFile(Path.join(currentPath, droppedFile.name), arrayBuffer).then((result) => {
           if (result.isSuccessful) {
             handleCleanup();
             setModalVisible(false); // Close the modal
@@ -77,7 +73,7 @@ export const UploadFileModal: FC<Props> = ({
 
     console.log("here 2");
 
-    a.readAsText(droppedFile, "base64");
+    a.readAsArrayBuffer(droppedFile);
     toast.success("File is uploaded.", {
       position: "top-right",
       autoClose: 5000,
