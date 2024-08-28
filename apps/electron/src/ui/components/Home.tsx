@@ -1,4 +1,4 @@
-import Path, { dirname } from "path-browserify";
+import Path from "path-browserify";
 import React, { type ChangeEvent, type FC, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams, useResolvedPath } from "react-router-dom";
 import "../css/loc-h-content.css";
@@ -46,7 +46,7 @@ export const Home: FC = () => {
   // console.log("path: " + path);
   // console.log("nfsPath: " + path);
 
-  const { nfsPath, setNfsPath } = useGlobalContext();
+  const { nfsPath, setNfsPath, mountNfs, isNfsMounted, unmountNfs } = useGlobalContext();
 
   // const [nfsPath, setNfsPath] = useState(currentNfsPath);
 

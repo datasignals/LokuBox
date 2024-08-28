@@ -23,7 +23,6 @@ const onMenuEvent = (_: Electron.IpcRendererEvent, channel: string, ...args: any
 
 export default function App() {
   useRendererListener(MenuChannels.MENU_EVENT, onMenuEvent);
-
   useThemeListener();
 
   return (

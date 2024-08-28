@@ -1,3 +1,4 @@
+import { exec } from "child_process";
 import { BrowserWindow, ipcMain, Menu, shell, dialog } from "electron";
 import * as fs from "node:fs";
 import path from "node:path";
@@ -79,6 +80,11 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
   });
 
   //FS Handling
+  ipcMain.handle(MenuChannels.TEST, (_event: Electron.IpcMainInvokeEvent, mountPath: string): string => {
+    console.log("test handle MILOSZ: " + mountPath);
+    return "hello world";
+  });
+
   ipcMain.handle(
     MenuChannels.READ_DIR,
     (_event: Electron.IpcMainInvokeEvent, dirPath: string): { files: FileDescription[]; directories: string[] } => {
@@ -204,5 +210,99 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
         message: "Not a File or Dir",
       };
     }
+  });
+
+  ipcMain.handle(
+    MenuChannels.MOUNT_NFS,
+    async (_event: Electron.IpcMainInvokeEvent, address: string, mountPath: string): Promise<SimpleResponse> => {
+      // fs.lockular.in:/user_key=shahrukh
+      // /Users/og_pixel/nfs
+
+      const command = `osascript -e 'do shell script "sudo mount_nfs -o nolocks,vers=3,tcp,rsize=131072,actimeo=120,port=2049,mountport=2049 ${address} ${mountPath}" with administrator privileges'`;
+
+      return execPromise(command)
+        .then(() => {
+          return {
+            isSuccessful: true,
+            message: "Mounted Successfully",
+          };
+        })
+        .catch((error: unknown) => {
+          return {
+            isSuccessful: false,
+            message: `Mounted Unsuccessfully: ${error.toString()}`,
+          };
+        });
+    },
+  );
+
+  ipcMain.handle(
+    MenuChannels.UNMOUNT_NFS,
+    async (_event: Electron.IpcMainInvokeEvent, mountPath: string): Promise<SimpleResponse> => {
+      console.log("Unmount nfs");
+      const command = `osascript -e 'do shell script "sudo umount ${mountPath}" with administrator privileges'`;
+
+      try {
+        const result = await execPromise(command);
+        console.log("result: " + result.toString());
+        return result.includes(mountPath)
+          ? {
+              isSuccessful: true,
+              message: "Unmount Successful",
+            }
+          : {
+              isSuccessful: false,
+              message: "Nothing to Unmount",
+            };
+      } catch (error) {
+        return {
+          isSuccessful: false,
+          message: error.toString(),
+        };
+      }
+    },
+  );
+
+  ipcMain.handle(
+    MenuChannels.IS_NFS_MOUNTED,
+    async (_event: Electron.IpcMainInvokeEvent, mountPath: string): Promise<SimpleResponse> => {
+      try {
+        const result = await execPromise("mount");
+        return result.includes(mountPath)
+          ? {
+              isSuccessful: true,
+              message: "Already Mounted",
+            }
+          : {
+              isSuccessful: false,
+              message: "Not Mounted",
+            };
+      } catch (error) {
+        return {
+          isSuccessful: false,
+          message: error.toString(),
+        };
+      }
+    },
+  );
+};
+
+const execPromise = (command: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      console.log("execing");
+      if (error) {
+        console.log(`execing error ${error.message}`);
+        reject(`Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.log("execing stderr");
+        reject(`Stderr: ${stderr}`);
+        return;
+      }
+      console.log("execing resolve");
+      resolve(stdout);
+    });
   });
 };

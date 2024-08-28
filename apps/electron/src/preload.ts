@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import * as fs from "node:fs";
 
 import { FileDescription } from "@repo/common/dist/Models";
 import { SimpleResponse } from "@repo/common/dist/SimpleResponse";
@@ -38,6 +37,11 @@ export const globals = {
       createFile: (filePath: string, buffer: ArrayBuffer): Promise<SimpleResponse> =>
         ipcRenderer.invoke("create-file", filePath, buffer),
       deleteDirOrFile: (path: string): Promise<SimpleResponse> => ipcRenderer.invoke("remove-dir-file", path),
+      mountNfs: (config: { address: string; mountPath: string }): Promise<SimpleResponse> =>
+        ipcRenderer.invoke("mount-nfs", config.address, config.mountPath),
+      unmountNfs: (mountPath: string): Promise<SimpleResponse> => ipcRenderer.invoke("unmount-nfs", mountPath),
+      isNfsMounted: (mountPath: string): Promise<SimpleResponse> => ipcRenderer.invoke("is-nfs-mounted", mountPath),
+      test: (): Promise<string> => ipcRenderer.invoke("hello-world", "mount path"),
     },
 
     send(channel: string, ...args: any[]) {

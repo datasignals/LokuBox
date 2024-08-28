@@ -21,4 +21,10 @@ export enum MenuChannels {
   CREATE_FILE = "create-file",
 
   REMOVE_DIR_FILE = "remove-dir-file",
+
+  MOUNT_NFS = "mount-nfs",
+  UNMOUNT_NFS = "unmount-nfs",
+  IS_NFS_MOUNTED = "is-nfs-mounted",
+
+  TEST = "hello-world",
 }

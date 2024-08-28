@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import "../css/loc-layout.css";
 import "../css/main.css";
+import { useGlobalContext } from "ui/components/context/GlobalContext";
 // import { useWallet } from './context/WalletContext';
 // import "/images/svg/user_default.svg"
 export const Layout: React.FC = () => {
@@ -11,12 +12,18 @@ export const Layout: React.FC = () => {
   // const { currentAccount, setCurrentAccount } = useWallet();
   const currentAccount = "DEBUG LOGOUT";
 
+  const { isNfsMounted, nfsPath, unmountNfs, mountNfs } = useGlobalContext();
+
+  const [isMounted, setIsMounted] = useState(false);
+
   const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
     navigate(path);
   };
 
-  useEffect(() => {});
+  useEffect(() => {
+    isNfsMounted().then((e) => setIsMounted(e));
+  }, []);
 
   return (
     <div>
@@ -29,8 +36,15 @@ export const Layout: React.FC = () => {
         </div>
         <ul className='loc-nav-menu' style={{ display: "flex", alignItems: "center", padding: "0" }}>
           <li style={{ display: "flex", alignItems: "center" }}>
+            {isMounted ? <h1>Drive Mounted at: {nfsPath}</h1> : <h1>Drive NOT Mounted</h1>}
+            <button type='button' onClick={unmountNfs}>
+              debug unmount
+            </button>
+            <button type='button' onClick={mountNfs}>
+              debug mount
+            </button>
             {currentAccount && (
-              <button type="button" onClick={() => navigate("/")}>
+              <button type='button' onClick={() => navigate("/")}>
                 <span style={{ margin: "10px", whiteSpace: "nowrap" }}>
                   {currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}
                 </span>

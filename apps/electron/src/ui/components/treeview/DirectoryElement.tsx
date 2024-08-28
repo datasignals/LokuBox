@@ -14,7 +14,6 @@ export const DirectoryElement: FC<Props> = ({ dirName, callbackEnterDirectory, c
 
   const handleDirectoryDelete = () => {
     const fullPath = Path.join(nfsPath, dirName);
-
     if (!window.confirm(`Are you sure you want to delete ${fullPath}?`)) {
       return;
     }

@@ -1,3 +1,4 @@
+import { exec } from "child_process";
 import { app, BrowserWindow, Menu, session } from "electron";
 import path from "path";
 
@@ -43,6 +44,55 @@ export function createAppWindow(): BrowserWindow {
       preload: path.join(__dirname, "preload.js"),
     },
   };
+
+  // const win = new BrowserWindow({
+  //   width: 800,
+  //   height: 600,
+  //   webPreferences: {
+  //     nodeIntegration: false,
+  //     contextIsolation: true,
+  //     preload: path.join(__dirname, "preload.js"),
+  //   },
+  // });
+  // const chromePath = "/Users/Applications/Google Chrome";
+  // const extensionPath = "/Users/og_pixel/Desktop/polkadot";
+  //
+  // win.loadURL(`https://ddg.gg`);
+  // // Once the page is loaded, execute JS to interact with Polkadot.js
+  // win.webContents.on("did-finish-load", () => {
+  //   win.webContents
+  //     .executeJavaScript(
+  //       `
+  //       const browser = require('puppeteer').launch({
+  //           executablePath: '${chromePath}',
+  //           args: ['--load-extension=${extensionPath}']
+  //       });
+  //
+  //       browser.newPage().then(page => {
+  //           page.goto('https://google.com');
+  //       });
+  //
+  //       (async () => {
+  //           console.log("hello world");
+  //           const { web3Enable, web3Accounts } = window.injectedWeb3;
+  //
+  //           // Enable the extension
+  //           const extensions = await web3Enable('Your App Name');
+  //           if (extensions.length === 0) {
+  //               return; // no extension found
+  //           }
+  //
+  //           // Retrieve accounts
+  //           const accounts = await web3Accounts();
+  //           return accounts;
+  //       })()
+  //   `,
+  //     )
+  //     .then((accounts) => {
+  //       console.log("Accounts:", accounts);
+  //       // Send the accounts back to Electron or handle them in your Dapp
+  //     });
+  // });
 
   if (process.platform === "darwin") {
     windowOptions.titleBarStyle = "hidden";
