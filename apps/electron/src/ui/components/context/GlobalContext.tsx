@@ -34,6 +34,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   //TODO should be a config option
   const [nfsPath, setNfsPath] = useState("/Users/og_pixel/nfs");
+  // const [nfsPath, setNfsPath] = useState("/Volumes/user_key=shahrukh");
   const [selectedPath, _setSelectedPath] = useState(nfsPath);
   const [isNfsMounted, setIsNfsMounted] = useState<boolean | undefined>(undefined); //TODO not desirable approach
 

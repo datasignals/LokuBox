@@ -214,7 +214,7 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
       // /Users/og_pixel/nfs
 
       const command = `osascript -e 'do shell script "sudo mount_nfs -o nolocks,vers=3,tcp,rsize=131072,actimeo=120,port=2049,mountport=2049 ${address} ${mountPath}" with administrator privileges'`;
-      const command2 = `osascript -e 'tell application "Finder" to open location "nfs://server_ip_or_hostname/path_to_nfs_share"'`;
+      // const command2 = `osascript -e 'tell application "Finder" to open location "nfs://fs.lockular.in:/:/user_key=shahrukh"'`;
 
       return execPromise(command)
         .then(() => {
@@ -237,6 +237,7 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
     async (_event: Electron.IpcMainInvokeEvent, mountPath: string): Promise<SimpleResponse> => {
       console.log("Unmount nfs");
       const command = `osascript -e 'do shell script "sudo umount -f ${mountPath}" with administrator privileges'`;
+      // const command2 = `osascript -e 'do shell script "sudo umount -f /Volumes/user_key=shahrukh" with administrator privileges'`;
 
       try {
         const result = await execPromise(command);
@@ -268,6 +269,7 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
     async (_event: Electron.IpcMainInvokeEvent, mountPath: string): Promise<SimpleResponse> => {
       try {
         const result = await execPromise("mount");
+        // return result.includes("/Volumes/user_key=shahrukh")
         return result.includes(mountPath)
           ? {
               isSuccessful: true,

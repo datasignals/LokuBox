@@ -1,4 +1,5 @@
 // import { type InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
 // Define types for the context state
@@ -26,7 +27,7 @@ interface WalletProviderProps {
 // Create a Provider component
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [isWalletConnected, setWalletConnected] = useState<boolean>(false);
-  const [walletData, setWalletData] = useState<any[]>([]); // Replace `any` with the appropriate type
+  const [walletData, setWalletData] = useState<InjectedAccountWithMeta[]>([]);
   const [currentAccount, setCurrentAccount] = useState(String);
   const [currentBalance, setCurrentBalance] = useState<number>(0);
   const [name, setName] = useState<string>("");
@@ -35,7 +36,13 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   //   localStorage.setItem('currentAccount', JSON.stringify(currentAccount));
   // }, [currentAccount]);
 
-  return (
+  electron.ipcRenderer.on("wallet-connected", (event, data) => {
+    console.log("Wallet connected:", JSON.stringify(data, null, 2));
+    console.log("Wallet connected 2:", data.toString());
+    setCurrentAccount(data.toString());
+  });
+
+  return currentAccount ? (
     <WalletContext.Provider
       value={{
         isWalletConnected,
@@ -52,6 +59,11 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     >
       {children}
     </WalletContext.Provider>
+  ) : (
+    <p>
+      Please login first, go to
+      <a href={"http://localhost:3000"}>http://localhost:3000</a>
+    </p>
   );
 };
 

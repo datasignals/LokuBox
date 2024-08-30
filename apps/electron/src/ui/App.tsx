@@ -27,11 +27,6 @@ export default function App() {
   useRendererListener(MenuChannels.MENU_EVENT, onMenuEvent);
   useThemeListener();
 
-  electron.ipcRenderer.on("wallet-connected", (event, data) => {
-    console.log("Wallet connected:", data);
-    // Handle the connected wallet data (e.g., save it, display it, etc.)
-  });
-
   return (
     <WalletProvider>
       <GlobalProvider>

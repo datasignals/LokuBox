@@ -6,11 +6,12 @@ import "../css/main.css";
 
 import { useNavigate } from "react-router-dom";
 
+import { useWallet } from "ui/components/context/WalletContext";
+
 import { WalletList } from "../Wallets";
 
 import { web3Accounts, web3Enable, web3FromSource } from "@polkadot/extension-dapp";
 
-import { shell } from "electron";
 // import {useWallet} from '../context/WalletContext';
 
 export const Login: FC = () => {
@@ -37,15 +38,17 @@ export const Login: FC = () => {
     return { account: firstAccount, injector };
   }
 
+  const a = useWallet();
+
   useEffect(() => {
-    connectToWallet()
-      .then(({ account, injector }) => {
-        console.log("Connected Account:", account);
-        // You can now use the account and injector
-      })
-      .catch((error) => {
-        console.error("Error connecting to wallet:", error);
-      });
+    // connectToWallet()
+    //   .then(({ account, injector }) => {
+    //     console.log("Connected Account:", account);
+    //     // You can now use the account and injector
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error connecting to wallet:", error);
+    //   });
   }, []);
 
   const navigate = useNavigate();
