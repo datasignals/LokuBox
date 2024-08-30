@@ -1,15 +1,53 @@
-import React, { type FC } from "react";
+import React, { type FC, useEffect } from "react";
 import "../css/loc-h-content.css";
 import "../css/loc-layout.css";
 import "../css/loc-login.css";
 import "../css/main.css";
 
-import { WalletList } from "../Wallets";
 import { useNavigate } from "react-router-dom";
+
+import { WalletList } from "../Wallets";
+
+import { web3Accounts, web3Enable, web3FromSource } from "@polkadot/extension-dapp";
+
+import { shell } from "electron";
 // import {useWallet} from '../context/WalletContext';
 
 export const Login: FC = () => {
   // const {setCurrentAccount, setWalletConnected, setWalletData} = useWallet();
+
+  async function connectToWallet() {
+    // Request extension to enable the app
+    const extensions = await web3Enable("My Electron App");
+    if (extensions.length === 0) {
+      console.error("No extension installed, or user did not accept the authorization");
+      return;
+    }
+
+    // Retrieve all accounts from the extension
+    const allAccounts = await web3Accounts();
+    console.log("Accounts:", allAccounts);
+
+    // Get the first account (as an example)
+    const firstAccount = allAccounts[0];
+
+    // Optionally, get the injector for signing transactions or making other calls
+    const injector = await web3FromSource(firstAccount.meta.source);
+
+    return { account: firstAccount, injector };
+  }
+
+  useEffect(() => {
+    connectToWallet()
+      .then(({ account, injector }) => {
+        console.log("Connected Account:", account);
+        // You can now use the account and injector
+      })
+      .catch((error) => {
+        console.error("Error connecting to wallet:", error);
+      });
+  }, []);
+
   const navigate = useNavigate();
 
   return (

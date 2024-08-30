@@ -1,18 +1,16 @@
 import { SimpleResponse } from "@repo/common/dist/SimpleResponse";
-import axios, { type AxiosResponse } from "axios";
-import Path from "path-browserify";
 import React, { createContext, type ReactNode, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-// import {RouteNames} from "@repo/common/RouteNames";
 
 interface GlobalContextType {
-  // routeNames: RouteNames;
   provenanceAddress: string;
   nfsPath: string;
+  selectedPath: string;
+  setSelectedPath: (path: string) => void;
   setNfsPath: (path: string) => void;
   nfsAddress: string;
-  isNfsMounted: () => Promise<boolean>;
+  isNfsMounted: boolean;
+  askMountOnce: boolean;
+  setAskMountOnce: (_: boolean) => void;
   mountNfs: () => Promise<SimpleResponse>;
   unmountNfs: () => Promise<SimpleResponse>;
 }
@@ -31,66 +29,83 @@ interface Props {
 }
 
 export const GlobalProvider: React.FC<Props> = ({ children }) => {
-  // const [
-  //     routeNames,
-  //     setRouteNames
-  //     //TODO this will most likely be a hook
-  // ] = useState<RouteNames | undefined>(undefined);
-
   //TODO this should be one class inside of route names
   const [provenanceAddress, setProvenanceAddress] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    // const fetchConfig = async (): Promise<void> => {
-    //   const config: AxiosResponse<AppConfig> = await axios.get("/config.json");
-    //   // setRouteNames(new RouteNames(
-    //   //     config.data.backendAddress,
-    //   // ));
-    //   // setProvenanceAddress(config.data.provenace.server);
-    // };
-    // void fetchConfig();
+  //TODO should be a config option
+  const [nfsPath, setNfsPath] = useState("/Users/og_pixel/nfs");
+  const [selectedPath, _setSelectedPath] = useState(nfsPath);
+  const [isNfsMounted, setIsNfsMounted] = useState<boolean | undefined>(undefined); //TODO not desirable approach
 
-    isNfsMounted().then((result) => {
-      console.log("is nfs mounted? " + result);
-      if (result === false) {
-        console.log("calling mountNfs");
-        mountNfs();
+  const [nfsAddress, setNfsAddress] = useState("fs.lockular.in:/user_key=shahrukh");
+  const [askMountOnce, setAskMountOnce] = useState(false);
+
+  //This will prevent user from leaving mounted drive
+  const setSelectedPath = (path: string) => {
+    if (path.startsWith(nfsPath)) {
+      _setSelectedPath(path);
+    }
+  };
+
+  const mountNfs = async (): Promise<SimpleResponse> => {
+    if (isNfsMounted === false) {
+      const result = await electron.ipcRenderer.fs.mountNfs({ address: nfsAddress, mountPath: nfsPath });
+
+      if (result.isSuccessful) {
+        setIsNfsMounted(true);
       }
+
+      return result;
+    }
+    return {
+      isSuccessful: false,
+      message: "Already Mounted",
+    };
+  };
+
+  const unmountNfs = async (): Promise<SimpleResponse> => {
+    if (isNfsMounted === true) {
+      const result = await electron.ipcRenderer.fs.unmountNfs(nfsPath);
+
+      if (result.isSuccessful) {
+        setIsNfsMounted(false);
+        //Don't ask if user just explicitly unmounted
+        setAskMountOnce(true);
+      }
+
+      return result;
+    }
+    return {
+      isSuccessful: false,
+      message: "Already Unmounted",
+    };
+  };
+
+  useEffect(() => {
+    electron.ipcRenderer.fs.isNfsMounted(nfsPath).then((e) => {
+      setIsNfsMounted(e.isSuccessful);
     });
   }, []);
 
-  //TODO should be a config option
-  const [nfsPath, setNfsPath] = useState("/Users/og_pixel/nfs");
-  const [nfsAddress, setNfsAddress] = useState("fs.lockular.in:/user_key=shahrukh");
-
-  const isNfsMounted = (): Promise<boolean> => {
-    return electron.ipcRenderer.fs
-      .isNfsMounted(nfsPath)
-      .then((res) => res.isSuccessful)
-      .catch(() => false);
-  };
-
-  const mountNfs = (): Promise<SimpleResponse> => {
-    return electron.ipcRenderer.fs.mountNfs({ address: nfsAddress, mountPath: nfsPath });
-  };
-
-  const unmountNfs = (): Promise<SimpleResponse> => {
-    return electron.ipcRenderer.fs.unmountNfs(nfsPath);
-    // return electron.ipcRenderer.fs.isNfsMounted(nfsPath);
-  };
-
   return (
     <GlobalContext.Provider
-      value={{ nfsPath, setNfsPath, nfsAddress, provenanceAddress, isNfsMounted, mountNfs, unmountNfs }}
+      value={{
+        nfsPath,
+        setNfsPath,
+        selectedPath,
+        setSelectedPath,
+        askMountOnce,
+        setAskMountOnce,
+        nfsAddress,
+        provenanceAddress,
+        isNfsMounted,
+        mountNfs,
+        unmountNfs,
+      }}
     >
       {children}
     </GlobalContext.Provider>
   );
-  // return /*routeNames &&*/ provenanceAddress ? (
-  //   <GlobalContext.Provider value={{ /*routeNames,*/ provenanceAddress }}>{children}</GlobalContext.Provider>
-  // ) : (
-  //   <h1>Loading</h1>
-  // ); //TODO some nice spinning gif?
 };
 
 export const useGlobalContext = (): GlobalContextType => {

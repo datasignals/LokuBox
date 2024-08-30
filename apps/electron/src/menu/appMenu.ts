@@ -68,6 +68,21 @@ const MenuItems: Electron.MenuItemConstructorOptions[] = [
       },
     ],
   },
+  {
+    label: "NFS Drive",
+    submenu: [
+      {
+        id: MenuChannels.MOUNT_NFS,
+        label: "Mount",
+        click: emitEvent(MenuChannels.MOUNT_NFS, "flaviodelgrosso"),
+      },
+      {
+        id: MenuChannels.UNMOUNT_NFS,
+        label: "Unmount",
+        click: emitEvent(MenuChannels.UNMOUNT_NFS, "flaviodelgrosso"),
+      },
+    ],
+  },
 ];
 
 export default MenuItems;

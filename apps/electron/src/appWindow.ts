@@ -1,9 +1,13 @@
 import { exec } from "child_process";
-import { app, BrowserWindow, Menu, session } from "electron";
+import { app, BrowserWindow, Menu, protocol, session, shell } from "electron";
+import http from "http";
 import path from "path";
 
+import bodyParser from "body-parser";
+import Cors from "cors";
 import { ElectronChromeExtensions } from "electron-chrome-extensions";
 import windowStateKeeper from "electron-window-state";
+import express from "express";
 
 import { registerMenuIpc } from "src/ipc/menuIPC";
 import appMenu from "src/menu/appMenu";
@@ -98,6 +102,7 @@ export function createAppWindow(): BrowserWindow {
     windowOptions.titleBarStyle = "hidden";
   }
 
+  // shell.openExternal("http://localhost:3000/connect-wallet");
   // Create new window instance
   appWindow = new BrowserWindow(windowOptions);
 
@@ -126,6 +131,26 @@ export function createAppWindow(): BrowserWindow {
   appWindow.on("close", () => {
     appWindow = null;
     app.quit();
+  });
+
+  const expressApp = express();
+  expressApp.use(bodyParser.json());
+  expressApp.use(Cors({ credentials: true }));
+  // Endpoint to receive wallet data
+  expressApp.get("/wallet-data", (req, res) => {
+    const { address, name } = req.query;
+    console.log("Received wallet data:", address, name);
+
+    // Send wallet data to renderer process
+    appWindow.webContents.send("wallet-connected", { address, name });
+
+    res.send("Wallet data received");
+  });
+
+  const server = http.createServer(expressApp);
+
+  server.listen(3001, () => {
+    console.log("Server running on http://localhost:3001");
   });
 
   return appWindow;

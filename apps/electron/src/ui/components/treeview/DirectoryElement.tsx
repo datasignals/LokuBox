@@ -10,10 +10,10 @@ interface Props {
 }
 
 export const DirectoryElement: FC<Props> = ({ dirName, callbackEnterDirectory, callbackDeleteDirectory }) => {
-  const { nfsPath } = useGlobalContext();
+  const { selectedPath } = useGlobalContext();
+  const fullPath = Path.join(selectedPath, dirName);
 
   const handleDirectoryDelete = () => {
-    const fullPath = Path.join(nfsPath, dirName);
     if (!window.confirm(`Are you sure you want to delete ${fullPath}?`)) {
       return;
     }
@@ -23,8 +23,6 @@ export const DirectoryElement: FC<Props> = ({ dirName, callbackEnterDirectory, c
         callbackDeleteDirectory();
       }
     });
-
-    console.log("delete: " + Path.join(nfsPath, dirName));
   };
 
   return (
@@ -59,7 +57,7 @@ export const DirectoryElement: FC<Props> = ({ dirName, callbackEnterDirectory, c
             <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
               <li className='dropdown-item'>
                 <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />
-                <div>Jason Roy</div>
+                <div onClick={() => electron.ipcRenderer.fs.shareFile(fullPath, "jason")}>Jason Roy (Share test)</div>
               </li>
               <li className='dropdown-item'>
                 <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />

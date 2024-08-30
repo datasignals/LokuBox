@@ -1,35 +1,26 @@
 import Path from "path-browserify";
-import React, { type ChangeEvent, type FC, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams, useResolvedPath } from "react-router-dom";
+import React, { type FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "../css/loc-h-content.css";
 import "../css/loc-layout.css";
 import "../css/loc-login.css";
 import "../css/main.css";
 import "react-toastify/dist/ReactToastify.css";
-
-// import {type FileDescription} from "@repo/common/Models";
-interface FileDescription {
-  filename: string;
-  creationDate: number;
-}
-
-import { MenuChannels } from "src/channels/menuChannels";
 import { useGlobalContext } from "ui/components/context/GlobalContext";
-import { useWallet } from "ui/components/context/WalletContext";
 import { CreateDirectoryModal } from "ui/components/CreateDirectoryModal";
-// import { Layout } from 'ui/components/Layout';
 import { Layout } from "ui/components/Layout";
 import { FileElement } from "ui/components/treeview/FileElement";
 import { UploadFileModal } from "ui/components/UploadFileModal";
 
 import { DirectoryElement } from "./treeview/DirectoryElement";
 
-export const Home: FC = () => {
-  const navigate = useNavigate();
-  // const { currentAccount, setCurrentAccount, isWalletConnected } = useWallet();
-  const setCurrentAccount = (_s: string): any => null;
-  const isWalletConntect = true;
+interface FileDescription {
+  filename: string;
+  creationDate: number;
+}
 
+export const Home: FC = () => {
   const [files, setFiles] = useState<FileDescription[]>([]);
   const [directories, setDirectories] = useState<string[]>([]);
   const [filesselected, setFilesselected] = useState<FileDescription | null>(null);
@@ -38,28 +29,38 @@ export const Home: FC = () => {
   const [uploadFileModalVisible, setUploadFileModalVisible] = useState(false);
   const [createDirectoryModalVisible, setCreateDirectoryModalVisible] = useState(false);
 
-  // const { "*": splat } = useParams<{ "*": string }>();
-
-  // const path = splat ? `/${splat}` : "/";
-  // const nfsPath = "/tmp/nfs" + path;
-
-  // console.log("path: " + path);
-  // console.log("nfsPath: " + path);
-
-  const { nfsPath, setNfsPath, mountNfs, isNfsMounted, unmountNfs } = useGlobalContext();
-
-  // const [nfsPath, setNfsPath] = useState(currentNfsPath);
+  const { nfsPath, selectedPath, setSelectedPath, mountNfs, isNfsMounted, askMountOnce, setAskMountOnce } =
+    useGlobalContext();
 
   const fetchNfsContents = (): void => {
-    electron.ipcRenderer.fs.readDir(nfsPath).then((contents) => {
+    electron.ipcRenderer.fs.readDir(selectedPath).then((contents) => {
       setFiles(contents.files);
       setDirectories(contents.directories);
     });
   };
 
   useEffect(() => {
-    fetchNfsContents();
-  }, [nfsPath, files, directories]); //Hook to a path so that it will refresh file contents when path changes
+    // if (localStorage.getItem("currentAccount")) {
+    //   const add = localStorage.getItem("currentAccount");
+    //   if (add !== null) {
+    //     setCurrentAccount(add);
+    //     localStorage.setItem("currentAccount", add);
+    //   }
+    //   console.log("add", localStorage.getItem("currentAccount"));
+    // }
+
+    if (isNfsMounted) {
+      fetchNfsContents();
+    } else if (isNfsMounted === false) {
+      if (!askMountOnce && confirm(`Would you like to Mount NFS at: ${nfsPath}`)) {
+        mountNfs();
+      } else {
+        setAskMountOnce(true);
+        setFiles([]);
+        setDirectories([]);
+      }
+    }
+  }, [selectedPath, nfsPath, isNfsMounted /*, files, directories*/]); //Hook to a path so that it will refresh file contents when path changes
 
   const handleFileSelect = (file: FileDescription): void => {
     // Here you can handle the file selection, such as fetching its provenance
@@ -68,7 +69,8 @@ export const Home: FC = () => {
   };
 
   const handleDirectorySelect = (dirName: string): void => {
-    setNfsPath(dirName);
+    // setNfsPath(dirName);
+    setSelectedPath(dirName);
   };
 
   // const fetchProvenance = async (filename: string) => {
@@ -124,42 +126,25 @@ export const Home: FC = () => {
   };
 
   const handleGoDirUp = (): void => {
-    if (nfsPath === "/") {
+    if (selectedPath === "/") {
       return;
     }
 
-    setNfsPath(Path.dirname(nfsPath));
-
-    // const trimmedPath = path.replace(/\/$/, "");
-    // const lastSlashIndex = trimmedPath.lastIndexOf("/");
-    // const slicedPath = trimmedPath.substring(0, lastSlashIndex);
-    //
-    // navigate(routePath + slicedPath);
+    setSelectedPath(Path.dirname(selectedPath));
   };
-
-  useEffect(() => {
-    // console.log('isWalletConnected', isWalletConnected);
-    if (localStorage.getItem("currentAccount")) {
-      const add = localStorage.getItem("currentAccount");
-      if (add !== null) {
-        setCurrentAccount(add);
-        localStorage.setItem("currentAccount", add);
-      }
-      console.log("add", localStorage.getItem("currentAccount"));
-    }
-  });
 
   const handleDeleteFile = (index: number) => () => {
     setFiles((prevState) => {
-      prevState.splice(index, 1);
-      return prevState;
+      return prevState.filter((_, i) => i !== index);
     });
   };
 
   const handleDeleteDirectory = (index: number) => {
+    console.log("delete dir");
     setDirectories((prevState) => {
-      prevState.splice(index, 1);
-      return prevState;
+      const result = prevState.filter((_, i) => i !== index);
+      console.log("result delete: " + JSON.stringify(result, null, 2));
+      return result;
     });
   };
 
@@ -174,10 +159,10 @@ export const Home: FC = () => {
   const allDirectoriesElement = directories.map((dirName, index) => (
     <div key={dirName}>
       <DirectoryElement
-        key={dirName}
+        key={dirName + index}
         dirName={dirName}
         callbackEnterDirectory={() => {
-          handleDirectorySelect(Path.join(nfsPath, dirName));
+          handleDirectorySelect(Path.join(selectedPath, dirName));
         }}
         callbackDeleteDirectory={() => handleDeleteDirectory(index)}
       />
@@ -193,9 +178,9 @@ export const Home: FC = () => {
             <div className='col-12'>
               <div className='loc-card loc-h'>
                 <div className='position-relative' style={{ width: "350px" }}>
-                  <p>Current Path: {nfsPath}</p>
+                  <p>Current Path: {selectedPath}</p>
                   <input style={{ width: "350px" }} type='text' className='loc-form-control' placeholder='Search' />
-                  {nfsPath !== "/" ? (
+                  {selectedPath !== nfsPath ? (
                     <button type='button' onClick={handleGoDirUp}>
                       DIR UP
                     </button>
@@ -237,7 +222,7 @@ export const Home: FC = () => {
         </div>
       </div>
       <UploadFileModal
-        currentPath={nfsPath}
+        currentPath={selectedPath}
         errors={errors}
         setErrors={setErrors}
         modalVisible={uploadFileModalVisible}
@@ -246,7 +231,7 @@ export const Home: FC = () => {
       />
 
       <CreateDirectoryModal
-        currentPath={nfsPath}
+        currentPath={selectedPath}
         errors={errors}
         setErrors={setErrors}
         modalVisible={createDirectoryModalVisible}

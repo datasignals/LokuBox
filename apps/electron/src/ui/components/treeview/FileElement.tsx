@@ -30,8 +30,8 @@ interface Props {
 //Simpler version of FileElement
 export const FileElement: FC<Props> = ({ fileDescription, callbackDeleteFile }) => {
   const [selectFile, setSelectFile] = useState<FileToShare | null>(null);
-  const { nfsPath } = useGlobalContext();
-  const fullPath = Path.join(nfsPath, fileDescription.filename);
+  const { selectedPath } = useGlobalContext();
+  const fullPath = Path.join(selectedPath, fileDescription.filename);
 
   const handleDeleteFile = () => {
     if (!window.confirm(`Are you sure you want to delete ${fullPath}?`)) {
@@ -88,7 +88,7 @@ export const FileElement: FC<Props> = ({ fileDescription, callbackDeleteFile }) 
             <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
               <li className='dropdown-item'>
                 <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />
-                <div>Jason Roy</div>
+                <div onClick={() => electron.ipcRenderer.fs.shareFile(fullPath, "jason")}>Jason Roy (Share Test)</div>
               </li>
               <li className='dropdown-item'>
                 <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />

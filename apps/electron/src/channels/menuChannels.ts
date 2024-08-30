@@ -26,5 +26,5 @@ export enum MenuChannels {
   UNMOUNT_NFS = "unmount-nfs",
   IS_NFS_MOUNTED = "is-nfs-mounted",
 
-  TEST = "hello-world",
+  SHARE_FILE = "share-file",
 }

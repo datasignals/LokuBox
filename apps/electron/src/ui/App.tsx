@@ -1,3 +1,5 @@
+import { ipcRenderer } from "electron";
+
 import { Toast } from "bootstrap";
 import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
@@ -24,6 +26,11 @@ const onMenuEvent = (_: Electron.IpcRendererEvent, channel: string, ...args: any
 export default function App() {
   useRendererListener(MenuChannels.MENU_EVENT, onMenuEvent);
   useThemeListener();
+
+  electron.ipcRenderer.on("wallet-connected", (event, data) => {
+    console.log("Wallet connected:", data);
+    // Handle the connected wallet data (e.g., save it, display it, etc.)
+  });
 
   return (
     <WalletProvider>

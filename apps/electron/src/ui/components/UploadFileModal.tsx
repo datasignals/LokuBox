@@ -71,8 +71,6 @@ export const UploadFileModal: FC<Props> = ({
     //   creationDate: new Date().getTime(), //TODO this is sort of fake, we create a date that might be different to what acually backend has made
     // }); //Inform parent of change
 
-    console.log("here 2");
-
     a.readAsArrayBuffer(droppedFile);
     toast.success("File is uploaded.", {
       position: "top-right",

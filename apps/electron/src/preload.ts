@@ -41,7 +41,8 @@ export const globals = {
         ipcRenderer.invoke("mount-nfs", config.address, config.mountPath),
       unmountNfs: (mountPath: string): Promise<SimpleResponse> => ipcRenderer.invoke("unmount-nfs", mountPath),
       isNfsMounted: (mountPath: string): Promise<SimpleResponse> => ipcRenderer.invoke("is-nfs-mounted", mountPath),
-      test: (): Promise<string> => ipcRenderer.invoke("hello-world", "mount path"),
+      shareFile: (filePath: string, personToShareWith: string): Promise<SimpleResponse> =>
+        ipcRenderer.invoke("share-file", filePath, personToShareWith),
     },
 
     send(channel: string, ...args: any[]) {

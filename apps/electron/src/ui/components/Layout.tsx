@@ -12,18 +12,16 @@ export const Layout: React.FC = () => {
   // const { currentAccount, setCurrentAccount } = useWallet();
   const currentAccount = "DEBUG LOGOUT";
 
-  const { isNfsMounted, nfsPath, unmountNfs, mountNfs } = useGlobalContext();
-
-  const [isMounted, setIsMounted] = useState(false);
+  const { nfsPath, unmountNfs, mountNfs, isNfsMounted } = useGlobalContext();
 
   const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
     navigate(path);
   };
 
-  useEffect(() => {
-    isNfsMounted().then((e) => setIsMounted(e));
-  }, []);
+  // useEffect(() => {
+  //   isNfsMountedFun().then((e) => setIsMounted(e));
+  // }, []);
 
   return (
     <div>
@@ -36,7 +34,7 @@ export const Layout: React.FC = () => {
         </div>
         <ul className='loc-nav-menu' style={{ display: "flex", alignItems: "center", padding: "0" }}>
           <li style={{ display: "flex", alignItems: "center" }}>
-            {isMounted ? <h1>Drive Mounted at: {nfsPath}</h1> : <h1>Drive NOT Mounted</h1>}
+            {isNfsMounted ? <p>Drive Mounted at: {nfsPath}</p> : <p>Drive NOT Mounted</p>}
             <button type='button' onClick={unmountNfs}>
               debug unmount
             </button>

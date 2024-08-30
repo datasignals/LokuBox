@@ -4,12 +4,12 @@
     "scripts": {
       "build": "yarn build:web",
       "build:web": "turbo build --filter=lokubox-frontend --filter=lokubox-backend",
-      "build:electron": "turbo build --filter=lokubox-electron",
+      "build:electron": "turbo build --filter=lokubox-electron --filter=lokubox-electron-login",
       "build:all": "turbo build",
 
       "dev": "yarn dev:web",
       "dev:web": "turbo dev --filter=lokubox-frontend --filter=lokubox-backend",
-      "dev:electron": "turbo dev --filter=lokubox-electron",
+      "dev:electron": "turbo dev --filter=lokubox-electron --filter=lokubox-electron-login",
       "dev:all": "turbo dev --filter=lokubox-frontend --filter=lokubox-backend",
 
       "lint": "turbo lint",
