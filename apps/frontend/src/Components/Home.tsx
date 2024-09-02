@@ -180,16 +180,25 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
                     <div className="row">
                         <div className="col-12">
                             <div className="loc-card loc-h">
-                                <div className="position-relative" style={{width: '350px'}}>
-                                    <input style={{width: '350px'}} type="text" className="loc-form-control"
-                                           placeholder="Search"/>
+                                <div className='d-flex align-items-center'>
                                     {
                                         path !== "/" ?
-                                            <button type="button" onClick={handleGoDirUp}>DIR UP</button> :
+                                            <button className='loc-transparent-img-btn loc-h-back-btn' style={{marginRight: '15px'}} type="button" onClick={handleGoDirUp}>
+                                                <img src="/images/svg/ic_back.svg" />
+                                            </button> :
                                             null
                                     }
-                                    <img style={{position: 'absolute', top: '12px', right: '15px'}}
-                                         src="/images/svg/ic_search.svg" alt=""/>
+                                    <div className="position-relative loc-h-" style={{width: '350px'}}>
+                                        <input style={{width: '350px'}} type="text" className="loc-form-control"
+                                            placeholder="Search"/>
+                                        <img style={{position: 'absolute', top: '12px', right: '15px'}}
+                                            src="/images/svg/ic_search.svg" alt=""/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button" className='loc-btn px-3' onClick={() => setCreateDirectoryModalVisible(true)}>
+                                        Add Directory
+                                    </button>
                                 </div>
                             </div>
                             <div>
@@ -249,10 +258,6 @@ export const Home: FC<{ routePath: string }> = ({routePath}) => {
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="loc-transparent-img-btn"
                     style={{position: 'fixed', bottom: '40px', right: '420px', zIndex: 50}}>
                 <img src={'/images/svg/ic_upload_file.svg'} onClick={() => setUploadFileModalVisible(true)} alt=""/>
-            </button>
-            <button type="button" onClick={() => setCreateDirectoryModalVisible(true)}
-                    style={{position: 'fixed', bottom: '40px', right: '750px', zIndex: 50}}>
-                Add Directory
             </button>
         </div>
     );

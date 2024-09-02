@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.021" height="20.021" viewBox="0 0 20.021 20.021">
+  <g id="Icons" transform="translate(5 3)">
+    <g id="Two-Tone" transform="translate(-5 -3)">
+      <g id="Action" transform="translate(0)">
+        <g id="Two-Tone-_-Action-_-delete" data-name="Two-Tone-/-Action-/-delete" transform="translate(0 0)">
+          <g id="Group_14" data-name="Group 14">
+            <path id="Path" d="M0,0H20.021V20.021H0Z" fill="none" fill-rule="evenodd"/>
+            <path id="_-Secondary-Color" data-name="🔹-Secondary-Color" d="M8,9h6.674v8.342H8Z" transform="translate(-1.326 -1.492)" fill="#afa9a3" fill-rule="evenodd"/>
+            <path id="_-Primary-Color" data-name="🔹-Primary-Color" d="M13.759,3.834,12.925,3H8.754l-.834.834H5V5.5H16.679V3.834ZM5.834,16.347A1.673,1.673,0,0,0,7.5,18.015h6.674a1.673,1.673,0,0,0,1.668-1.668V6.337H5.834ZM7.5,8.005h6.674v8.342H7.5Z" transform="translate(-0.829 -0.497)" fill="#afa9a3" fill-rule="evenodd"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

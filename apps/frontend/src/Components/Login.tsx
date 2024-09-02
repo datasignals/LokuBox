@@ -44,7 +44,9 @@ export const Login: FC = () => {
                             <img style={{width: '150px', marginBottom: '70px'}} src="/images/svg/logo.svg"
                                  alt="brand-logo"/>
                         </div>
-                        <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel"
+                        <img style={{width: '350px'}} className="d-block" src="/images/png/ic_login-image.png"
+                                         alt="First slide"/>
+                        {/* <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel"
                              data-bs-interval="3000">
                             <div className="carousel-inner">
                                 <div className="carousel-item active">
@@ -66,27 +68,18 @@ export const Login: FC = () => {
                                 <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" />
                                 <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" />
                             </ol>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="col-12 col-md-6 col-lg-4">
-                    <div style={{backgroundColor: 'white', height: '100%'}}>
+                    <div className='loc-login-right-panel' style={{height: '100%'}}>
                         <div className="loc-login-form">
                             <h2>Secure & share your files with provenance tracking.</h2>
                             <form style={{width: '100%', padding: '100px 0'}}>
-                                <div style={{width: '100%'}}>
-                                    <label htmlFor="loc-login-select" className="loc-label">
+                                <div style={{width: '100%', textAlign: 'center'}}>
+                                    <label htmlFor="loc-login-select" className="loc-label" style={{marginBottom: '10px', display: 'inline-block'}}>
                                         Select your wallet
                                     </label>
-                                    {/* <select
-                        className="loc-form-control"
-                        id="loc-login-select"
-                        style={{ width: '100%', padding: '0 10px' }}
-                    >
-                        <option>Coinbase</option>
-                        <option>Wallet 2</option>
-                    </select> */}
-
                                     <div className='drop-menu wallet'>
                                         <ul className="flex flex-column">
                                             {WalletList.map((item, index) => (
@@ -95,7 +88,7 @@ export const Login: FC = () => {
                                                     <a className="d-item-flex">
                                                         <img src={item.img} alt="wallet-icon"/>
                                                         <div className='ml-4'>
-                                                            <div className='mb-1'>{item.name}</div>
+                                                            <div className='mb-1 text-white'>{item.name}</div>
                                                         </div>
                                                     </a>
                                                 </li>
@@ -111,7 +104,7 @@ export const Login: FC = () => {
                     Connect
                     </button> */}
                             </form>
-                            <p style={{color: '#92A1AC', marginBottom: '2px', fontSize: '12px'}}>
+                            <p className="loc-login-setup-text" style={{marginBottom: '2px', fontSize: '12px'}}>
                                 Don't have a wallet?
                             </p>
                             <button type="button" className="loc-btn-transparent">

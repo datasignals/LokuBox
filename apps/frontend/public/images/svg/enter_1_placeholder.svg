@@ -1,9 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-<g id="XMLID_1_">
-	<path id="XMLID_5_" d="M175.9,256H15.8v-64.2h160.1v-64.2l95.9,95.9l-95.9,96.8V256z M496.2,0v416.1L304.4,512v-95.9H111.7V287.7
-		h32.6v95.9h160.1V95.9l128.5-64.2H144.3v128.5h-31.7V0H496.2z"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_41" data-name="Rectangle 41" width="24" height="24" transform="translate(3717 -40)" fill="#afa9a3" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="enter_1_placeholder" transform="translate(-3717 40)" clip-path="url(#clip-path)">
+    <g id="Icons" transform="translate(3719 -36)">
+      <g id="Rounded" transform="translate(-204 -2284)">
+        <g id="File" transform="translate(100 2226)">
+          <g id="_-Round-_-File-_-folder" data-name="-Round-/-File-/-folder" transform="translate(102 54)">
+            <g id="Group_32008" data-name="Group 32008">
+              <path id="Path" d="M0,0H24V24H0Z" fill="none" fill-rule="evenodd"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <path id="Subtraction_1" data-name="Subtraction 1" d="M20.7,18H2.3A2.278,2.278,0,0,1,0,15.75L.011,2.25A2.272,2.272,0,0,1,2.3,0H8.246A2.317,2.317,0,0,1,9.878.664L11.5,2.25h9.2A2.278,2.278,0,0,1,23,4.5V15.75A2.278,2.278,0,0,1,20.7,18ZM8.493,8.957a.736.736,0,1,0,0,1.472h4.2l-.977.949a.725.725,0,0,0,0,1.045.763.763,0,0,0,1.067,0l2.256-2.207a.728.728,0,0,0,.158-.243.714.714,0,0,0,0-.559.741.741,0,0,0-.158-.243L12.787,6.963a.766.766,0,0,0-1.067,0,.727.727,0,0,0,0,1.045l.977.949Z" transform="translate(3717 -37)" fill="#afa9a3"/>
+  </g>
 </svg>

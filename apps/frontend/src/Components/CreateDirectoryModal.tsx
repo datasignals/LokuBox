@@ -1,5 +1,6 @@
 import React, {type ChangeEvent, type FC, useRef, useState} from "react";
 import {useGlobalContext} from "../context/GlobalContext";
+import '../css/main.css';
 
 interface Props {
     currentPath: string;
@@ -43,10 +44,13 @@ export const CreateDirectoryModal: FC<Props> = ({currentPath, errors, setErrors,
                             top: '20px',
                             right: '20px',
                             zIndex: 999,
-                            fontSize: '10px'
+                            fontSize: '10px',
+                            background: 'transparent',
+                            border:0
                         }}
-                                className="btn-close" onClick={() => setModalVisible(false)}
+                                className="" onClick={() => setModalVisible(false)}
                                 aria-label="Close">
+                                <img src="/images/svg/ic_close.svg" />
                         </button>
                         <div className="modal-body" style={{
                             display: 'flex',
@@ -57,8 +61,8 @@ export const CreateDirectoryModal: FC<Props> = ({currentPath, errors, setErrors,
                             marginTop: '20px'
                         }}>
                             {errors ? <p className="text-danger">{errors}</p> : null}
-                            <input type="text" placeholder="Directory Name" onChange={e => setNewDirectoryName(e.target.value)}/>
-                            <button className="loc-btn" type="button" style={{marginTop: '30px', width: '200px'}}
+                            <input style={{marginTop: '30px'}} className="loc-form-control" type="text" placeholder="Directory Name" onChange={e => setNewDirectoryName(e.target.value)}/>
+                            <button className="loc-btn px-3" type="button" style={{marginTop: '30px'}}
                                     onClick={createDirectory}>
                                 Create
                             </button>

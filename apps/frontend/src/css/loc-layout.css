@@ -4,7 +4,7 @@
     top: 0;
     left: 0;
     height: 70px;
-    background-color: white;
+    background-color: var(--card-bg-color);
     box-shadow: 0 0 8px 2px rgba(0,0,0,.03);
     display: flex;
     align-items: center;
@@ -48,7 +48,7 @@
     margin: auto;
     width: 1px;
     height: 20px;
-    background-color: #E2EAF0;
+    background-color: var(--card-bg-color)
 }
 .loc-logo img{
     width: 80px;
@@ -68,7 +68,7 @@
     position: fixed;
     top: 70px;
     left: 0;
-    background-color: white;
+    background-color: var(--card-bg-color);
     box-shadow: 0 0 8px 2px rgba(0,0,0,.03);
     z-index: 40;
 }
@@ -82,19 +82,19 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    border-bottom: 1px solid #E2EAF0;
+    border-bottom: 1px solid var(--border-color);
     cursor: pointer;
 }
 
 .loc-sidemenu ul .loc-sidemenu-item.active a{
-    background-color: #F4F9FD;
+    background-color: var(--item-bg-color);
 }
 .loc-sidemenu ul .loc-sidemenu-item a svg{
-    fill: #C0CED9;
+    fill: var(--light-text);
     margin-bottom: 10px;
 }
 .loc-sidemenu ul .loc-sidemenu-item.active a svg{
-    fill: #007AD3;
+    fill: var(--primary-color);
 }
 .loc-sidemenu ul .loc-sidemenu-item a .loc-sidemenu-item-content{
     display: flex;
@@ -104,8 +104,8 @@
 }
 .loc-sidemenu ul .loc-sidemenu-item a .loc-sidemenu-item-name{
     font-size: 14px;
-    color: #C0CED9;
+    color: var(--light-text);
 }
 .loc-sidemenu ul .loc-sidemenu-item.active a .loc-sidemenu-item-name{
-    color: #007AD3;
+    color: var(--primary-color);
 }

@@ -20,7 +20,7 @@
     align-items: center;
     justify-content: center;
     padding: 10px 20px;
-    background-color: #FFFFFF;
+    background-color: var(--card-bg-color);
     border-radius: 10px;
     box-shadow: 0 0 8px 2px rgba(0,0,0,.02);
 }
@@ -28,7 +28,7 @@
     display: flex;
     gap: 15px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #E2EAF0;
+    border-bottom: 1px solid var(--border-color);
 }
 .loc-h-activity-content-con{
     margin-top: 30px;
@@ -40,8 +40,8 @@
     justify-content: center;
 }
 .loc-card.card-active{
-    background-color: #F4F9FD;
-    border: 1px solid rgba(0, 122, 211, .5);
+    background-color: var(--item-bg-color);
+    border: 1px solid var(--border-color);
 }
 .loc-h-card-content-con{
     display: flex;
@@ -52,4 +52,11 @@
     display: flex;
     align-items: center;
     gap: 20px;
+}
+.loc-h-back-btn{
+    border: 1px solid var(--input-border) !important;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 7px;
 }

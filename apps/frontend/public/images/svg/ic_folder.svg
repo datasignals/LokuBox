@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42" height="42" viewBox="0 0 42 42">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_40" data-name="Rectangle 40" width="42" height="42" transform="translate(4107 -67)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="ic_folder" transform="translate(-4107 67)" clip-path="url(#clip-path)">
+    <g id="ic_folder-2" data-name="ic_folder" transform="translate(4109 -127.407)">
+      <g id="Group_32007" data-name="Group 32007" transform="translate(0 67.229)">
+        <path id="Path_34" data-name="Path 34" d="M10.355,81.271a9.609,9.609,0,0,1,4.023-.97H31.371V77.033A4.6,4.6,0,0,0,26.8,72.457H15.685V71.8a4.4,4.4,0,0,0-1.348-3.227,4.4,4.4,0,0,0-3.227-1.348H4.575a4.4,4.4,0,0,0-3.227,1.348A4.4,4.4,0,0,0,0,71.8V91.41q0,.082.01.256c.007.116.01.2.01.255l.1-.122,6.883-8.088A9.528,9.528,0,0,1,10.355,81.271Z" transform="translate(0 -67.229)" fill="#afa9a3"/>
+        <path id="Path_35" data-name="Path 35" d="M57.186,286.76a2.765,2.765,0,0,0-1.236-.266H33.73a7.087,7.087,0,0,0-2.931.725,6.925,6.925,0,0,0-2.461,1.767l-6.862,8.088a2.1,2.1,0,0,0-.633,1.348.907.907,0,0,0,.541.878,2.766,2.766,0,0,0,1.236.266H44.841a7.092,7.092,0,0,0,2.93-.725,6.921,6.921,0,0,0,2.461-1.767l6.862-8.088a2.1,2.1,0,0,0,.633-1.348A.907.907,0,0,0,57.186,286.76Z" transform="translate(-19.352 -270.809)" fill="#afa9a3"/>
+      </g>
+    </g>
+  </g>
+</svg>

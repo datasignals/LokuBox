@@ -9,7 +9,7 @@ export const DirectoryElement: FC<Props> = ({dirName, callbackEnterDirectory}) =
     <div className="loc-card card-active" style={{marginTop: '20px'}}>
         <div className="loc-h-card-content-con">
             <div className="loc-h-card-content">
-                <img src="/images/svg/s_files.svg" alt=""/>
+                <img src="/images/svg/ic_folder.svg" alt=""/>
                 <div>
                     <h4 style={{marginBottom: '5px'}}>{dirName}</h4>
                     <h5 style={{marginBottom: '5px'}}>Directory</h5>
@@ -17,7 +17,7 @@ export const DirectoryElement: FC<Props> = ({dirName, callbackEnterDirectory}) =
             </div>
             <div className="loc-h-tools">
                 <div className="dropdown">
-                    <img style={{cursor: 'pointer', width: "30px", padding: "4px", margin: "4px"}} src={'/images/svg/enter_1_placeholder.svg'}
+                    <img style={{cursor: 'pointer', width: "30px", marginRight:'20px'}} src={'/images/svg/enter_1_placeholder.svg'}
                          alt="more-options"
                          data-bs-toggle="modal" data-bs-target="#shareModal"
                          onClick={callbackEnterDirectory}/>
