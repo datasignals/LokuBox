@@ -7,6 +7,9 @@
     align-items: center;
     justify-content: center;
 }
+.loc-login-right-panel{
+    background-color: var(--card-bg-color);
+}
 #carouselExampleIndicators{
     width: 300px;
     position: relative;
@@ -37,6 +40,7 @@
     background-color: #007AD3 !important;
 }
 .loc-login-form{
+    height: 100%;
     padding: 100px 50px;
     display: flex;
     flex-direction: column;
@@ -46,6 +50,12 @@
 .loc-login-form h2{
     font-size: 16px;
     text-align: center;
-    color: #626F79;
+    color: var(--dark-text);
     line-height: 24px;
+}
+.loc-login-setup-text{
+    color: var(--grey-text);
+}
+.drop-item-container{
+    background-color: var(--item-bg-color) !important;
 }

@@ -113,15 +113,19 @@ export const UploadFileModal: FC<Props> = ({currentPath, errors, setErrors, moda
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content" style={{borderRadius: '20px', padding: '30px'}}>
-                        <button type="button" style={{
+                    <button type="button" style={{
                             position: 'absolute',
                             top: '20px',
                             right: '20px',
                             zIndex: 999,
-                            fontSize: '10px'
+                            fontSize: '10px',
+                            background: 'transparent',
+                            border:0
                         }}
-                                className="btn-close" onClick={() => setModalVisible(false)}
-                                aria-label="Close"></button>
+                                className="" onClick={() => setModalVisible(false)}
+                                aria-label="Close">
+                                <img src="/images/svg/ic_close.svg" />
+                        </button>
                         <div className="modal-body" style={{
                             display: 'flex',
                             flexDirection: 'column',

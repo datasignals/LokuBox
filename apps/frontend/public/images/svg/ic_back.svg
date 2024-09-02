@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 14 14">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_403" data-name="Rectangle 403" width="14" height="14" transform="translate(-4860 175)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="ic_back" transform="translate(4860 -175)" clip-path="url(#clip-path)">
+    <path id="_-Icon-Color" data-name="🔹-Icon-Color" d="M5.942,10.54a.716.716,0,0,1-1.014,0L.168,5.779a.571.571,0,0,1,0-.808L4.928.211A.717.717,0,0,1,5.942,1.225L1.795,5.378,5.948,9.532A.714.714,0,0,1,5.942,10.54Z" transform="translate(-4856.077 176.625)" fill="#fff" stroke="#fff" stroke-width="0.5" fill-rule="evenodd"/>
+  </g>
+</svg>
