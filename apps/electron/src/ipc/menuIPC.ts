@@ -267,6 +267,11 @@ export const registerMenuIpc = (mainWindow: BrowserWindow) => {
   ipcMain.handle(
     MenuChannels.IS_NFS_MOUNTED,
     async (_event: Electron.IpcMainInvokeEvent, mountPath: string): Promise<SimpleResponse> => {
+      return {
+        isSuccessful: true,
+        message: "Already Mounted",
+      };
+      //TODO disabled for a test
       try {
         const result = await execPromise("mount");
         // return result.includes("/Volumes/user_key=shahrukh")

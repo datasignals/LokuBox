@@ -100,9 +100,10 @@ export function createAppWindow(): BrowserWindow {
 
   const server = http.createServer(expressApp);
 
-  server.listen(3001, () => {
-    console.log("Server running on http://localhost:3001");
-  });
+  //TODO uncomment
+  // server.listen(3001, () => {
+  //   console.log("Server running on http://localhost:3001");
+  // });
 
   return appWindow;
 }

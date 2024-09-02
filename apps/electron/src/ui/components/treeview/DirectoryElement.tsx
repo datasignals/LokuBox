@@ -29,7 +29,7 @@ export const DirectoryElement: FC<Props> = ({ dirName, callbackEnterDirectory, c
     <div className='loc-card card-active' style={{ marginTop: "20px" }}>
       <div className='loc-h-card-content-con'>
         <div className='loc-h-card-content'>
-          <img src='assets/images/svg/s_files.svg' alt='' />
+          <img src='assets/images/svg/ic_folder.svg' alt='' />
           <div>
             <h4 style={{ marginBottom: "5px" }}>{dirName}</h4>
             <h5 style={{ marginBottom: "5px" }}>Directory</h5>
@@ -38,7 +38,7 @@ export const DirectoryElement: FC<Props> = ({ dirName, callbackEnterDirectory, c
         <div className='loc-h-tools'>
           <div className='dropdown'>
             <img
-              style={{ cursor: "pointer", width: "30px", padding: "4px", margin: "4px" }}
+              style={{ cursor: "pointer", width: "30px", marginRight: "20px" }}
               src={"assets/images/svg/enter_1_placeholder.svg"}
               alt='more-options'
               data-bs-toggle='modal'
@@ -57,7 +57,7 @@ export const DirectoryElement: FC<Props> = ({ dirName, callbackEnterDirectory, c
             <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
               <li className='dropdown-item'>
                 <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />
-                <div onClick={() => electron.ipcRenderer.fs.shareFile(fullPath, "jason")}>Jason Roy (Share test)</div>
+                <div>Jason Roy</div>
               </li>
               <li className='dropdown-item'>
                 <img style={{ width: "35px" }} src={"assets/images/svg/user_default.svg"} alt='user' />

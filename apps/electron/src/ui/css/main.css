@@ -1,12 +1,14 @@
   /*------------------ Theme ----------------*/
   :root {
-    --primary-color: #007AD3;
-    --dark-text: #122B3E;
-    --grey-text: #8B959B;
-    --light-text: #C0CED9;
-    --border-color: #E2EAF0;
-    --background-color: #F4F9FD;
-    --input-border: #D9DBE3;
+    --primary-color: #F09937;
+    --dark-text: #FFFFFF;
+    --grey-text: #FFFFFFC5;
+    --light-text: #ffffffA5;
+    --border-color: #ffffff23;
+    --background-color: #000000;
+    --card-bg-color: #323232;
+    --item-bg-color: #ffffff35;
+    --input-border: #ffffff4f;
   }
   
     /*------------------ General ----------------*/
@@ -42,7 +44,7 @@
       width: 100%;
   }
   .loc-card{
-      background-color: #FFFFFF;
+      background-color: var(--card-bg-color);
       border-radius: 10px;
       box-shadow: 0 0 8px 2px rgba(0,0,0,.02);
       padding: 20px;
@@ -64,6 +66,8 @@
       color: #122B3E;
       height: 38px;
       border-radius: 7px;
+      background-color: var(--item-bg-color);
+      width: 100%;
   }
   .loc-form-control::placeholder{
       padding-left: 15px;
@@ -72,8 +76,18 @@
   .loc-label{
       font-size: 12px;
       margin-bottom: 5px;
-      color: #92A1AC;
+      color: var(--light-text);
   }
+  :focus-visible {
+    outline: -webkit-focus-ring-color auto 0 !important;
+  }
+  .loc-form-control:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 0 var(--primary-color);
+}
   
     /*------------------ Button Style ----------------*/
   .loc-transparent-img-btn{
@@ -178,7 +192,7 @@
       box-shadow: 0 0 8px 2px rgba(0,0,0,.03);
     }
     .loc-view-toggle-con li.active svg path {
-      fill: #007AD3; /* Active color */
+      fill: var(--primary-color); /* Active color */
     }
     .loc-view-toggle-con li svg{
       fill: #C0CED9;
@@ -197,7 +211,7 @@
       width: 100%;
   }
   .drop-menu ul li.drop-item-container{
-      background-color: #f7f7f7;
+      background-color: var(--item-bg-color);
       padding: 15px;
       border-radius: 10px;
       margin-bottom: 15px;
@@ -206,7 +220,7 @@
   }
   
   .drop-menu ul li.drop-item-container:hover{
-    color:#0b0b0c;
+    color: white;
   }
   .drop-menu ul li.drop-item-container:nth-last-child(1){
       margin-bottom: 0;
@@ -228,21 +242,28 @@
   /*------------------ new css ----------------*/
   .dropdown-menu{
     border: 0;
-    box-shadow: 0 0 8px 2px rgba(0,0,0,.08);
+    box-shadow: 0 0 8px 2px rgba(0,0,0,.5);
   }
   .dropdown-menu{
     width: 200px;
+    color: white;
     padding: 0;
+    background-color: var(--card-bg-color);
   }
   .dropdown-menu .dropdown-item{
     display: flex;
     align-items: center;
     padding-bottom: 15px;
     padding-top: 15px;
-    border-bottom: 1px solid #E2EAF0;
+    border-bottom: 1px solid var(--border-color);
+    color: white;
+    cursor: pointer;
+  }
+  .dropdown-menu .dropdown-item:hover{
+    background-color: var(--item-bg-color);
   }
   .dropdown-menu .dropdown-item:nth-last-child(1){
-    border-bottom: 0 solid #E2EAF0;
+    border-bottom: 0 solid var(--border-color);
   }
   .dropdown-menu .dropdown-item img{
     margin-right: 10px;
@@ -250,3 +271,12 @@
   .dropdown img{
     cursor: pointer;
   }
+
+    /*------------------ Modal ----------------*/
+    .modal-content{
+      background-color: var(--card-bg-color) !important;
+      box-shadow: 0 0 30px 2px rgba(0,0,0,.5);
+    }
+    .modal-header .btn-close {
+      filter: invert(1);
+    }

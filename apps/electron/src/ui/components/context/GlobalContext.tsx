@@ -36,7 +36,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
   const [nfsPath, setNfsPath] = useState("/Users/og_pixel/nfs");
   // const [nfsPath, setNfsPath] = useState("/Volumes/user_key=shahrukh");
   const [selectedPath, _setSelectedPath] = useState(nfsPath);
-  const [isNfsMounted, setIsNfsMounted] = useState<boolean | undefined>(undefined); //TODO not desirable approach
+  const [isNfsMounted, setIsNfsMounted] = useState<boolean | undefined>(true); //TODO not desirable approach
 
   const [nfsAddress, setNfsAddress] = useState("fs.lockular.in:/user_key=shahrukh");
   const [askMountOnce, setAskMountOnce] = useState(false);

@@ -42,6 +42,10 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setCurrentAccount(data.toString());
   });
 
+  useEffect(() => {
+    setCurrentAccount("TEST");
+  }, []);
+
   return currentAccount ? (
     <WalletContext.Provider
       value={{

@@ -29,13 +29,23 @@ export const Home: FC = () => {
   const [uploadFileModalVisible, setUploadFileModalVisible] = useState(false);
   const [createDirectoryModalVisible, setCreateDirectoryModalVisible] = useState(false);
 
+  const [searchText, setSearchText] = useState("");
+
   const { nfsPath, selectedPath, setSelectedPath, mountNfs, isNfsMounted, askMountOnce, setAskMountOnce } =
     useGlobalContext();
 
   const fetchNfsContents = (): void => {
     electron.ipcRenderer.fs.readDir(selectedPath).then((contents) => {
-      setFiles(contents.files);
-      setDirectories(contents.directories);
+      if (searchText.length > 0) {
+        const filteredFiles = contents.files.filter((e) => e.filename.toLowerCase().includes(searchText));
+        const filteredDirectories = contents.directories.filter((e) => e.toLowerCase().includes(searchText));
+
+        setFiles(filteredFiles);
+        setDirectories(filteredDirectories);
+      } else {
+        setFiles(contents.files);
+        setDirectories(contents.directories);
+      }
     });
   };
 
@@ -70,7 +80,21 @@ export const Home: FC = () => {
 
   const handleDirectorySelect = (dirName: string): void => {
     // setNfsPath(dirName);
+    setSearchText("");
     setSelectedPath(dirName);
+  };
+
+  const handleFilterNodesBySearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchText = e.target.value;
+    setSearchText(searchText);
+
+    // if (searchText.length > 0) {
+    //   const filteredFiles = files.filter((e) => e.filename.toLowerCase().includes(searchText));
+    //   const filteredDirectories = directories.filter((e) => e.toLowerCase().includes(searchText));
+    //
+    //   setFiles(filteredFiles);
+    //   setDirectories(filteredDirectories);
+    // }
   };
 
   // const fetchProvenance = async (filename: string) => {
@@ -149,6 +173,7 @@ export const Home: FC = () => {
   };
 
   const allFilesElement = files
+    .filter((e) => e.filename.toLowerCase().includes(searchText))
     .sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime())
     .map((file, index) => (
       <div key={file.filename} onClick={() => handleFileSelect(file)}>
@@ -156,18 +181,20 @@ export const Home: FC = () => {
       </div>
     ));
 
-  const allDirectoriesElement = directories.map((dirName, index) => (
-    <div key={dirName}>
-      <DirectoryElement
-        key={dirName + index}
-        dirName={dirName}
-        callbackEnterDirectory={() => {
-          handleDirectorySelect(Path.join(selectedPath, dirName));
-        }}
-        callbackDeleteDirectory={() => handleDeleteDirectory(index)}
-      />
-    </div>
-  ));
+  const allDirectoriesElement = directories
+    .filter((e) => e.toLowerCase().includes(searchText))
+    .map((dirName, index) => (
+      <div key={dirName}>
+        <DirectoryElement
+          key={dirName + index}
+          dirName={dirName}
+          callbackEnterDirectory={() => {
+            handleDirectorySelect(Path.join(selectedPath, dirName));
+          }}
+          callbackDeleteDirectory={() => handleDeleteDirectory(index)}
+        />
+      </div>
+    ));
 
   return (
     <div>
@@ -177,19 +204,37 @@ export const Home: FC = () => {
           <div className='row'>
             <div className='col-12'>
               <div className='loc-card loc-h'>
-                <div className='position-relative' style={{ width: "350px" }}>
-                  <p>Current Path: {selectedPath}</p>
-                  <input style={{ width: "350px" }} type='text' className='loc-form-control' placeholder='Search' />
+                <div className='d-flex align-items-center'>
                   {selectedPath !== nfsPath ? (
-                    <button type='button' onClick={handleGoDirUp}>
-                      DIR UP
+                    <button
+                      className='loc-transparent-img-btn loc-h-back-btn'
+                      style={{ marginRight: "15px" }}
+                      type='button'
+                      onClick={handleGoDirUp}
+                    >
+                      <img src='assets/images/svg/ic_back.svg' />
                     </button>
                   ) : null}
-                  <img
-                    style={{ position: "absolute", top: "12px", right: "15px" }}
-                    src='assets/images/svg/ic_search.svg'
-                    alt=''
-                  />
+                  <div className='position-relative loc-h-' style={{ width: "350px" }}>
+                    <input
+                      style={{ width: "350px" }}
+                      type='text'
+                      className='loc-form-control'
+                      value={searchText}
+                      placeholder='Search'
+                      onChange={handleFilterNodesBySearchText}
+                    />
+                    <img
+                      style={{ position: "absolute", top: "12px", right: "15px" }}
+                      src='assets/images/svg/ic_search.svg'
+                      alt=''
+                    />
+                  </div>
+                </div>
+                <div>
+                  <button type='button' className='loc-btn px-3' onClick={() => setCreateDirectoryModalVisible(true)}>
+                    Add Directory
+                  </button>
                 </div>
               </div>
               <div>
@@ -246,16 +291,6 @@ export const Home: FC = () => {
         style={{ position: "fixed", bottom: "40px", right: "420px", zIndex: 50 }}
       >
         <img src={"assets/images/svg/ic_upload_file.svg"} onClick={() => setUploadFileModalVisible(true)} alt='' />
-      </button>
-      <button
-        type='button'
-        onClick={() => {
-          setCreateDirectoryModalVisible(true);
-          console.log("setting some modal to true");
-        }}
-        style={{ position: "fixed", bottom: "40px", right: "750px", zIndex: 50 }}
-      >
-        Add Directory
       </button>
     </div>
   );
